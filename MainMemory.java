@@ -1,14 +1,27 @@
+import java.util.Arrays;
 
 public class MainMemory {
 	//64KB memory
-	String[] memory = new String[65535];
+	String[][] memory;
 	int accessTimeInCycles = 0;
 	Clock clock;
 	boolean busy = false;
+	int blockSize = 1;
 	
-	public MainMemory(int accessTimeInCycles, Clock clock) {
+	public MainMemory(int accessTimeInCycles, Clock clock, int blockSize) {
+		//blockSize represents bytes per memory line
 		this.accessTimeInCycles = accessTimeInCycles;
 		this.clock = clock;
+		this.blockSize = blockSize;
+		this.memory = new String[65535/blockSize][blockSize];
+	}
+	
+	
+	public String toString(){
+		for (int i = 0; i < memory.length; i++) {
+			System.out.println("Line " + i + ": " + Arrays.toString(memory[i]));
+		}
+		return "";
 	}
 	
 	
@@ -29,7 +42,7 @@ public class MainMemory {
 		while(clock.counter.get() < clockCycleToReturnAt);
 		
 		//update memory
-		memory[address] = value;
+		memory[address/blockSize][address%blockSize] = value;
 		System.out.println("Store finished, clock cycle: "+clock.counter.get());
 		busy = false;
 	}
@@ -52,16 +65,16 @@ public class MainMemory {
 		System.out.println("Load finished, clock cycle: "+clock.counter.get());
 		busy = false;
 		
-		return memory[address];
+		return memory[address/blockSize][address%blockSize];
 		
 	}
 	
 	
 	
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) {
 		Clock c = new Clock();
 		c.start();
-		MainMemory m = new MainMemory(4, c);
+		MainMemory m = new MainMemory(4, c, 1);
 		m.store("sayegh", 0xff);
 		String value = m.load(255);
 		System.out.println(value);

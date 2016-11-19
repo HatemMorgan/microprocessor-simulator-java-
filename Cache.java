@@ -8,10 +8,11 @@ public class Cache {
 	int cacheLines;
 	int accessTimeInCycles;
 	boolean busy = false;
+	Clock clock;
 
 	CacheEntry[][] memory;
 
-	public Cache(int cacheSize, int lineSize, int associativity, int accessTimeInCycles) {
+	public Cache(int cacheSize, int lineSize, int associativity, int accessTimeInCycles, Clock clock) {
 		// cacheSize is assumed to be in bytes
 		this.cacheSize = cacheSize;
 		this.lineSize = lineSize;
@@ -19,6 +20,7 @@ public class Cache {
 		this.cacheLines = cacheSize / lineSize;
 		this.accessTimeInCycles = accessTimeInCycles;
 		this.memory = new CacheEntry[cacheLines / associativity][associativity];
+		this.clock = clock;
 	}
 	
 	public String toString(){
@@ -28,52 +30,94 @@ public class Cache {
 		return "";
 	}
 
-	public void searchCache(int byteAddress){
+	public CacheEntry searchCache(int byteAddress){
 		
 		while(busy);
-		int indexBits = log(cacheLines, 2);
-		int offsetBits = log(lineSize, 2);
-		int tagBits = 16-(indexBits+offsetBits);
+		busy = true;
+		//determine at which clock cycle the operation will end
+		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
+		
+		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
 
-		int byteAddressCopy = byteAddress;
-		byteAddressCopy >>= offsetBits;
-		int index = extractLastNBitsToDecimal(byteAddressCopy, indexBits);
-		byteAddressCopy >>= indexBits;
-		int tag = extractLastNBitsToDecimal(byteAddressCopy, tagBits);
+		//wait until memory access time is over
+		while(clock.counter.get() < clockCycleToReturnAt);
 
+		int[] addressSegments = decryptAddress(byteAddress);
+		int tag = addressSegments[0];
+		int index = addressSegments[1];
+		int offset = addressSegments[2];
+			
 		CacheEntry[] memorySet = memory[index];
 		for (int i = 0; i < memorySet.length; i++) {
 			if(memorySet[i] == null){
 				break;
 			}
-			if(memorySet[i].tag == tag){
+			if(memorySet[i].tag == tag && memorySet[i].valid == true){
 				System.out.println("Result found");
-				return;
+				return memorySet[i];
 			} 
 		}
-		System.out.println("Result not found, going 1 level deeper");
 		
-		//fetch data from lower memory in the hierarchy
-		insertIntoCache(tag, index, "Fake data");
+		//not found
+		System.out.println("Result not found");
+		busy=false;
+		return null;
+	}
+	
+	//returns [Tag, Index, Offset]
+	int[] decryptAddress(int byteAddress){
+		int indexBits = log(cacheLines, 2);
+		int offsetBits = log(lineSize, 2);
+		int tagBits = 16-(indexBits+offsetBits);
+
 		
+		int byteAddressCopy = byteAddress;
+		int offset = extractLastNBitsToDecimal(byteAddressCopy, offsetBits);
+		byteAddressCopy >>= offsetBits;
+		int index = extractLastNBitsToDecimal(byteAddressCopy, indexBits);
+		byteAddressCopy >>= indexBits;
+		int tag = extractLastNBitsToDecimal(byteAddressCopy, tagBits);
+		
+		int[] result = new int[3];
+		result[0] = tag;
+		result[1] = index;
+		result[2] = offset;
+		
+		return result;
+
 	}
 	
 	
-	void insertIntoCache(int tag, int index, String data){
+	void insertIntoCache(int byteAddress, String data){
 		while(busy);
+		busy = true;
+		
+		//determine at which clock cycle the operation will end
+		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
+		
+		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
 
+		//wait until memory access time is over
+		while(clock.counter.get() < clockCycleToReturnAt);
+
+		int[] addressSegments = decryptAddress(byteAddress);
+		int tag = addressSegments[0];
+		int index = addressSegments[1];
+		int offset = addressSegments[2];
+
+
+		//looks for first invaid entry
 		CacheEntry[] memorySet = memory[index];
-		for (int i = 0; i < memorySet.length; i++) {
-			if(memorySet[i] == null){
-				memorySet[i]= new CacheEntry();
-			}
-			
-			if(memorySet[i].valid == false){
+		for (int i = 0; i < memorySet.length; i++) {			
+			if(memorySet[i] == null || memorySet[i].valid == false){
 				memorySet[i] = new CacheEntry(tag, data, true);
 				System.out.println("Inserted new value into cache");
+				busy=false;
 				return;
 			}
 		}
+		busy=false;
+
 	}
 	
 	
@@ -83,18 +127,11 @@ public class Cache {
 	}
 	
 	public int extractLastNBitsToDecimal(int integer, int N){
-		final ByteBuffer buf = ByteBuffer.allocate(N);
-		buf.putInt(integer);
-		
-		int result = 0;
-		for (int i = 0; i < N; i++) {
-			int currentBit =  (int) buf.get(i);
-			result += currentBit;
-		}
-		
-		result &= bitmask(N);
+		int masked = bitmask(N);
+		int res = integer & masked;
 
-		return result;
+
+		return res;
 	}
 
 	static int log(int x, int base) {
@@ -102,7 +139,9 @@ public class Cache {
 	}
 
 	public static void main(String[] args) {
-		Cache c = new Cache(16, 1, 1, 1);
+		Clock clock = new Clock();
+		clock.start();
+		Cache c = new Cache(16, 4, 1, 1, clock);
 		c.searchCache(213);
 		c.toString();
 	}

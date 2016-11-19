@@ -7,7 +7,7 @@ public class Clock {
 		counter = new AtomicInteger();
 	}
 	
-	public void start() throws InterruptedException{
+	public void start(){
 		Runnable run = new Runnable() {
 		    public void run() {
 		    	while(true){

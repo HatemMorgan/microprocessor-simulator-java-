@@ -1,4 +1,3 @@
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class Cache {
@@ -30,6 +29,19 @@ public class Cache {
 		return "";
 	}
 
+	public CacheEntry locateReplacementBlock(int byteAddress){
+		int[] addressSegments = decryptAddress(byteAddress);
+//		int tag = addressSegments[0];
+		int index = addressSegments[1];
+//		int offset = addressSegments[2];
+			
+		CacheEntry[] memorySet = memory[index];
+		//TODO: LRU Replacement
+
+		return memorySet[0];
+	}
+	
+	
 	public CacheEntry searchCache(int byteAddress){
 		
 		while(busy);
@@ -45,7 +57,7 @@ public class Cache {
 		int[] addressSegments = decryptAddress(byteAddress);
 		int tag = addressSegments[0];
 		int index = addressSegments[1];
-		int offset = addressSegments[2];
+//		int offset = addressSegments[2];
 			
 		CacheEntry[] memorySet = memory[index];
 		for (int i = 0; i < memorySet.length; i++) {
@@ -88,7 +100,7 @@ public class Cache {
 	}
 	
 	
-	void insertIntoCache(int byteAddress, String data){
+	void insertIntoCache(int byteAddress, String data, boolean dirty){
 		while(busy);
 		busy = true;
 		
@@ -103,19 +115,25 @@ public class Cache {
 		int[] addressSegments = decryptAddress(byteAddress);
 		int tag = addressSegments[0];
 		int index = addressSegments[1];
-		int offset = addressSegments[2];
+//		int offset = addressSegments[2];
 
 
-		//looks for first invaid entry
+		//looks for first invalid entry
+		boolean foundInvalidCell = false;
 		CacheEntry[] memorySet = memory[index];
 		for (int i = 0; i < memorySet.length; i++) {			
 			if(memorySet[i] == null || memorySet[i].valid == false){
-				memorySet[i] = new CacheEntry(tag, data, true);
+				memorySet[i] = new CacheEntry(tag, data, true, dirty);
 				System.out.println("Inserted new value into cache");
-				busy=false;
-				return;
+				foundInvalidCell = true;
+				break;			
 			}
 		}
+		if(!foundInvalidCell){
+			//replace first entry in set
+			memorySet[0] = new CacheEntry(tag, data, true, dirty);
+		}
+		//TODO: LRU Replacement
 		busy=false;
 
 	}
@@ -142,6 +160,7 @@ public class Cache {
 		Clock clock = new Clock();
 		clock.start();
 		Cache c = new Cache(16, 4, 1, 1, clock);
+		c.insertIntoCache(213, "sasa", false);
 		c.searchCache(213);
 		c.toString();
 	}

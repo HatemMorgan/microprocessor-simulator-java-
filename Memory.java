@@ -7,17 +7,17 @@ public class Memory {
 	
 	//back + allocate
 	//through + around
-	public static writeHitPolicy hitPolicy = writeHitPolicy.writeThrough;
-	public static writeMissPolicy missPolicy = writeMissPolicy.writeAround;
+	public writeHitPolicy hitPolicy = writeHitPolicy.writeThrough;
+	public writeMissPolicy missPolicy = writeMissPolicy.writeAround;
 	
 	public Memory(int cacheLevels, int mainMemoryAccessTimeInCycles,  Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
 		this.cacheLevels = cacheLevels;
 		this.caches = new Cache[cacheLevels];
 		this.clock = clock;
 		if(hitPolicy != null)
-			Memory.hitPolicy = hitPolicy;
+			this.hitPolicy = hitPolicy;
 		if(missPolicy != null)
-			Memory.missPolicy = missPolicy;
+			this.missPolicy = missPolicy;
 		this.main = new MainMemory(mainMemoryAccessTimeInCycles, clock, 3);
 		init();
 	}
@@ -37,7 +37,7 @@ public class Memory {
 		return "";
 	}
 	
-	String load(int byteAddress){
+	public String load(int byteAddress){
 		String res=loadHelper(byteAddress, 0);
 		System.out.println(res);
 		return res;
@@ -153,7 +153,7 @@ public class Memory {
 
 	}
 
-	void store(int byteAddress, String value){
+	public void store(int byteAddress, String value){
 		storeHelper(byteAddress,value, 0);
 	}
 	

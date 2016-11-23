@@ -1,3 +1,4 @@
+package memory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.TimeUnit;
 public class Clock {

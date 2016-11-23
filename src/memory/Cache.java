@@ -1,3 +1,4 @@
+package memory;
 import java.util.Arrays;
 
 public class Cache {
@@ -43,8 +44,9 @@ public class Cache {
 	
 	
 	public CacheEntry searchCache(int byteAddress){
-		
+		// stuck here when searching in the cache 
 		while(busy);
+		System.out.println("no busy");
 		busy = true;
 		//determine at which clock cycle the operation will end
 		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
@@ -52,6 +54,7 @@ public class Cache {
 		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
 
 		//wait until memory access time is over
+		// ??
 		while(clock.counter.get() < clockCycleToReturnAt);
 
 		int[] addressSegments = decryptAddress(byteAddress);
@@ -99,7 +102,7 @@ public class Cache {
 
 	}
 	
-	
+	// bt3ml ehh be boolean dirty hena ?
 	void insertIntoCache(int byteAddress, String data, boolean dirty){
 		while(busy);
 		busy = true;
@@ -110,6 +113,7 @@ public class Cache {
 		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
 
 		//wait until memory access time is over
+		//?
 		while(clock.counter.get() < clockCycleToReturnAt);
 
 		int[] addressSegments = decryptAddress(byteAddress);
@@ -131,6 +135,7 @@ public class Cache {
 		}
 		if(!foundInvalidCell){
 			//replace first entry in set
+			// ??? why replacing the first element in the cache ?
 			memorySet[0] = new CacheEntry(tag, data, true, dirty);
 		}
 		//TODO: LRU Replacement

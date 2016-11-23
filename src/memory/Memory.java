@@ -1,3 +1,5 @@
+package memory;
+
 
 public class Memory {
 	Cache[] caches;
@@ -7,6 +9,7 @@ public class Memory {
 	
 	//back + allocate
 	//through + around
+	//?? why there is default values for writeHitPolicy and writeMissPolicy
 	public static writeHitPolicy hitPolicy = writeHitPolicy.writeThrough;
 	public static writeMissPolicy missPolicy = writeMissPolicy.writeAround;
 	
@@ -22,6 +25,7 @@ public class Memory {
 		init();
 	}
 	
+	// ??? caches doesnot have the same size or associativity . it must be customized 
 	void init(){
 		for (int i = 0; i < cacheLevels; i++) {
 			caches[i] = new Cache(16, 1, 1, 1, this.clock);
@@ -37,6 +41,8 @@ public class Memory {
 		return "";
 	}
 	
+	
+	
 	String load(int byteAddress){
 		String res=loadHelper(byteAddress, 0);
 		System.out.println(res);
@@ -47,6 +53,7 @@ public class Memory {
 	
 	String loadHelper(int byteAddress, int i){
 		CacheEntry result = null;
+		System.out.println(i);
 		if(i>= caches.length){
 			String mainMemoryResult =  main.load(byteAddress);
 			return mainMemoryResult;
@@ -54,6 +61,7 @@ public class Memory {
 
 		//searching the cache
 		result = caches[i].searchCache(byteAddress);
+		System.out.println("here------>"+result);
 		//Read hit
 		if(result !=null){
 			return result.data;
@@ -194,5 +202,9 @@ public class Memory {
 		m.store(212, "sayegh");
 		String res = m.load(212);
 		System.out.println(res);
+		System.out.println("------------------------------------------------");
+		String res2 = m.load(213);
+		System.out.println("heree");
+		System.out.println(res2);
 	}
 }

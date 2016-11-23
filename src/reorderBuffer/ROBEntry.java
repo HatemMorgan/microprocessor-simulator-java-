@@ -7,6 +7,8 @@ public class ROBEntry {
 	private String value;
 	private boolean ready ;
 	
+	public ROBEntry next ;
+	
 	public ROBEntry(int entryNumber, ROBEntryType type,
 			ROBEntryDestination destination, String value, boolean ready) {
 		this.entryNumber = entryNumber;
@@ -14,6 +16,7 @@ public class ROBEntry {
 		this.destination = destination;
 		this.value = value;
 		this.ready = ready;
+		this.next =null ;
 	}
 
 	
@@ -22,9 +25,7 @@ public class ROBEntry {
 		return entryNumber;
 	}
 
-	public void setEntryNumber(int entryNumber) {
-		this.entryNumber = entryNumber;
-	}
+
 
 	public ROBEntryType getType() {
 		return type;
@@ -56,6 +57,15 @@ public class ROBEntry {
 
 	public void setReady(boolean ready) {
 		this.ready = ready;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "ROBEntry [entryNumber=" + entryNumber + ", type=" + type
+				+ ", destination=" + destination + ", value=" + value
+				+ ", ready=" + ready + "]";
 	}
 	
 	

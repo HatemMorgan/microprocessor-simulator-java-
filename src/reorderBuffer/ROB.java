@@ -90,30 +90,13 @@ public class ROB {
 	private void commit(int entryNumber){
 		// check if the head is pointing to this entry inorder to maintain inorder committing 
 		if(head.getEntryNumber() == entryNumber && head.isReady()){
-			ROBEntry current = head.next;
+			ROBEntry current = head;
+			head = head.next;
 			
-			if(head.equals(first)){
-				head = new ROBEntry(head.getEntryNumber(),null,null,null,false);
-				head.next = current ;
-				first = head;		// emptying the first entry
-				head = current;    // moving head to the next entry
-				last.next = first; // connecting last to new first to maintain that the linked list is circular
-				tail = tail.next; // moving tail to next empty element
-				return;
-
-			}
-				ROBEntry prevHead = first ;
-				while(!prevHead.next.equals(head)){
-					prevHead = prevHead.next;
-				}
-			
-				head = new ROBEntry(head.getEntryNumber(),null,null,null,false);
-				head.next = current ;
-				prevHead.next = head ; // connecting the previous entry with the new empty entry
-				head = current; // moving head to next entry
-				tail = tail.next;
-			
-			
+			current.setDestination(null);
+			current.setReady(false);
+			current.setType(null);
+			current.setValue(null);
 		
 			
 			System.out.println("entry with number #"+entryNumber+" is committed and removed from the ROB");
@@ -169,7 +152,7 @@ public class ROB {
 		r.commit(3);
 		r.commit(4);
 		
-		r.insertToROB(ROBEntryType.INT, Register.R6); // testing if the new entry will be in the first ROB entry
+//		r.insertToROB(ROBEntryType.INT, Register.R6); // testing if the new entry will be in the first ROB entry
 		
 		System.out.println("------------------------------------------");
 		r.printROB();

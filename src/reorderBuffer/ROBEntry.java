@@ -1,16 +1,20 @@
 package reorderBuffer;
 
+import registers.Register;
+
+
+
 public class ROBEntry {
 	private int entryNumber ;
 	private ROBEntryType type ;
-	private ROBEntryDestination destination;
+	private Register destination;
 	private String value;
 	private boolean ready ;
 	
 	public ROBEntry next ;
 	
 	public ROBEntry(int entryNumber, ROBEntryType type,
-			ROBEntryDestination destination, String value, boolean ready) {
+			Register destination, String value, boolean ready) {
 		this.entryNumber = entryNumber;
 		this.type = type;
 		this.destination = destination;
@@ -35,11 +39,11 @@ public class ROBEntry {
 		this.type = type;
 	}
 
-	public ROBEntryDestination getDestination() {
+	public Register getDestination() {
 		return destination;
 	}
 
-	public void setDestination(ROBEntryDestination destination) {
+	public void setDestination(Register destination) {
 		this.destination = destination;
 	}
 

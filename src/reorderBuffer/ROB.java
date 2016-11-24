@@ -1,5 +1,7 @@
 package reorderBuffer;
 
+import registers.Register;
+
 public class ROB {
 	private ROBEntry head;
 	private ROBEntry tail;
@@ -49,7 +51,7 @@ public class ROB {
 	}
 	
 	
-	private void insertToROB(ROBEntryType type, ROBEntryDestination destination){
+	private void insertToROB(ROBEntryType type, Register destination){
 		if(!isFull()){
 		tail.setType(type);
 		tail.setDestination(destination);
@@ -147,11 +149,11 @@ public class ROB {
 	
 	public static void main(String[] args) {
 		ROB r = new ROB(4);
-		r.insertToROB(ROBEntryType.LD, ROBEntryDestination.R1);
-		r.insertToROB(ROBEntryType.SD, ROBEntryDestination.R2);
-		r.insertToROB(ROBEntryType.LD, ROBEntryDestination.R3);
-		r.insertToROB(ROBEntryType.INT, ROBEntryDestination.R4);
-		r.insertToROB(ROBEntryType.INT, ROBEntryDestination.R5); // testing to insert a new entry when the ROB is FUll
+		r.insertToROB(ROBEntryType.LD, Register.R1);
+		r.insertToROB(ROBEntryType.SD, Register.R2);
+		r.insertToROB(ROBEntryType.LD, Register.R3);
+		r.insertToROB(ROBEntryType.INT, Register.R4);
+		r.insertToROB(ROBEntryType.INT, Register.R5); // testing to insert a new entry when the ROB is FUll
 		
 		r.writeResultTOROB(3, "24"); // testing entring a new entry
 		r.commit(3); // testing committing an entry that the head is not pointing to it
@@ -167,7 +169,7 @@ public class ROB {
 		r.commit(3);
 		r.commit(4);
 		
-		r.insertToROB(ROBEntryType.INT, ROBEntryDestination.R6); // testing if the new entry will be in the first ROB entry
+		r.insertToROB(ROBEntryType.INT, Register.R6); // testing if the new entry will be in the first ROB entry
 		
 		System.out.println("------------------------------------------");
 		r.printROB();

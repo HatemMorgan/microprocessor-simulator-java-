@@ -1,5 +1,5 @@
 package reorderBuffer;
 
 public enum ROBEntryType {
-	INT,LD,SD
+	INT,LD,SD,BR
 }

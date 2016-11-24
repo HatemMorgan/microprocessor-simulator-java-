@@ -66,6 +66,7 @@ public class Cache {
 			}
 			if(memorySet[i].tag == tag && memorySet[i].valid == true){
 				System.out.println("Result found");
+				busy = false;
 				return memorySet[i];
 			} 
 		}

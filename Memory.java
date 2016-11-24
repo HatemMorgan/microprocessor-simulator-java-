@@ -56,6 +56,7 @@ public class Memory {
 		result = caches[i].searchCache(byteAddress);
 		//Read hit
 		if(result !=null){
+			System.out.println("Found in cache level " + i);
 			return result.data;
 		}
 		
@@ -193,6 +194,8 @@ public class Memory {
 		Memory m = new Memory(2, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAllocate);
 		m.store(212, "sayegh");
 		String res = m.load(212);
+		String res2 = m.load(212);
 		System.out.println(res);
+		System.out.println(res2);
 	}
 }

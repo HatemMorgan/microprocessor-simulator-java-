@@ -5,24 +5,24 @@ import reservationStations.Operation;
 
 public class AddImmediateInstruction extends InstructionSetArchitecture {
 	
-	String immediateValue ;
-	public AddImmediateInstruction(Operation operation, RegisterEnum destinationRegister,
-			RegisterEnum sourceOneRegister, String immidiateValue) {
+	Short immediateValue;
+	public AddImmediateInstruction( RegisterEnum destinationRegister,
+			RegisterEnum sourceOneRegister, Short immidiateValue) {
 		
-		super(operation, destinationRegister, sourceOneRegister, null);
+		super(Operation.ADDI, destinationRegister, sourceOneRegister, null);
 		this.immediateValue = immidiateValue;
 	}
 
 	@Override
-	public String execute() {
+	public Short execute() {
 		
-		String[] operands = super.loadDataFromRegisters();
+		Short[] operands = super.loadDataFromRegisters();
 		
 		// call ADDI function and pass operand and immediateValue to it and it will return the address as the result
+		Short result = adderFU.add(operands[0],immediateValue);
 		
-		// store returned result to destination register
-		super.storeResultIntoDest(null);
-		return null;
+
+		return result ;
 	}
 
 }

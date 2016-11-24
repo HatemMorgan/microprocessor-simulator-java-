@@ -6,19 +6,18 @@ import reservationStations.Operation;
 public class JALRInstruction extends InstructionSetArchitecture {
 
 
-	public JALRInstruction(Operation operation, RegisterEnum destinationRegister, RegisterEnum sourceOneRegister) {
-		super(operation,destinationRegister ,sourceOneRegister , null);
+	public JALRInstruction(RegisterEnum destinationRegister, RegisterEnum sourceOneRegister) {
+		super(Operation.JALR,destinationRegister ,sourceOneRegister , null);
 
 	}
 
 	@Override
-	public String execute() {
+	public Short execute() {
 		
-		String[] operands = super.loadDataFromRegisters();
+		Short[] operands = super.loadDataFromRegisters();
 		
 		
 		// store PC+1 in destination 
-		super.storeResultIntoDest(null);
 		
 		// call (call/return method) and pass to it the operand
 		

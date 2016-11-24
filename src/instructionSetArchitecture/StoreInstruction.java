@@ -5,22 +5,25 @@ import reservationStations.Operation;
 
 public class StoreInstruction extends InstructionSetArchitecture {
 	
-	String immediateValue ;
-	public StoreInstruction(Operation operation, RegisterEnum destinationRegister,
-			RegisterEnum sourceOneRegister, String immidiateValue) {
+	Short immediateValue ;
+	public StoreInstruction(RegisterEnum destinationRegister,
+			RegisterEnum sourceOneRegister, Short immediateValue) {
 		
-		super(operation, destinationRegister, sourceOneRegister, null);
-		this.immediateValue = immidiateValue;
+		super(Operation.SW, destinationRegister, sourceOneRegister, null);
+		this.immediateValue = immediateValue;
 	}
 
 	@Override
-	public String execute() {
+	public Short execute() {
 		
-		String[] operands = super.loadDataFromRegisters();
 		
+		Short[] operands = super.loadDataFromRegisters();
+			
 		// call ADDI function and pass operand and immediateValue to it and it will return the address as the result
+		Short result = adderFU.add(operands[0],immediateValue);
 		
 		// call store method and pass address to it
+		//TODo
 				
 		return null;
 	}

@@ -5,19 +5,18 @@ import reservationStations.Operation;
 
 public class RETInstruction extends InstructionSetArchitecture {
 
-
-	public RETInstruction(Operation operation, RegisterEnum sourceOneRegister) {
-		super(operation,null ,sourceOneRegister , null);
+	public RETInstruction(RegisterEnum sourceOneRegister) {
+		super(Operation.RET, null, sourceOneRegister, null);
 
 	}
 
 	@Override
-	public String execute() {
-		
-		String[] operands = super.loadDataFromRegisters();
-		
+	public Short execute() {
+
+		Short[] operands = super.loadDataFromRegisters();
+
 		// call (call/return method) and pass to it the operand
-		
+
 		return null;
 	}
 

@@ -7,71 +7,80 @@ import java.util.Hashtable;
 import registerStatus.RegisterStatus;
 
 public class RegisterFile {
-	private Hashtable<RegisterEnum,Register> registerFile ;
-	
-	public RegisterFile (){
-		registerFile = new Hashtable<RegisterEnum, Register>(8);
+	private static RegisterFile registerFile;
+	private Hashtable<RegisterEnum, Register> registerFileTable;
+
+	private RegisterFile() {
+		registerFileTable = new Hashtable<RegisterEnum, Register>(8);
 		init();
-		
+
 	}
-	
-	private void init (){
-		for (int i = 0; i < 8 ;i++) {
-			if( i== 0 ){
-				registerFile.put(RegisterEnum.valueOf("R"+i), new Register((short) 0));
+
+	public static synchronized RegisterFile getInstance() {
+
+		if (registerFile == null)
+			registerFile = new RegisterFile();
+
+		return registerFile;
+
+	}
+
+	private void init() {
+		for (int i = 0; i < 8; i++) {
+			if (i == 0) {
+				registerFileTable.put(RegisterEnum.valueOf("R" + i),
+						new Register((short) 0));
 				continue;
 			}
-			registerFile.put(RegisterEnum.valueOf("R"+i), new Register(null));
+			registerFileTable.put(RegisterEnum.valueOf("R" + i), new Register(
+					null));
 		}
 	}
-	
-	private void printRegisterFile(){
-		for(RegisterEnum registerName : registerFile.keySet()){
-			System.out.println("Register "+registerName+" has value : "+registerFile.get(registerName));
+
+	private void printregisterFileTable() {
+		for (RegisterEnum registerName : registerFileTable.keySet()) {
+			System.out.println("Register " + registerName + " has value : "
+					+ registerFileTable.get(registerName));
 		}
 	}
-	
-	
-	private Short loadDataFromRegister(RegisterEnum registerName){
-		if(! registerFile.containsKey(registerName)){
+
+	public Short loadDataFromRegister(RegisterEnum registerName) {
+		if (!registerFileTable.containsKey(registerName)) {
 			System.out.println("Wrong Register");
 			return null;
 		}
-		
-		return registerFile.get(registerName).getData();
-		
-	}
-	
-	private void storeDataToRegister(RegisterEnum registerName , Short data){
-		if(! registerFile.containsKey(registerName)){
-			System.out.println("Wrong Register");
-			return ;
-		}
-		
-		if(registerName.equals(RegisterEnum.R0)){
-			System.out.println("cannot store data to register R0");
-			return ;
-		}
-		
-		registerFile.get(registerName).setData(data);
-		System.out.println("Storing data : "+data+" to register : "+registerName);
-	}
-	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		RegisterFile registerFile = new RegisterFile();
-		
-		registerFile.storeDataToRegister(RegisterEnum.R1, (short)100);
-		registerFile.storeDataToRegister(RegisterEnum.R3, (short)2230);
-		
-		System.out.println(registerFile.loadDataFromRegister(RegisterEnum.R1));
-		
-		registerFile.printRegisterFile();
-		
-	}
-	
-}
 
+		return registerFileTable.get(registerName).getData();
+
+	}
+
+	public void storeDataToRegister(RegisterEnum registerName, Short data) {
+		if (!registerFileTable.containsKey(registerName)) {
+			System.out.println("Wrong Register");
+			return;
+		}
+
+		if (registerName.equals(RegisterEnum.R0)) {
+			System.out.println("cannot store data to register R0");
+			return;
+		}
+
+		registerFileTable.get(registerName).setData(data);
+		System.out.println("Storing data : " + data + " to register : "
+				+ registerName);
+	}
+
+	public static void main(String[] args) {
+		RegisterFile registerFileTable = new RegisterFile();
+
+		registerFileTable.storeDataToRegister(RegisterEnum.R1, (short) 100);
+		registerFileTable.storeDataToRegister(RegisterEnum.R3, (short) 2230);
+
+		System.out.println(registerFileTable
+				.loadDataFromRegister(RegisterEnum.R1));
+
+		registerFileTable.printregisterFileTable();
+
+	}
+
+}

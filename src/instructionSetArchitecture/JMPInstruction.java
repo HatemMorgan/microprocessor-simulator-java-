@@ -5,21 +5,25 @@ import reservationStations.Operation;
 
 public class JMPInstruction extends InstructionSetArchitecture {
 
-	private String immediateValue;
+	private Short immediateValue;
 
-	public JMPInstruction(Operation operation, RegisterEnum sourceOneRegister, String immediateValue) {
-		super(operation, null, sourceOneRegister,
+	public JMPInstruction(RegisterEnum sourceOneRegister, Short immediateValue) {
+		super(Operation.JMP, null, sourceOneRegister,
 				null);
 		this.immediateValue = immediateValue;
 	}
 
 	@Override
-	public String execute() {
+	public Short execute() {
 		
-		String[] operands = super.loadDataFromRegisters();
+		Short[] operands = super.loadDataFromRegisters();
 		
-		// call ADDI function and pass  operand and immidiate value to it and it will return the address as the result
+		// call ADDI function and pass  operand and immidiate value to it
+		Short result = adderFU.add(operands[0],immediateValue);
 		
+		// call ADDI function and pass result and PC+1 to calculate targat address
+		
+
 		// call jmp method that will jmp to the instruction at the resulted address
 		
 		return null;

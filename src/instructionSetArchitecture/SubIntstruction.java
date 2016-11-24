@@ -5,22 +5,22 @@ import reservationStations.Operation;
 
 public class SubIntstruction extends InstructionSetArchitecture {
 
-	public SubIntstruction(Operation operation, RegisterEnum destinationRegister,
+	public SubIntstruction(RegisterEnum destinationRegister,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
-		
-		super(operation, destinationRegister, sourceOneRegister, sourceTwoRegister);
+
+		super(Operation.SUB, destinationRegister, sourceOneRegister,
+				sourceTwoRegister);
 	}
 
 	@Override
-	public String execute() {
-		String[] operands = super.loadDataFromRegisters();
-		
-		// call SUB function and pass operands to it and it will return  the result to be store in dest reg
-		
-		// store returned result to destination register
-		super.storeResultIntoDest(null);
-		
-		return null;
+	public Short execute() {
+		Short[] operands = super.loadDataFromRegisters();
+
+		// call SUB function and pass operands to it and it will return the
+		// result to be store in dest reg
+		Short result = adderFU.sub(operands[0], operands[1]);
+
+		return result;
 	}
 
 }

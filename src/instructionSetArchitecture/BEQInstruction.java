@@ -5,21 +5,26 @@ import reservationStations.Operation;
 
 public class BEQInstruction extends InstructionSetArchitecture {
 
-	public BEQInstruction(Operation operation, RegisterEnum destinationRegister,
+	public BEQInstruction( RegisterEnum destinationRegister,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
-		super(operation, destinationRegister, sourceOneRegister, sourceTwoRegister);
+		super(Operation.BEQ, destinationRegister, sourceOneRegister, sourceTwoRegister);
 	}
 
 	@Override
-	public String execute() {
-		String[] operands = super.loadDataFromRegisters();
+	public Short execute() {
+		Short[] operands = super.loadDataFromRegisters();
 		
 		// call subtract method of adder and pass operands to it and it will return result
-		
+		Short result = adderFU.sub(operands[0],operands[1]);
 		// check if result==0 so we will branch 
 		
-		return null;
+		if(result == 0){
+			return 1 ;
+		}else{
+			return 0 ;
+		}
+	
 	}
 
 }

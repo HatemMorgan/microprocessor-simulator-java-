@@ -5,22 +5,20 @@ import reservationStations.Operation;
 
 public class AddInstruction extends InstructionSetArchitecture {
 
-	public AddInstruction(Operation operation, RegisterEnum destinationRegister,
+	public AddInstruction(RegisterEnum destinationRegister,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
-		super(operation, destinationRegister, sourceOneRegister, sourceTwoRegister);
+		super(Operation.ADD, destinationRegister, sourceOneRegister, sourceTwoRegister);
 	}
 
 	@Override
-	public String execute() {
-		String[] operands = super.loadDataFromRegisters();
+	public Short execute() {
+		Short[] operands = super.loadDataFromRegisters();
 		
 		// call ADD function and pass operands to it and it will return  the result to be store in dest reg
+		Short result = adderFU.add(operands[0], operands[1]);
 		
-		// store returned result to destination register
-		super.storeResultIntoDest(null);
-		
-		return null;
+		return result;
 	}
 
 }

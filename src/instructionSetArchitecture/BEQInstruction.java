@@ -1,12 +1,12 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public class BEQInstruction extends InstructionSetArchitecture {
 
-	public BEQInstruction(Operation operation, Register destinationRegister,
-			Register sourceOneRegister, Register sourceTwoRegister) {
+	public BEQInstruction(Operation operation, RegisterEnum destinationRegister,
+			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
 		super(operation, destinationRegister, sourceOneRegister, sourceTwoRegister);
 	}

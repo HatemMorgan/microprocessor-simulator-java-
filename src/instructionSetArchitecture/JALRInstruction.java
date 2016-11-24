@@ -1,12 +1,12 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public class JALRInstruction extends InstructionSetArchitecture {
 
 
-	public JALRInstruction(Operation operation, Register destinationRegister, Register sourceOneRegister) {
+	public JALRInstruction(Operation operation, RegisterEnum destinationRegister, RegisterEnum sourceOneRegister) {
 		super(operation,destinationRegister ,sourceOneRegister , null);
 
 	}

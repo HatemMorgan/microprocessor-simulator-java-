@@ -1,6 +1,6 @@
 package reorderBuffer;
 
-import registers.Register;
+import registers.RegisterEnum;
 
 public class ROB {
 	private ROBEntry head;
@@ -51,7 +51,7 @@ public class ROB {
 	}
 	
 	
-	private void insertToROB(ROBEntryType type, Register destination){
+	private void insertToROB(ROBEntryType type, RegisterEnum destination){
 		if(!isFull()){
 		tail.setType(type);
 		tail.setDestination(destination);
@@ -132,11 +132,11 @@ public class ROB {
 	
 	public static void main(String[] args) {
 		ROB r = new ROB(4);
-		r.insertToROB(ROBEntryType.LD, Register.R1);
-		r.insertToROB(ROBEntryType.SD, Register.R2);
-		r.insertToROB(ROBEntryType.LD, Register.R3);
-		r.insertToROB(ROBEntryType.INT, Register.R4);
-		r.insertToROB(ROBEntryType.INT, Register.R5); // testing to insert a new entry when the ROB is FUll
+		r.insertToROB(ROBEntryType.LD, RegisterEnum.R1);
+		r.insertToROB(ROBEntryType.SD, RegisterEnum.R2);
+		r.insertToROB(ROBEntryType.LD, RegisterEnum.R3);
+		r.insertToROB(ROBEntryType.INT, RegisterEnum.R4);
+		r.insertToROB(ROBEntryType.INT, RegisterEnum.R5); // testing to insert a new entry when the ROB is FUll
 		
 		r.writeResultTOROB(3, "24"); // testing entring a new entry
 		r.commit(3); // testing committing an entry that the head is not pointing to it

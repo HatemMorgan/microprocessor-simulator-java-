@@ -1,18 +1,18 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public abstract class InstructionSetArchitecture {
 	private Operation operation ;
-	private Register destinationRegister;
-	private Register sourceOneRegister;
-	private Register sourceTwoRegister;
+	private RegisterEnum destinationRegister;
+	private RegisterEnum sourceOneRegister;
+	private RegisterEnum sourceTwoRegister;
 	
 	
 	public InstructionSetArchitecture(Operation operation,
-			Register destinationRegister, Register sourceOneRegister,
-			Register sourceTwoRegister) {
+			RegisterEnum destinationRegister, RegisterEnum sourceOneRegister,
+			RegisterEnum sourceTwoRegister) {
 
 		this.operation = operation;
 		this.destinationRegister = destinationRegister;

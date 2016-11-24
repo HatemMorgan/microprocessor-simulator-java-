@@ -1,12 +1,12 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public class NANDInstruction extends InstructionSetArchitecture {
 
-	public NANDInstruction(Operation operation, Register destinationRegister,
-			Register sourceOneRegister, Register sourceTwoRegister) {
+	public NANDInstruction(Operation operation, RegisterEnum destinationRegister,
+			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
 		super(operation, destinationRegister, sourceOneRegister, sourceTwoRegister);
 	}

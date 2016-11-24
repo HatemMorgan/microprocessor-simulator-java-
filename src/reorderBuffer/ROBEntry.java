@@ -1,20 +1,20 @@
 package reorderBuffer;
 
-import registers.Register;
+import registers.RegisterEnum;
 
 
 
 public class ROBEntry {
 	private int entryNumber ;
 	private ROBEntryType type ;
-	private Register destination;
+	private RegisterEnum destination;
 	private String value;
 	private boolean ready ;
 	
 	public ROBEntry next ;
 	
 	public ROBEntry(int entryNumber, ROBEntryType type,
-			Register destination, String value, boolean ready) {
+			RegisterEnum destination, String value, boolean ready) {
 		this.entryNumber = entryNumber;
 		this.type = type;
 		this.destination = destination;
@@ -39,11 +39,11 @@ public class ROBEntry {
 		this.type = type;
 	}
 
-	public Register getDestination() {
+	public RegisterEnum getDestination() {
 		return destination;
 	}
 
-	public void setDestination(Register destination) {
+	public void setDestination(RegisterEnum destination) {
 		this.destination = destination;
 	}
 

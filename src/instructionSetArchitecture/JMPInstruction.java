@@ -1,13 +1,13 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public class JMPInstruction extends InstructionSetArchitecture {
 
 	private String immediateValue;
 
-	public JMPInstruction(Operation operation, Register sourceOneRegister, String immediateValue) {
+	public JMPInstruction(Operation operation, RegisterEnum sourceOneRegister, String immediateValue) {
 		super(operation, null, sourceOneRegister,
 				null);
 		this.immediateValue = immediateValue;

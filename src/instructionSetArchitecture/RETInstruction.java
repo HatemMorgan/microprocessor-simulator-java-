@@ -1,12 +1,12 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public class RETInstruction extends InstructionSetArchitecture {
 
 
-	public RETInstruction(Operation operation, Register sourceOneRegister) {
+	public RETInstruction(Operation operation, RegisterEnum sourceOneRegister) {
 		super(operation,null ,sourceOneRegister , null);
 
 	}

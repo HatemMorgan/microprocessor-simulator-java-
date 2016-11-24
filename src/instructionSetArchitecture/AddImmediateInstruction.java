@@ -1,13 +1,13 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public class AddImmediateInstruction extends InstructionSetArchitecture {
 	
 	String immediateValue ;
-	public AddImmediateInstruction(Operation operation, Register destinationRegister,
-			Register sourceOneRegister, String immidiateValue) {
+	public AddImmediateInstruction(Operation operation, RegisterEnum destinationRegister,
+			RegisterEnum sourceOneRegister, String immidiateValue) {
 		
 		super(operation, destinationRegister, sourceOneRegister, null);
 		this.immediateValue = immidiateValue;

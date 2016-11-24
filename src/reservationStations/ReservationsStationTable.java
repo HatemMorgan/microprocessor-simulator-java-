@@ -1,7 +1,7 @@
 package reservationStations;
 
 import java.util.Hashtable;
-import registers.Register;
+import registers.RegisterEnum;
 import reorderBuffer.ROB;
 
 public class ReservationsStationTable {

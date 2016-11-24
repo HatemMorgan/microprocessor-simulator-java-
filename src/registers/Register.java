@@ -1,6 +1,24 @@
 package registers;
 
+public class Register {
 
-public enum Register {
-	R1,R2,R3,R4,R5,R6,R7
+	private Short data;
+
+	public Register(Short data) {
+		this.data = data;
+	}
+
+	public Short getData() {
+		return data;
+	}
+
+	public void setData(Short data) {
+		this.data = data;
+	}
+
+	@Override
+	public String toString() {
+		return "Register [data=" + data + "]";
+	}
+
 }

@@ -1,6 +1,6 @@
 package reservationStations;
 
-import registers.Register;
+import registers.RegisterEnum;
 
 public class ReservationStationEntry {
 

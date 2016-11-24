@@ -1,12 +1,12 @@
 package instructionSetArchitecture;
 
-import registers.Register;
+import registers.RegisterEnum;
 import reservationStations.Operation;
 
 public class AddInstruction extends InstructionSetArchitecture {
 
-	public AddInstruction(Operation operation, Register destinationRegister,
-			Register sourceOneRegister, Register sourceTwoRegister) {
+	public AddInstruction(Operation operation, RegisterEnum destinationRegister,
+			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
 		super(operation, destinationRegister, sourceOneRegister, sourceTwoRegister);
 	}

@@ -18,7 +18,7 @@ public class NANDInstruction extends InstructionSetArchitecture {
 
 		// call NAND function and pass operands to it and it will return the
 		// result to be store in dest reg
-		Short result = multFU.mul(operands[0], operands[1]);
+		Short result = nandFU.nand(operands[0], operands[1]);
 
 		return result;
 	}

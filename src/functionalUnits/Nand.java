@@ -1,8 +1,37 @@
 package functionalUnits;
+import memory.Clock;
+import java.util.*;
+import java.math.*;
 
 public class Nand {
-
-	public Short nand(Short num1, Short num2) {
-		return (short) ~(num1 & num2);
+	
+	private int nandCycles;
+	
+	public void setMULTCycles(int time){
+		nandCycles = time;
+	}
+	
+		
+	public short bitwiseAnd(short x,short y)
+	{
+		short result= (short)(x&y);
+		return result;
+	}
+	
+	public Short nand(Short sourceReg1,Short sourceReg2)
+	{
+		int currentClock = Clock.counter.intValue()+nandCycles;
+		while(true)
+		{
+			if(currentClock == Clock.counter.intValue()){
+				break;
+			}
+		}
+		/*int regA=Integer.parseInt(sourceReg1);
+		int regB=Integer.parseInt(sourceReg2);*/
+		short result = (short)~(bitwiseAnd(sourceReg1.shortValue(),sourceReg2.shortValue()));
+		//String resultString =""+result;
+		return result;
 	}
 }
+

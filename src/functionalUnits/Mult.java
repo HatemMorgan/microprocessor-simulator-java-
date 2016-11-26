@@ -1,9 +1,31 @@
 package functionalUnits;
+import memory.Clock;
+import java.util.*;
+import java.math.*;
 
 public class Mult {
-
-	public Short mul(Short num1, Short num2) {
-		return (short) (num1 * num2);
+	
+	private int multCycles;
+	
+	public void setMULTCycles(int time){
+		multCycles = time;
 	}
-
+	
+	public Short mul(Short sourceReg1,Short sourceReg2)
+	{
+		int currentClock = Clock.counter.intValue()+multCycles;
+		while(true)
+		{
+			if(currentClock == Clock.counter.intValue()){
+				break;
+			}
+		}
+		
+		
+		/*int regA=Integer.parseInt(sourceReg1);
+		int regB=Integer.parseInt(sourceReg2);*/
+		short result = (short)(sourceReg1.shortValue()*sourceReg2.shortValue());
+		//String resultString =""+result;
+		return result;
+	}
 }

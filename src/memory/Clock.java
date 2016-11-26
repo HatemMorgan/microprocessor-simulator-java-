@@ -2,7 +2,7 @@ package memory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.TimeUnit;
 public class Clock {
-	public AtomicInteger counter;
+	public static AtomicInteger counter;
 	
 	public Clock(){
 		counter = new AtomicInteger();

@@ -64,4 +64,14 @@ public class InstructionMemory extends Memory {
 	public void incrementPC() {
 		PC++;
 	}
+	
+	public static void main(String []args){
+		Clock c = new Clock();
+		InstructionMemory im = new InstructionMemory(2, 10, c, writeHitPolicy.writeBack, writeMissPolicy.writeAllocate);
+		im.setPC((short)0);
+		
+	}
+	
+	
+	
 }

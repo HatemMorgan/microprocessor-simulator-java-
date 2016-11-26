@@ -5,10 +5,10 @@ import reservationStations.Operation;
 
 public class AddInstruction extends InstructionSetArchitecture {
 
-	public AddInstruction(RegisterEnum destinationRegister,
+	public AddInstruction(RegisterEnum destinationRegister,Integer instructionNumber,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
-		super(Operation.ADD, destinationRegister, sourceOneRegister, sourceTwoRegister);
+		super(Operation.ADD, instructionNumber,destinationRegister, sourceOneRegister, sourceTwoRegister);
 	}
 
 	@Override

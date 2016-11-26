@@ -5,10 +5,10 @@ import reservationStations.Operation;
 
 public class MulInstruction extends InstructionSetArchitecture {
 
-	public MulInstruction(RegisterEnum destinationRegister,
+	public MulInstruction(RegisterEnum destinationRegister,Integer instructionNumber,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 
-		super(Operation.MUL, destinationRegister, sourceOneRegister,
+		super(Operation.MUL, instructionNumber,destinationRegister, sourceOneRegister,
 				sourceTwoRegister);
 	}
 

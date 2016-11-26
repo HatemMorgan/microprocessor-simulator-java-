@@ -1,20 +1,22 @@
 package reorderBuffer;
 
+import instructionSetArchitecture.InstructionSetArchitecture;
 import registers.RegisterEnum;
+import reservationStations.Operation;
 
 
 
 public class ROBEntry {
 	private int entryNumber ;
-	private ROBEntryType type ;
+	private InstructionSetArchitecture type ;
 	private RegisterEnum destination;
-	private String value;
+	private Short value;
 	private boolean ready ;
 	
 	public ROBEntry next ;
 	
-	public ROBEntry(int entryNumber, ROBEntryType type,
-			RegisterEnum destination, String value, boolean ready) {
+	public ROBEntry(int entryNumber, InstructionSetArchitecture type,
+			RegisterEnum destination, Short value, boolean ready) {
 		this.entryNumber = entryNumber;
 		this.type = type;
 		this.destination = destination;
@@ -31,11 +33,11 @@ public class ROBEntry {
 
 
 
-	public ROBEntryType getType() {
+	public InstructionSetArchitecture getType() {
 		return type;
 	}
 
-	public void setType(ROBEntryType type) {
+	public void setType(InstructionSetArchitecture type) {
 		this.type = type;
 	}
 
@@ -47,11 +49,11 @@ public class ROBEntry {
 		this.destination = destination;
 	}
 
-	public String getValue() {
+	public Short getValue() {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(Short value) {
 		this.value = value;
 	}
 

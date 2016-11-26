@@ -7,8 +7,8 @@ public class JMPInstruction extends InstructionSetArchitecture {
 
 	private Short immediateValue;
 
-	public JMPInstruction(RegisterEnum sourceOneRegister, Short immediateValue) {
-		super(Operation.JMP, null, sourceOneRegister,
+	public JMPInstruction(RegisterEnum sourceOneRegister,Integer instructionNumber,Short immediateValue) {
+		super(Operation.JMP,instructionNumber ,null, sourceOneRegister,
 				null);
 		this.immediateValue = immediateValue;
 	}

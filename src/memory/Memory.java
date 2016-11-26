@@ -9,18 +9,20 @@ public class Memory {
 	
 	//back + allocate
 	//through + around
+	
 	//?? why there is default values for writeHitPolicy and writeMissPolicy
 	public static writeHitPolicy hitPolicy = writeHitPolicy.writeThrough;
 	public static writeMissPolicy missPolicy = writeMissPolicy.writeAround;
+
 	
 	public Memory(int cacheLevels, int mainMemoryAccessTimeInCycles,  Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
 		this.cacheLevels = cacheLevels;
 		this.caches = new Cache[cacheLevels];
 		this.clock = clock;
 		if(hitPolicy != null)
-			Memory.hitPolicy = hitPolicy;
+			this.hitPolicy = hitPolicy;
 		if(missPolicy != null)
-			Memory.missPolicy = missPolicy;
+			this.missPolicy = missPolicy;
 		this.main = new MainMemory(mainMemoryAccessTimeInCycles, clock, 3);
 		init();
 	}
@@ -40,10 +42,9 @@ public class Memory {
 		}		
 		return "";
 	}
-	
-	
-	
-	String load(int byteAddress){
+
+	public String load(int byteAddress){
+
 		String res=loadHelper(byteAddress, 0);
 		System.out.println(res);
 		return res;
@@ -64,6 +65,7 @@ public class Memory {
 		System.out.println("here------>"+result);
 		//Read hit
 		if(result !=null){
+			System.out.println("Found in cache level " + i);
 			return result.data;
 		}
 		
@@ -161,7 +163,7 @@ public class Memory {
 
 	}
 
-	void store(int byteAddress, String value){
+	public void store(int byteAddress, String value){
 		storeHelper(byteAddress,value, 0);
 	}
 	
@@ -202,9 +204,11 @@ public class Memory {
 		m.store(212, "sayegh");
 		String res = m.load(212);
 		System.out.println(res);
+
 		System.out.println("------------------------------------------------");
-		String res2 = m.load(213);
+		String res2 = m.load(212);
 		System.out.println("heree");
+		
 		System.out.println(res2);
 	}
 }

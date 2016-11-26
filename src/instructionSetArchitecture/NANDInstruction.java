@@ -5,10 +5,10 @@ import reservationStations.Operation;
 
 public class NANDInstruction extends InstructionSetArchitecture {
 
-	public NANDInstruction(RegisterEnum destinationRegister,
+	public NANDInstruction(RegisterEnum destinationRegister, Integer instructionNumber,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 
-		super(Operation.NAND, destinationRegister, sourceOneRegister,
+		super(Operation.NAND, instructionNumber,destinationRegister, sourceOneRegister,
 				sourceTwoRegister);
 	}
 

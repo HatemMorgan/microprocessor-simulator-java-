@@ -27,13 +27,34 @@ public class ProgramState {
 		}
 	}
 
+	public InstructionSetArchitecture getInstruction(int position){
+		if (programStateTable.size() >= position){
+			System.out.println("No instruction with this position");
+			return null;
+		}
+		
+		return programStateTable.get(position).getInstruction();
+		
+	}
+	
+	public ProgramStateEntry getProgramStateTableEntry(int position){
+		if (programStateTable.size() >= position){
+			System.out.println("No instruction with this position");
+			return null;
+		}
+		
+		return programStateTable.get(position);
+		
+	}
+	
+	
 	public static void main(String[] args) {
 
 		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[2];
-		instructions[0] = new AddInstruction(RegisterEnum.R2, RegisterEnum.R3,
+		instructions[0] = new AddInstruction(RegisterEnum.R2,1, RegisterEnum.R3,
 				RegisterEnum.R4);
 
-		instructions[1] = new MulInstruction(RegisterEnum.R6, RegisterEnum.R1,
+		instructions[1] = new MulInstruction(RegisterEnum.R6,2, RegisterEnum.R1,
 				RegisterEnum.R4);
 
 		ProgramState programState = new ProgramState();

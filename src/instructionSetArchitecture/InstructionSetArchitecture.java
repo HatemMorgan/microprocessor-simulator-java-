@@ -1,6 +1,7 @@
 package instructionSetArchitecture;
 
 import functionalUnits.*;
+import registers.Register;
 import registers.RegisterEnum;
 import registers.RegisterFile;
 import reservationStations.Operation;
@@ -10,7 +11,7 @@ public abstract class InstructionSetArchitecture {
 	private RegisterEnum destinationRegister;
 	private RegisterEnum sourceOneRegister;
 	private RegisterEnum sourceTwoRegister;
-
+	private Integer instructionNumber ;
 	// Functional Units
 	protected static Adder adderFU = new Adder();
 	protected static Mult multFU = new Mult();
@@ -19,10 +20,11 @@ public abstract class InstructionSetArchitecture {
 	// Register File
 	protected static RegisterFile registerFile = RegisterFile.getInstance();
 
-	public InstructionSetArchitecture(Operation operation,
+	public InstructionSetArchitecture(Operation operation, Integer instructionNumber,
 			RegisterEnum destinationRegister, RegisterEnum sourceOneRegister,
 			RegisterEnum sourceTwoRegister) {
 
+		this.instructionNumber = instructionNumber;
 		this.operation = operation;
 		this.destinationRegister = destinationRegister;
 		this.sourceOneRegister = sourceOneRegister;
@@ -52,14 +54,42 @@ public abstract class InstructionSetArchitecture {
 		operands[1] = registerFile.loadDataFromRegister(sourceTwoRegister);
 		return operands;
 	}
+	
+
+
+	public Operation getOperation() {
+		return operation;
+	}
+
+	public RegisterEnum getDestinationRegister() {
+		return destinationRegister;
+	}
+
+	public RegisterEnum getSourceOneRegister() {
+		return sourceOneRegister;
+	}
+
+	public RegisterEnum getSourceTwoRegister() {
+		return sourceTwoRegister;
+	}
+
+	
+	
+	public Integer getInstructionNumber() {
+		return instructionNumber;
+	}
 
 	@Override
 	public String toString() {
 		return "InstructionSetArchitecture [operation=" + operation
 				+ ", destinationRegister=" + destinationRegister
 				+ ", sourceOneRegister=" + sourceOneRegister
-				+ ", sourceTwoRegister=" + sourceTwoRegister + "]";
+				+ ", sourceTwoRegister=" + sourceTwoRegister
+				+ ", instructionNumber=" + instructionNumber + "]";
 	}
+
+	
+	
 
 	
 

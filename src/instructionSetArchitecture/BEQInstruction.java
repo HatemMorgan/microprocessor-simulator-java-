@@ -5,10 +5,10 @@ import reservationStations.Operation;
 
 public class BEQInstruction extends InstructionSetArchitecture {
 
-	public BEQInstruction( RegisterEnum destinationRegister,
+	public BEQInstruction( RegisterEnum destinationRegister, Integer instructionNumber ,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
-		super(Operation.BEQ, destinationRegister, sourceOneRegister, sourceTwoRegister);
+		super(Operation.BEQ,instructionNumber ,destinationRegister, sourceOneRegister, sourceTwoRegister);
 	}
 
 	@Override

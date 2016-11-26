@@ -6,10 +6,10 @@ import reservationStations.Operation;
 public class StoreInstruction extends InstructionSetArchitecture {
 	
 	Short immediateValue ;
-	public StoreInstruction(RegisterEnum destinationRegister,
+	public StoreInstruction(RegisterEnum destinationRegister,Integer instructionNumber,
 			RegisterEnum sourceOneRegister, Short immediateValue) {
 		
-		super(Operation.SW, destinationRegister, sourceOneRegister, null);
+		super(Operation.SW,instructionNumber, destinationRegister, sourceOneRegister, null);
 		this.immediateValue = immediateValue;
 	}
 

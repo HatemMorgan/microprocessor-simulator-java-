@@ -5,8 +5,8 @@ import reservationStations.Operation;
 
 public class RETInstruction extends InstructionSetArchitecture {
 
-	public RETInstruction(RegisterEnum sourceOneRegister) {
-		super(Operation.RET, null, sourceOneRegister, null);
+	public RETInstruction(RegisterEnum sourceOneRegister,Integer instructionNumber) {
+		super(Operation.RET,instructionNumber, null, sourceOneRegister, null);
 
 	}
 

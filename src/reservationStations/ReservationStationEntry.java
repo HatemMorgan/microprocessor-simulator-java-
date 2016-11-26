@@ -6,15 +6,15 @@ public class ReservationStationEntry {
 
 	private boolean isBusy;
 	private Operation op;
-	private String vj;
-	private String vk;
+	private Short vj;
+	private Short vk;
 	private Integer qj;
 	private Integer qk;
 	private Integer destination;
 	private Integer address ;
 	
-	public ReservationStationEntry(boolean isBusy, Operation op, String vj,
-			String vk, Integer qj, Integer qk, Integer destination,
+	public ReservationStationEntry(boolean isBusy, Operation op, Short vj,
+			Short vk, Integer qj, Integer qk, Integer destination,
 			Integer address) {
 		this.isBusy = isBusy;
 		this.op = op;
@@ -42,19 +42,19 @@ public class ReservationStationEntry {
 		this.op = op;
 	}
 
-	public String getVj() {
+	public Short getVj() {
 		return vj;
 	}
 
-	public void setVj(String vj) {
+	public void setVj(Short vj) {
 		this.vj = vj;
 	}
 
-	public String getVk() {
+	public Short getVk() {
 		return vk;
 	}
 
-	public void setVk(String vk) {
+	public void setVk(Short vk) {
 		this.vk = vk;
 	}
 

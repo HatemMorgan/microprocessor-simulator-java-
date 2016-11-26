@@ -6,10 +6,10 @@ import reservationStations.Operation;
 public class AddImmediateInstruction extends InstructionSetArchitecture {
 	
 	Short immediateValue;
-	public AddImmediateInstruction( RegisterEnum destinationRegister,
+	public AddImmediateInstruction( RegisterEnum destinationRegister, Integer instructionNumber,
 			RegisterEnum sourceOneRegister, Short immidiateValue) {
 		
-		super(Operation.ADDI, destinationRegister, sourceOneRegister, null);
+		super(Operation.ADDI,instructionNumber, destinationRegister, sourceOneRegister, null);
 		this.immediateValue = immidiateValue;
 	}
 

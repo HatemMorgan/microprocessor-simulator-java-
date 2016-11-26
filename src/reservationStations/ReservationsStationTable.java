@@ -20,8 +20,8 @@ public class ReservationsStationTable {
 		}
 	}
 
-	private void insertIntoReservationStation(String reservationStationName,
-			Operation op, String vj, String vk, Integer qj, Integer qk,
+	public void insertIntoReservationStation(String reservationStationName,
+			Operation op, Short vj, Short vk, Integer qj, Integer qk,
 			Integer destination, Integer address) {
 		// check if there is a reservation station available (not busy) with
 		// this reservationStationName
@@ -41,11 +41,23 @@ public class ReservationsStationTable {
 					.println("No free Reservation station so you have to wait ");
 		}
 	}
+	
+	public ReservationStationEntry getReservationStationEntry(String reservationStationName){
+		if (!reservationsStationTable.containsKey(reservationStationName)) {
+			System.out.println("wrong reservation station name");
+			return null;
+		}
+		
+		return reservationsStationTable.get(reservationStationName);
+		
+	}
+	
+	
 
 	// emptying reservation station entry with specified reservationStationName
 	// when writing results
 
-	private void writeResult(String reservationStationName) {
+	public void remove(String reservationStationName) {
 		if (!reservationsStationTable.containsKey(reservationStationName)) {
 			System.out.println("wrong reservation station name");
 			return;
@@ -70,7 +82,7 @@ public class ReservationsStationTable {
 
 	}
 
-	private void passResultToWaitingReservationStation(String value,
+	public void passResultToWaitingReservationStation(Short value,
 			Integer ROBNum) {
 
 		for (ReservationStationEntry reservationEntry : reservationsStationTable
@@ -92,7 +104,7 @@ public class ReservationsStationTable {
 		}
 	}
 
-	private void printReservationStationsTable(){
+	public void printReservationStationsTable(){
 		for (String key : reservationsStationTable.keySet()) {
 			System.out.println(key+" : "+ reservationsStationTable.get(key).toString());
 		}
@@ -102,13 +114,13 @@ public class ReservationsStationTable {
 		String [] reservationStationNames = {"load1","load2","store1","add","mult"};
 		ReservationsStationTable reservationsStationTable = new ReservationsStationTable(reservationStationNames);
 		
-		reservationsStationTable.insertIntoReservationStation("load1", Operation.LD,"2","3",null,null,1,null);
-		reservationsStationTable.insertIntoReservationStation("mult", Operation.MUL,null,"6",1,null,1,null);
+		reservationsStationTable.insertIntoReservationStation("load1", Operation.LD,(short)2,(short)3,null,null,1,null);
+		reservationsStationTable.insertIntoReservationStation("mult", Operation.MUL,null,(short)6,1,null,1,null);
 		
 		reservationsStationTable.printReservationStationsTable();
 		
-		reservationsStationTable.writeResult("load1");
-		reservationsStationTable.passResultToWaitingReservationStation("200", 1);
+		reservationsStationTable.remove("load1");
+		reservationsStationTable.passResultToWaitingReservationStation((short)200, 1);
 		
 		System.out.println("------------------------------------------------------");
 		reservationsStationTable.printReservationStationsTable();

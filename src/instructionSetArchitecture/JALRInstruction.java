@@ -6,8 +6,8 @@ import reservationStations.Operation;
 public class JALRInstruction extends InstructionSetArchitecture {
 
 
-	public JALRInstruction(RegisterEnum destinationRegister, RegisterEnum sourceOneRegister) {
-		super(Operation.JALR,destinationRegister ,sourceOneRegister , null);
+	public JALRInstruction(RegisterEnum destinationRegister,Integer instructionNumber ,RegisterEnum sourceOneRegister) {
+		super(Operation.JALR,instructionNumber,destinationRegister ,sourceOneRegister , null);
 
 	}
 

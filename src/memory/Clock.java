@@ -13,7 +13,7 @@ public class Clock {
 		    public void run() {
 		    	while(true){
 					counter.incrementAndGet();
-//					System.out.println(counter);
+					System.out.println(counter);
 					try {
 						TimeUnit.SECONDS.sleep(1);
 					} catch (InterruptedException e) {

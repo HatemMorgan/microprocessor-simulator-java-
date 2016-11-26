@@ -21,6 +21,7 @@ public class AddImmediateInstruction extends InstructionSetArchitecture {
 		// call ADDI function and pass operand and immediateValue to it and it will return the address as the result
 		Short result = adderFU.addi(operands[0],immediateValue);
 		
+		
 
 		return result ;
 	}

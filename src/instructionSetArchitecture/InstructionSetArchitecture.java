@@ -1,5 +1,7 @@
 package instructionSetArchitecture;
 
+import java.io.Serializable;
+
 import functionalUnits.*;
 import memory.Clock;
 import memory.InstructionMemory;
@@ -10,7 +12,7 @@ import registers.RegisterEnum;
 import registers.RegisterFile;
 import reservationStations.Operation;
 
-public abstract class InstructionSetArchitecture {
+public abstract class InstructionSetArchitecture implements Serializable{
 	private Operation operation;
 	private RegisterEnum destinationRegister;
 	private RegisterEnum sourceOneRegister;

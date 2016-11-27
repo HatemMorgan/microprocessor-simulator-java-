@@ -1,15 +1,11 @@
 package memory;
 import java.util.Arrays;
-import instructionSetArchitecture.*;
+
+import instructionSetArchitecture.InstructionSetArchitecture;
 
 public class MainMemory {
 	//64KB memory
 	String[][] memory;
-
-	InstructionSetArchitecture[][] instructionMemory;
-
-	Short[][] datamemory;
-
 	int accessTimeInCycles = 0;
 	Clock clock;
 	boolean busy = false;
@@ -31,16 +27,14 @@ public class MainMemory {
 		return "";
 	}
 	
-	public void storeInstruction(InstructionSetArchitecture instruction, short address){
-		instructionMemory[address/blockSize][address%blockSize] = instruction;
+	public void storeInstruction(String instruction, short address){
+		memory[address/blockSize][address%blockSize] = instruction;
 		System.out.println("Inserted " + instruction + " in main successfully!");
 	}
+
 	
 	
-
-
-	public void dataStore(Short value, short address){
-
+	public void store(String value, int address){
 		//value is the binary representation of the value in string format
 		//address can be hexadecimal or decimal or even binary
 		
@@ -57,14 +51,12 @@ public class MainMemory {
 		while(clock.counter.get() < clockCycleToReturnAt);
 		
 		//update memory
-		datamemory[address/blockSize][address%blockSize] = value;
+		memory[address/blockSize][address%blockSize] = value;
 		System.out.println("Store finished, clock cycle: "+clock.counter.get());
 		busy = false;
 	}
 	
-
-	public short dataLoad(short address){
-
+	public String load(int address){
 		//address can be hexadecimal or decimal or even binary
 		
 		//wait till previous operation is finished
@@ -82,47 +74,19 @@ public class MainMemory {
 		System.out.println("Load finished, clock cycle: "+clock.counter.get());
 		busy = false;
 		
-		return datamemory[address/blockSize][address%blockSize];
-		
-	}
-	
-	public InstructionSetArchitecture loadInstruction(short address){
-		//address can be hexadecimal or decimal or even binary
-		
-		//wait till previous operation is finished
-		while(busy);
-		busy = true;
-		//determine at which clock cycle the load will end
-		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
-		
-		System.out.println("Load will finish in clock cycle " + clockCycleToReturnAt);
-
-		//wait until memory access time is over
-		while(clock.counter.get() < clockCycleToReturnAt);
-		
-		//fetch from memory
-		System.out.println("Load finished, clock cycle: "+clock.counter.get());
-		busy = false;
-		
-		return instructionMemory[address/blockSize][address%blockSize];
+		return memory[address/blockSize][address%blockSize];
 		
 	}
 	
 	
 	
 	public static void main(String[] args) {
-		/*Clock c = new Clock();
+		Clock c = new Clock();
 		c.start();
 		MainMemory m = new MainMemory(4, c, 1);
-<<<<<<< HEAD
-		m.store("sayegh", 0xff);
+		m.store("sayegh", 255);
 		String value = m.load(255);
-		System.out.println(value);*/
-
-		//m.store("sayegh", 0xff);
-		/*Short value = m.dataLoad((short)255);
-		System.out.println(value);*/
-
+		System.out.println(value);
 	}
 	
 	

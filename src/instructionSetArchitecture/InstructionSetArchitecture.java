@@ -1,6 +1,7 @@
 package instructionSetArchitecture;
 
 import functionalUnits.*;
+import memory.Clock;
 import registers.Register;
 import registers.RegisterEnum;
 import registers.RegisterFile;
@@ -88,8 +89,6 @@ public abstract class InstructionSetArchitecture {
 				+ ", instructionNumber=" + instructionNumber + "]";
 	}
 
-	
-	
 
 	
 

@@ -162,6 +162,14 @@ public class Memory {
 		main.store(value, byteAddress);
 
 	}
+	
+	public void storeInstructions(String []instructions){
+		for(int i=0; i<instructions.length; ++i){
+			main.storeInstruction(instructions[i], i);
+			System.out.println("Stored Instruction: " + instructions[i]);
+		}
+		System.out.println("Stored Instructions Successfully!");
+	}
 
 	public void store(int byteAddress, String value){
 		storeHelper(byteAddress,value, 0);

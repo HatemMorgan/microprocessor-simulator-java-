@@ -7,6 +7,11 @@ public class Mult {
 	
 	private int multCycles;
 	
+	
+	public Mult (int numberOfCycles){
+		this.multCycles = numberOfCycles;
+	}
+	
 	public void setMULTCycles(int time){
 		multCycles = time;
 	}

@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
 
@@ -23,11 +24,10 @@ public class AddImmediateInstruction extends InstructionSetArchitecture {
 
 	@Override
 	public Short execute() {
-		
+	
 		Short[] operands = super.loadDataFromRegisters();
-		
 		// call ADDI function and pass operand and immediateValue to it and it will return the address as the result
-		Short result = adderFU.add(operands[0],immediateValue);
+		Short result = MainFunctionUnit.getInstance().getAdder().add(operands[0],immediateValue);
 		
 		
 

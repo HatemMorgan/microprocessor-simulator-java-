@@ -13,10 +13,6 @@ public abstract class InstructionSetArchitecture {
 	private RegisterEnum sourceOneRegister;
 	private RegisterEnum sourceTwoRegister;
 	private Integer instructionNumber ;
-	// Functional Units
-	protected static Adder adderFU = new Adder();
-	protected static Mult multFU = new Mult();
-	protected static Nand nandFU = new Nand();
 
 	// Register File
 	protected static RegisterFile registerFile = RegisterFile.getInstance();
@@ -39,6 +35,7 @@ public abstract class InstructionSetArchitecture {
 		
 		if(sourceOneRegister != null && sourceTwoRegister == null){
 			Short[] operands = new Short[1];
+			System.out.println(sourceOneRegister);
 			operands[0] = registerFile.loadDataFromRegister(sourceOneRegister);
 			return operands ;
 		}
@@ -90,6 +87,23 @@ public abstract class InstructionSetArchitecture {
 	}
 
 
-	
+	public static void main(String[] args) {
+		
+		Clock clock = new Clock();
+		
+		MainFunctionUnit.init(3, 5, 2);
+		
+		
+		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R1,(short)20);
+		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R2,(short)200);
+		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R3,(short)240);
+		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R4,(short)290);
+		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R5,(short)522);
+		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R6,(short)2022);
+		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R7,(short)903);
+		
+		AddImmediateInstruction ADDI = new AddImmediateInstruction(RegisterEnum.R1, 1, RegisterEnum.R2,(short) 200);
+		System.out.println(ADDI.execute());
+	}
 
 }

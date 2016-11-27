@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import memory.InstructionMemory;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -33,9 +34,9 @@ public class BEQInstruction extends InstructionSetArchitecture {
 		// check if result==0 so we will branch 
 		
 		if(result == 0){
-			return 1 
+			return (short) (InstructionMemory.getInstance().getPC()+immeditate);
 		}else{
-			return 0 ;
+			return null ;
 		}
 	
 	}

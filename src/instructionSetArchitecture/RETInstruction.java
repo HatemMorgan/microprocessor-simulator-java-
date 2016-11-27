@@ -14,10 +14,10 @@ public class RETInstruction extends InstructionSetArchitecture {
 	public Short execute() {
 
 		Short[] operands = super.loadDataFromRegisters();
-
+		
 		// call (call/return method) and pass to it the operand
 
-		return null;
+		return operands[0];
 	}
 
 }

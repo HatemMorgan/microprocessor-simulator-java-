@@ -3,12 +3,15 @@ import instructionSetArchitecture.*;
 
 public class CacheEntry {
 	public int tag;
-	public String data;
+
 	public InstructionSetArchitecture instructionData;
+
+	public Short data;
+
 	public boolean valid = false;
 	public boolean dirty = false;
 	
-	public CacheEntry(int tag, String data, boolean valid, boolean dirty) {
+	public CacheEntry(int tag, Short data, boolean valid, boolean dirty) {
 		this.tag = tag;
 		this.data = data;
 		this.valid = valid;
@@ -28,7 +31,7 @@ public class CacheEntry {
 	}
 	
 	public String toString(){
-		return data;
+		return data+"";
 		
 	}
 }

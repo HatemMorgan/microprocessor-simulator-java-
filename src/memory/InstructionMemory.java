@@ -67,7 +67,7 @@ public class InstructionMemory extends Memory {
 	}
 	
 	public static void main(String []args){
-		Clock c = new Clock();
+		/*Clock c = new Clock();
 		InstructionMemory im = new InstructionMemory(2, 10, c, writeHitPolicy.writeBack, writeMissPolicy.writeAllocate);
 		im.setPC((short)0);
 		String[] instructions = {"LW 1, 2, 0", "ADD 5, 2, 1", "SUB 4, 2, 3", "MUL 2, 4, 5"};
@@ -79,8 +79,12 @@ public class InstructionMemory extends Memory {
 		String test2 = im.load(1);
 		String test3 = im.load(2);
 		String test4 = im.load(3);
+
 		String test5 = im.load(4);*/
 		//System.out.println(test + " " + test2 + " " + test3 + " " + test4);
+		/*String test5 = im.load(4);
+		System.out.println(test + " " + test2 + " " + test3 + " " + test4);*/
+
 	}
 	
 	

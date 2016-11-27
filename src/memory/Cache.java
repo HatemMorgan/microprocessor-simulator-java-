@@ -107,7 +107,7 @@ public class Cache {
 	}
 	
 	// bt3ml ehh be boolean dirty hena ?
-	void insertIntoCache(short byteAddress, String data, boolean dirty){
+	void insertInstructionIntoCache(short byteAddress, InstructionSetArchitecture data, boolean dirty){
 		while(busy);
 		busy = true;
 		
@@ -147,7 +147,9 @@ public class Cache {
 
 	}
 	
-	void insertInstructionIntoCache(short byteAddress, InstructionSetArchitecture data, boolean dirty){
+	
+
+	void insertIntoCache(short byteAddress, Short data, boolean dirty){
 		while(busy);
 		busy = true;
 		
@@ -206,10 +208,14 @@ public class Cache {
 	}
 
 	public static void main(String[] args) {
+
 		/*Clock clock = new Clock();
+=======
+	/*	Clock clock = new Clock();
+>>>>>>> ba6ca04eb314cc16ec4a5bb5519af1d5bd5f34ea
 		clock.start();
 		Cache c = new Cache(16, 4, 1, 1, clock);
-		c.insertIntoCache(213, "sasa", false);
+		c.insertIntoCache((Short)((short)13), "sasa", false);
 		c.searchCache(213);
 		c.toString();*/
 	}

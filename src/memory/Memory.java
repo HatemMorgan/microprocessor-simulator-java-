@@ -1,5 +1,6 @@
 package memory;
-
+import  java.util.*;
+import java.io.*;
 
 public class Memory {
 	Cache[] caches;
@@ -30,11 +31,33 @@ public class Memory {
 	// ??? caches doesnot have the same size or associativity . it must be customized 
 	void init(){
 		for (int i = 0; i < cacheLevels; i++) {
+			
 			caches[i] = new Cache(16, 1, 1, 1, this.clock);
 		}
 	}
 	
-	
+	public void inputFromUser(){
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter number of caches");
+		int cacheLevel=sc.nextInt();
+		int[][] cachestats=new int[cacheLevel][4];
+		int cacheSize=0;
+		int lineSize=0;
+		int associativity=0;
+		int accessTime=0;
+		for(int i=0;i<cacheLevel;i++){
+			System.out.println("Enter cache size for cache level"+ i+1);
+			cacheSize=sc.nextInt();
+			System.out.println("Enter cache line size for cache level"+ i+1);
+			lineSize=sc.nextInt();
+			System.out.println("Enter associativity for cache level"+ i+1);
+			associativity=sc.nextInt();
+			System.out.println("Enter accessTime for cache level"+ i+1);
+			accessTime=sc.nextInt();
+			caches[i]=new Cache(cacheSize,lineSize,associativity,accessTime,this.clock);
+			
+		}
+	}
 	public String toString(){
 		for (int i = 0; i < cacheLevels; i++) {
 			System.out.println("Cache" + i);

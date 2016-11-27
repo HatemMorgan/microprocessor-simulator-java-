@@ -299,7 +299,7 @@ public class Memory {
 	}
 	
 	public void storeInstructions(InstructionSetArchitecture []instructions){ //change this
-		for(int i=0; i<instructions.length; ++i){
+		for(short i=0; i<instructions.length; ++i){
 			main.storeInstruction(instructions[i], i);
 			System.out.println("Stored Instruction: " + instructions[i]);
 		}

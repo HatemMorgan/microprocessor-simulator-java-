@@ -27,13 +27,13 @@ public class MainMemory {
 		return "";
 	}
 	
-	public void storeInstruction(InstructionSetArchitecture instruction, int address){
+	public void storeInstruction(InstructionSetArchitecture instruction, short address){
 		instructionMemory[address/blockSize][address%blockSize] = instruction;
 		System.out.println("Inserted " + instruction + " in main successfully!");
 	}
 	
 	
-	public void store(String value, int address){
+	public void store(String value, short address){
 		//value is the binary representation of the value in string format
 		//address can be hexadecimal or decimal or even binary
 		
@@ -55,7 +55,7 @@ public class MainMemory {
 		busy = false;
 	}
 	
-	public String load(int address){
+	public String load(short address){
 		//address can be hexadecimal or decimal or even binary
 		
 		//wait till previous operation is finished
@@ -77,7 +77,7 @@ public class MainMemory {
 		
 	}
 	
-	public InstructionSetArchitecture loadInstruction(int address){
+	public InstructionSetArchitecture loadInstruction(short address){
 		//address can be hexadecimal or decimal or even binary
 		
 		//wait till previous operation is finished
@@ -102,12 +102,12 @@ public class MainMemory {
 	
 	
 	public static void main(String[] args) {
-		Clock c = new Clock();
+		/*Clock c = new Clock();
 		c.start();
 		MainMemory m = new MainMemory(4, c, 1);
 		m.store("sayegh", 0xff);
 		String value = m.load(255);
-		System.out.println(value);
+		System.out.println(value);*/
 	}
 	
 	

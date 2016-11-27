@@ -28,11 +28,11 @@ public class InstructionMemory extends Memory {
 
 	// gets number of instructions to read and the start address of the program
 	// returns an array of strings containing the instructions
-	public String[] readInstructions(int instructionsToFetch) {
-		String[] result = new String[instructionsToFetch];
+	public InstructionSetArchitecture[] readInstructions(int instructionsToFetch) {
+		InstructionSetArchitecture[] result = new InstructionSetArchitecture[instructionsToFetch];
 		decreaseClockCycles(instructionsToFetch);
 		for (int i = 0; i < instructionsToFetch; i++) {
-			result[i] = load(getPC());
+			result[i] = loadInstruction(getPC());
 			incrementPC();
 		}
 		// resetClockCycles(instructionsToFetch);

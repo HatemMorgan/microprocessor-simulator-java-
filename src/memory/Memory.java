@@ -30,10 +30,7 @@ public class Memory {
 	
 	// ??? caches doesnot have the same size or associativity . it must be customized 
 	void init(){
-		for (int i = 0; i < cacheLevels; i++) {
-			
-			caches[i] = new Cache(16, 1, 1, 1, this.clock);
-		}
+		inputFromUser();
 	}
 	
 	public void inputFromUser(){
@@ -64,130 +61,125 @@ public class Memory {
 		}		
 		return "";
 	}
-	
-	/*public short loadData(int byteAddress){
 		
-	}*/
 	
-	public String load(int byteAddress){
+	public Short dataLoad(short byteAddress){
 
-		String res=loadHelper(byteAddress, 0);
+		Short res=dataloadHelper(byteAddress, 0);
 		System.out.println(res);
 		return res;
 
 	}
-
-	
-	String loadHelper(int byteAddress, int i){
+	Short dataloadHelper(short byteAddress,int level){
 		CacheEntry result = null;
-		System.out.println(i);
-		if(i>= caches.length){
-			String mainMemoryResult =  main.load(byteAddress);
+		System.out.println(level);
+		if(level>= caches.length){
+			Short mainMemoryResult =  main.dataLoad(byteAddress);//fix MainMemory
 			return mainMemoryResult;
 		}
 
 		//searching the cache
-		result = caches[i].searchCache(byteAddress);
+		result = caches[level].searchCache(byteAddress);
 		System.out.println("here------>"+result);
 		//Read hit
 		if(result !=null){
-			System.out.println("Found in cache level " + i);
-			return result.data;
+			System.out.println("Found in cache level " + level);
+			return result.data;//fix cache memory
 		}
 		
-		String returnValue = "nothing";
+		Short returnValue =null;
 		
-		
-//		Read miss
+		//Read miss
 		if(missPolicy == writeMissPolicy.writeAround){
 //			no allocate
 			
 			//get value from lower memory
-			returnValue =  readAround(byteAddress, i);
+			returnValue = datareadAround(byteAddress, level);
 			//write the value to this cache level
-			storeHelper(byteAddress, returnValue, i);
+			datastoreHelper(byteAddress, returnValue, level);
 			return returnValue;		
 
 		}else{
 //			allocate
-			returnValue =  readAllocate(byteAddress, i);
+			returnValue =  datareadAllocate(byteAddress, level);
 			return returnValue;		
 
 		}		
 	}
-	String readAround(int byteAddress, int i) {
-		return loadHelper(byteAddress, i+1);
+	short datareadAround(short byteAddress, int level) {
+		return dataloadHelper(byteAddress, level+1);
 	}
 
-	String readAllocate(int byteAddress, int i) {
-		if(i>= caches.length){
-			String mainMemoryResult =  main.load(byteAddress);
+	Short datareadAllocate(short byteAddress, int level) {
+		if(level>= caches.length){
+			Short mainMemoryResult =  main.dataLoad(byteAddress);
 			return mainMemoryResult;
 		}
 
 		CacheEntry replacement = null;
-		replacement = caches[i].locateReplacementBlock(byteAddress);
+		replacement = caches[level].locateReplacementBlock(byteAddress);
 		
 		if(replacement!=null && replacement.dirty){
-			storeHelper(byteAddress, replacement.data, i+1);
+			datastoreHelper(byteAddress, replacement.data, level+1);
 		}
 
-		String data = loadHelper(byteAddress, i+1);
-		caches[i].insertIntoCache(byteAddress, data, false);
+		Short data = dataloadHelper(byteAddress, level+1);
+		caches[level].insertIntoCache(byteAddress, data, false);//fix cache
 		
 		return data;
 	}
 
-	void writeAllocate(int byteAddress, String value, int i){
+	void datawriteAllocate(short byteAddress, Short value, int level){
 		//BLOCK NOT FOUND
-		if(i>= caches.length){
-			main.store(value, byteAddress);
+		if(level>= caches.length){
+			main.dataStore(value, byteAddress);
 			return;
 		}
 		
 		//fetch the block from lower memories and place it into this cache level
-		loadHelper(byteAddress, i+1);
+		dataloadHelper(byteAddress, level+1);
 		
 		//insert value into cache and set dirty bit
-		caches[i].insertIntoCache(byteAddress, value, true);			
+		caches[level].insertIntoCache(byteAddress, value, true);			
 	}
 	
 	//DONE
-	void writeBack(int byteAddress, String value, int i, CacheEntry result){
+	void datawriteBack(short byteAddress, Short value, int level, CacheEntry result){
 		
 		
-		if(i>= caches.length){
-			main.store(value, byteAddress);
+		if(level>= caches.length){
+			main.dataStore(value, byteAddress);
 			return;
 		}
      
 		//block is dirty, write it back to lower memory
 		if(result.dirty){
-			storeHelper(byteAddress, result.data, i+1);
+			datastoreHelper(byteAddress, result.data, level+1);
 		}
 		
 		//block now isn't dirty, replace it
-		caches[i].insertIntoCache(byteAddress, value, true);			
+		caches[level].insertIntoCache(byteAddress, value, true);			
 	}
 
 	
 	
 	//DONE
-	void writeAround(int byteAddress, String value, int i){
+	void datawriteAround(short byteAddress, Short value, int level){
 		//only write to main
-		main.store(value, byteAddress);
+		main.dataStore(value, byteAddress);
 	}
 
 	
 	//DONE
-	void writeThrough(int byteAddress, String value, int i){
+	void datawriteThrough(Short byteAddress, Short value, int level){
 		//Write to caches and main
 		for (int j = 0; j < caches.length; j++) {
-			caches[i].insertIntoCache(byteAddress, value, false);			
+			caches[level].insertIntoCache(byteAddress,value, false);			
 		}
-		main.store(value, byteAddress);
+		main.dataStore(value, byteAddress);
 
 	}
+	
 	
 	public void storeInstructions(String []instructions){
 		for(int i=0; i<instructions.length; ++i){
@@ -197,31 +189,31 @@ public class Memory {
 		System.out.println("Stored Instructions Successfully!");
 	}
 
-	public void store(int byteAddress, String value){
-		storeHelper(byteAddress,value, 0);
+	public void datastore(short byteAddress, Short value){
+		datastoreHelper(byteAddress,value, 0);
 	}
 	
-	void storeHelper(int byteAddress, String value, int i){
-		if(i>= caches.length){
+	void datastoreHelper(short byteAddress, Short value, int level){
+		if(level>= caches.length){
 			return;
 		}
 		CacheEntry result = null;
-		Cache topCache = caches[i];
+		Cache topCache = caches[level];
 		//updating the caches
 			result = topCache.searchCache(byteAddress);
 			//WRITE MISS
 			if(result == null){				
 				if(missPolicy == writeMissPolicy.writeAround){
-					writeAround(byteAddress, value, i);
+					datawriteAround(byteAddress, value, level);
 				}else{
-					writeAllocate(byteAddress, value, i);
+					datawriteAllocate(byteAddress, value, level);
 				}
 			}else{
 				//WRITE HIT
 				if(hitPolicy == writeHitPolicy.writeThrough){
-					writeThrough(byteAddress, value, i);
+					datawriteThrough(byteAddress, value, level);
 				}else{
-					writeBack(byteAddress, value, i, result);
+					datawriteBack(byteAddress, value, level, result);
 					
 				}
 			}
@@ -234,7 +226,7 @@ public class Memory {
 	public static void main(String[] args) {
 		Clock c = new Clock();
 		c.start();
-		Memory m = new Memory(2, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAllocate);
+		/*Memory m = new Memory(2, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAllocate);
 		m.store(212, "sayegh");
 		String res = m.load(212);
 		System.out.println(res);
@@ -243,6 +235,6 @@ public class Memory {
 		String res2 = m.load(212);
 		System.out.println("heree");
 		
-		System.out.println(res2);
+		System.out.println(res2);*/
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Arrays;
 public class MainMemory {
 	//64KB memory
 	String[][] memory;
+	Short[][] datamemory;
 	int accessTimeInCycles = 0;
 	Clock clock;
 	boolean busy = false;
@@ -31,7 +32,7 @@ public class MainMemory {
 	}
 	
 	
-	public void store(String value, int address){
+	public void dataStore(Short value, short address){
 		//value is the binary representation of the value in string format
 		//address can be hexadecimal or decimal or even binary
 		
@@ -48,12 +49,12 @@ public class MainMemory {
 		while(clock.counter.get() < clockCycleToReturnAt);
 		
 		//update memory
-		memory[address/blockSize][address%blockSize] = value;
+		datamemory[address/blockSize][address%blockSize] = value;
 		System.out.println("Store finished, clock cycle: "+clock.counter.get());
 		busy = false;
 	}
 	
-	public String load(int address){
+	public short dataLoad(short address){
 		//address can be hexadecimal or decimal or even binary
 		
 		//wait till previous operation is finished
@@ -71,7 +72,7 @@ public class MainMemory {
 		System.out.println("Load finished, clock cycle: "+clock.counter.get());
 		busy = false;
 		
-		return memory[address/blockSize][address%blockSize];
+		return datamemory[address/blockSize][address%blockSize];
 		
 	}
 	
@@ -81,8 +82,8 @@ public class MainMemory {
 		Clock c = new Clock();
 		c.start();
 		MainMemory m = new MainMemory(4, c, 1);
-		m.store("sayegh", 0xff);
-		String value = m.load(255);
+		//m.store("sayegh", 0xff);
+		Short value = m.dataLoad((short)255);
 		System.out.println(value);
 	}
 	

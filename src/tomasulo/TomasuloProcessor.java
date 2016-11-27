@@ -201,7 +201,7 @@ public class TomasuloProcessor {
 	public RegisterStatus getRegisterStatus() {
 		return registerStatus;
 	}
-
+	
 	public ReservationsStationTable getReservationsStationTable() {
 		return reservationsStationTable;
 	}

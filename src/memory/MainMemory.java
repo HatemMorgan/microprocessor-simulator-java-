@@ -1,9 +1,11 @@
 package memory;
 import java.util.Arrays;
+import instructionSetArchitecture.*;
 
 public class MainMemory {
 	//64KB memory
 	String[][] memory;
+	InstructionSetArchitecture[][] instructionMemory;
 	int accessTimeInCycles = 0;
 	Clock clock;
 	boolean busy = false;
@@ -25,8 +27,8 @@ public class MainMemory {
 		return "";
 	}
 	
-	public void storeInstruction(String instruction, int address){
-		memory[address/blockSize][address%blockSize] = instruction;
+	public void storeInstruction(InstructionSetArchitecture instruction, int address){
+		instructionMemory[address/blockSize][address%blockSize] = instruction;
 		System.out.println("Inserted " + instruction + " in main successfully!");
 	}
 	
@@ -72,6 +74,28 @@ public class MainMemory {
 		busy = false;
 		
 		return memory[address/blockSize][address%blockSize];
+		
+	}
+	
+	public InstructionSetArchitecture loadInstruction(int address){
+		//address can be hexadecimal or decimal or even binary
+		
+		//wait till previous operation is finished
+		while(busy);
+		busy = true;
+		//determine at which clock cycle the load will end
+		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
+		
+		System.out.println("Load will finish in clock cycle " + clockCycleToReturnAt);
+
+		//wait until memory access time is over
+		while(clock.counter.get() < clockCycleToReturnAt);
+		
+		//fetch from memory
+		System.out.println("Load finished, clock cycle: "+clock.counter.get());
+		busy = false;
+		
+		return instructionMemory[address/blockSize][address%blockSize];
 		
 	}
 	

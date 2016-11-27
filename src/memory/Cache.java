@@ -1,5 +1,6 @@
 package memory;
 import java.util.Arrays;
+import instructionSetArchitecture.*;
 
 public class Cache {
 	int cacheSize;
@@ -30,7 +31,7 @@ public class Cache {
 		return "";
 	}
 
-	public CacheEntry locateReplacementBlock(int byteAddress){
+	public CacheEntry locateReplacementBlock(short byteAddress){
 		int[] addressSegments = decryptAddress(byteAddress);
 //		int tag = addressSegments[0];
 		int index = addressSegments[1];
@@ -43,7 +44,7 @@ public class Cache {
 	}
 	
 	
-	public CacheEntry searchCache(int byteAddress){
+	public CacheEntry searchCache(short byteAddress){
 		// stuck here when searching in the cache 
 		while(busy);
 		System.out.println("no busy");
@@ -80,14 +81,16 @@ public class Cache {
 		return null;
 	}
 	
+	
+	
 	//returns [Tag, Index, Offset]
-	int[] decryptAddress(int byteAddress){
+	int[] decryptAddress(short byteAddress){
 		int indexBits = log(cacheLines, 2);
 		int offsetBits = log(lineSize, 2);
 		int tagBits = 16-(indexBits+offsetBits);
 
 		
-		int byteAddressCopy = byteAddress;
+		short byteAddressCopy = byteAddress;
 		int offset = extractLastNBitsToDecimal(byteAddressCopy, offsetBits);
 		byteAddressCopy >>= offsetBits;
 		int index = extractLastNBitsToDecimal(byteAddressCopy, indexBits);
@@ -104,7 +107,47 @@ public class Cache {
 	}
 	
 	// bt3ml ehh be boolean dirty hena ?
-	void insertIntoCache(int byteAddress, String data, boolean dirty){
+	void insertIntoCache(short byteAddress, String data, boolean dirty){
+		while(busy);
+		busy = true;
+		
+		//determine at which clock cycle the operation will end
+		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
+		
+		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
+
+		//wait until memory access time is over
+		//?
+		while(clock.counter.get() < clockCycleToReturnAt);
+
+		int[] addressSegments = decryptAddress(byteAddress);
+		int tag = addressSegments[0];
+		int index = addressSegments[1];
+//		int offset = addressSegments[2];
+
+
+		//looks for first invalid entry
+		boolean foundInvalidCell = false;
+		CacheEntry[] memorySet = memory[index];
+		for (int i = 0; i < memorySet.length; i++) {			
+			if(memorySet[i] == null || memorySet[i].valid == false){
+				memorySet[i] = new CacheEntry(tag, data, true, dirty);
+				System.out.println("Inserted new value into cache");
+				foundInvalidCell = true;
+				break;			
+			}
+		}
+		if(!foundInvalidCell){
+			//replace first entry in set
+			// ??? why replacing the first element in the cache ?
+			memorySet[0] = new CacheEntry(tag, data, true, dirty);
+		}
+		//TODO: LRU Replacement
+		busy=false;
+
+	}
+	
+	void insertInstructionIntoCache(short byteAddress, InstructionSetArchitecture data, boolean dirty){
 		while(busy);
 		busy = true;
 		
@@ -163,11 +206,11 @@ public class Cache {
 	}
 
 	public static void main(String[] args) {
-		Clock clock = new Clock();
+		/*Clock clock = new Clock();
 		clock.start();
 		Cache c = new Cache(16, 4, 1, 1, clock);
 		c.insertIntoCache(213, "sasa", false);
 		c.searchCache(213);
-		c.toString();
+		c.toString();*/
 	}
 }

@@ -1,5 +1,5 @@
 package memory;
-
+import instructionSetArchitecture.*;
 import registers.Register;
 
 public class InstructionMemory extends Memory {
@@ -44,7 +44,7 @@ public class InstructionMemory extends Memory {
 	// of the program
 	// places the instructions sequentially in the instruction memory
 	public void placeInstructionsInMemory(
-			String[] instructions) {
+		InstructionSetArchitecture [] instructions) {
 		/*decreaseClockCycles(instructions.length); //Why is this here? Placing instructions in memory is independent of the clock
 		for (int i = 0; i < instructions.length; i++) {
 			this.store(getPC(), instructions[i]);
@@ -71,16 +71,16 @@ public class InstructionMemory extends Memory {
 		InstructionMemory im = new InstructionMemory(2, 10, c, writeHitPolicy.writeBack, writeMissPolicy.writeAllocate);
 		im.setPC((short)0);
 		String[] instructions = {"LW 1, 2, 0", "ADD 5, 2, 1", "SUB 4, 2, 3", "MUL 2, 4, 5"};
-		im.placeInstructionsInMemory(instructions); // storing instructions in memory is independent of the 
+		//im.placeInstructionsInMemory(instructions); // storing instructions in memory is independent of the 
 		//System.out.println(im.getPC());
 		c.start();
 		System.out.println(im.getPC());
-		String test = im.load(0);
+		/*String test = im.load(0);
 		String test2 = im.load(1);
 		String test3 = im.load(2);
 		String test4 = im.load(3);
-		String test5 = im.load(4);
-		System.out.println(test + " " + test2 + " " + test3 + " " + test4);
+		String test5 = im.load(4);*/
+		//System.out.println(test + " " + test2 + " " + test3 + " " + test4);
 	}
 	
 	

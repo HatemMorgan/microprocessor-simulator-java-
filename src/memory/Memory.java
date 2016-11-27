@@ -55,7 +55,6 @@ public class Memory {
 			System.out.println("Enter accessTime for cache level"+ i+1);
 			accessTime=sc.nextInt();
 			caches[i]=new Cache(cacheSize,lineSize,associativity,accessTime,this.clock);
-			
 		}
 	}
 	public String toString(){
@@ -65,7 +64,11 @@ public class Memory {
 		}		
 		return "";
 	}
-
+	
+	/*public short loadData(int byteAddress){
+		
+	}*/
+	
 	public String load(int byteAddress){
 
 		String res=loadHelper(byteAddress, 0);

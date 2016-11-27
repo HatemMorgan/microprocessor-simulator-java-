@@ -25,6 +25,11 @@ public class MainMemory {
 		return "";
 	}
 	
+	public void storeInstruction(String instruction, int address){
+		memory[address/blockSize][address%blockSize] = instruction;
+		System.out.println("Inserted " + instruction + " in main successfully!");
+	}
+	
 	
 	public void store(String value, int address){
 		//value is the binary representation of the value in string format

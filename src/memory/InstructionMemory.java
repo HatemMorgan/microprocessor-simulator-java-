@@ -45,11 +45,12 @@ public class InstructionMemory extends Memory {
 	// places the instructions sequentially in the instruction memory
 	public void placeInstructionsInMemory(
 			String[] instructions) {
-		decreaseClockCycles(instructions.length);
+		/*decreaseClockCycles(instructions.length); //Why is this here? Placing instructions in memory is independent of the clock
 		for (int i = 0; i < instructions.length; i++) {
 			this.store(getPC(), instructions[i]);
 			setPC((short) (getPC()+1));
-		}
+		}*/
+		this.storeInstructions(instructions);
 		// resetClockCycles(instructions.length);
 	}
 
@@ -69,7 +70,14 @@ public class InstructionMemory extends Memory {
 		Clock c = new Clock();
 		InstructionMemory im = new InstructionMemory(2, 10, c, writeHitPolicy.writeBack, writeMissPolicy.writeAllocate);
 		im.setPC((short)0);
+		String[] instructions = {"LW 1, 2, 0", "ADD 5, 2, 1", "SUB 4, 2, 3", "MUL 2, 4, 5"};
+		im.placeInstructionsInMemory(instructions); // storing instructions in memory is independent of the 
+		//System.out.println(im.getPC());
+		c.start();
 		
+		String test = im.load(0);
+		String test2 = im.load(1);
+		System.out.println(test);
 	}
 	
 	

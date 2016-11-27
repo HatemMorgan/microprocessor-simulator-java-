@@ -37,7 +37,7 @@ public class RegisterFile {
 		}
 	}
 
-	private void printregisterFileTable() {
+	public void printregisterFileTable() {
 		for (RegisterEnum registerName : registerFileTable.keySet()) {
 			System.out.println("Register " + registerName + " has value : "
 					+ registerFileTable.get(registerName));

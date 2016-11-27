@@ -96,27 +96,26 @@ public class ROB {
 		}
 	}
 
-	public void commit(int entryNumber) {
+	public void commit() {
 		// check if the head is pointing to this entry inorder to maintain
 		// inorder committing
-		if (head.getEntryNumber() == entryNumber && head.isReady()) {
+		if ( head.isReady()) {
+			
+			System.out.println("entry with number #" + head.getEntryNumber()
+					+ " is committed and removed from the ROB");
+			
 			ROBEntry current = head;
 			head = head.next;
 
+			
 			current.setDestination(null);
 			current.setReady(false);
 			current.setType(null);
 			current.setValue(null);
 
-			System.out.println("entry with number #" + entryNumber
-					+ " is committed and removed from the ROB");
+			
 		} else {
-			if (head.getEntryNumber() != entryNumber) {
-				System.out
-						.println("Cannot commit because the head is not pointing to this entry = #"
-								+ entryNumber + " .");
-				return;
-			}
+			
 
 			if (!head.isReady()) {
 				System.out
@@ -220,9 +219,9 @@ public class ROB {
 													// FUll
 
 		r.writeResultTOROB(3, (short) 24); // testing entring a new entry
-		r.commit(3); // testing committing an entry that the head is not
+		r.commit(); // testing committing an entry that the head is not
 						// pointing to it
-		r.commit(1); // testing committing an entry that is not ready
+		r.commit(); // testing committing an entry that is not ready
 
 		r.writeResultTOROB(1, (short) 200);
 
@@ -237,14 +236,14 @@ public class ROB {
 		System.out
 				.println("----------------------------------------------------------------------");
 
-		r.commit(1); // testing to commit an entry that is ready
+		r.commit(); // testing to commit an entry that is ready
 
 		// testing committing all ROB entries
 		r.writeResultTOROB(2, (short) 1000);
 		r.writeResultTOROB(4, (short) 500);
-		r.commit(2);
-		r.commit(3);
-		r.commit(4);
+		r.commit();
+		r.commit();
+		r.commit();
 
 		// r.insertToROB(ROBEntryType.INT, Register.R6); // testing if the new
 		// entry will be in the first ROB entry

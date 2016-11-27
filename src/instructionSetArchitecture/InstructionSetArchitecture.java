@@ -1,5 +1,7 @@
 package instructionSetArchitecture;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import functionalUnits.*;
 import memory.Clock;
 import memory.InstructionMemory;
@@ -16,6 +18,7 @@ public abstract class InstructionSetArchitecture {
 	private RegisterEnum sourceOneRegister;
 	private RegisterEnum sourceTwoRegister;
 	private Integer instructionNumber;
+	private Short result ;
 
 	// Register File
 	protected static RegisterFile registerFile = RegisterFile.getInstance();
@@ -31,7 +34,7 @@ public abstract class InstructionSetArchitecture {
 		this.sourceTwoRegister = sourceTwoRegister;
 	}
 
-	public abstract Short execute();
+	public abstract int execute();
 
 	public Short[] loadDataFromRegisters() {
 		// TODO get data from source operands
@@ -74,6 +77,16 @@ public abstract class InstructionSetArchitecture {
 	public Integer getInstructionNumber() {
 		return instructionNumber;
 	}
+	
+	
+
+	public Short getResult() {
+		return result;
+	}
+
+	public void setResult(Short result) {
+		this.result = result;
+	}
 
 	@Override
 	public String toString() {
@@ -110,45 +123,45 @@ public abstract class InstructionSetArchitecture {
 
 //		AddImmediateInstruction ADDI = new AddImmediateInstruction(
 //				RegisterEnum.R1, 1, RegisterEnum.R2, (short) 200);
-//		System.out.println("Returning Add Immediate :" + ADDI.execute());
-//
+//		System.out.println("Finishing at clock cycle:"+ADDI.execute()+" and  Add Immediate result = " + ADDI.getResult() );
+
 //		AddInstruction ADD = new AddInstruction(RegisterEnum.R3, 2,
 //				RegisterEnum.R4, RegisterEnum.R5);
-//		System.out.println("Returning Add :" + ADD.execute());
+//		System.out.println("Finishing at clock cycle:"+ADD.execute()+" and  Add result = " + ADD.getResult() );
 
 //		BEQInstruction BEQ = new BEQInstruction(RegisterEnum.R2, 3,
 //				RegisterEnum.R2, (short) 290);
-//		System.out.println("Returning BEQ :" + BEQ.execute());
-//////
+//		System.out.println("Finishing at clock cycle:"+BEQ.execute()+" and  BEQ result = " + BEQ.getResult() );
+
 //		JALRInstruction JALR = new JALRInstruction(RegisterEnum.R3, 4,
 //				RegisterEnum.R4);
-//		System.out.println("Returning JALR :" + JALR.execute());
+//		System.out.println("Finishing at clock cycle:"+JALR.execute()+" and  JALR result = " + JALR.getResult() );
 //		System.out.println("---> " +RegisterFile.getInstance().loadDataFromRegister(RegisterEnum.R3));
-//
+
 //		JMPInstruction JMP = new JMPInstruction(RegisterEnum.R1, 5, (short) 522);
-//		System.out.println("Returning JMP :" + JMP.execute());
-//
+//		System.out.println("Finishing at clock cycle:"+JMP.execute()+" and  JMP result = " + JMP.getResult() );
+
 		
 //		MulInstruction MUL = new MulInstruction(RegisterEnum.R3, 2,
 //				RegisterEnum.R4, RegisterEnum.R5);
-//		System.out.println("Returning MUL :" + MUL.execute());
+//		System.out.println("Finishing at clock cycle:"+MUL.execute()+" and  MUL result = " + MUL.getResult() );
 		
 //		SubIntstruction SUB = new SubIntstruction(RegisterEnum.R3, 2,
 //				RegisterEnum.R4, RegisterEnum.R5);
-//		System.out.println("Returning SUB :" + SUB.execute());
+//		System.out.println("Finishing at clock cycle:"+SUB.execute()+" and  SUB result = " + SUB.getResult() );
 		
 		
 //		NANDInstruction NAND = new NANDInstruction(RegisterEnum.R3, 2,
 //				RegisterEnum.R4, RegisterEnum.R5);
-//		System.out.println("Returning NAND :" + NAND.execute());
+//		System.out.println("Finishing at clock cycle:"+NAND.execute()+" and  SUB result = " + NAND.getResult() );
 		
 		
 		RETInstruction RET = new RETInstruction(RegisterEnum.R3, 2);
-		System.out.println("Returning RET :" + RET.execute());
+		System.out.println("Finishing at clock cycle:"+ RET.execute()+" and   RET result = " +  RET.getResult() );
 		
-		LoadInstruction LD = new LoadInstruction(RegisterEnum.R3, 2,
-				RegisterEnum.R4, (short) 903);
-		System.out.println("Returning Load :" + LD.execute());
+//		LoadInstruction LD = new LoadInstruction(RegisterEnum.R3, 2,
+//				RegisterEnum.R4, (short) 903);
+//		System.out.println("Returning Load :" + LD.execute());
 		
 		
 	}

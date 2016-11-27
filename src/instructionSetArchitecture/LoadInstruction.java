@@ -23,19 +23,19 @@ public class LoadInstruction extends InstructionSetArchitecture {
 
 
 	@Override
-	public Short execute() {
+	public int execute() {
 
 		Short[] operands = super.loadDataFromRegisters();
 
 		// call ADDI function and pass operand and immidiate value to it and it
 		// will return the address as the result
-		Short address = MainFunctionUnit.getInstance().getAdder().add(operands[0], immediateValue);
+		int results[] = MainFunctionUnit.getInstance().getAdder().add(operands[0], immediateValue);
 
-		// pass address to load function in the memory that will return the
-		// result
+		// pass result[0] to load function in the memory that will return the
+		// result and the clock cycle
 		// TODO
 
-		return null;
+		return 1;
 	}
 
 }

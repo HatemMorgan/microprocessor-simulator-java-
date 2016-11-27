@@ -36,7 +36,7 @@ public class Adder{
 		this.subCycles = time;
 	}
 	
-	public Short add(Short sourceReg1,Short sourceReg2)
+	public int[] add(Short sourceReg1,Short sourceReg2)
 	{
 		
 		int currentClock = Clock.counter.intValue()+addCycles;
@@ -52,10 +52,10 @@ public class Adder{
 		int regB=Integer.parseInt(sourceReg2);*/
 		short result =(short)(sourceReg1.shortValue()+sourceReg2.shortValue());
 		//String resultString =""+result;
-		return result;		
+		return new int[] {(int)result,currentClock};		
 	}
 	
-	public Short sub(Short sourceReg1,Short sourceReg2)
+	public int[] sub(Short sourceReg1,Short sourceReg2)
 	{
 		int currentClock = Clock.counter.intValue()+subCycles;
 		while(true)
@@ -68,7 +68,7 @@ public class Adder{
 		int regB=Integer.parseInt(sourceReg2);*/
 		short result = (short)(sourceReg1.shortValue()-sourceReg2.shortValue());
 		//String resultString =""+result;
-		return result;
+		return new int[] {(int)result,currentClock};
 	}
 	
 	

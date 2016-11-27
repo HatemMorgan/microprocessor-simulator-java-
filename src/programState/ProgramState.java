@@ -38,12 +38,12 @@ public class ProgramState {
 	}
 	
 	public ProgramStateEntry getProgramStateTableEntry(int position){
-		if (programStateTable.size() >= position){
+		if (programStateTable.size() <= position-1){
 			System.out.println("No instruction with this position");
 			return null;
 		}
 		
-		return programStateTable.get(position);
+		return programStateTable.get(position-1);
 		
 	}
 	

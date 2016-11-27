@@ -14,14 +14,15 @@ public class NANDInstruction extends InstructionSetArchitecture {
 	}
 
 	@Override
-	public Short execute() {
+	public int execute() {
 		Short[] operands = super.loadDataFromRegisters();
 
 		// call NAND function and pass operands to it and it will return the
 		// result to be store in dest reg
-		Short result = MainFunctionUnit.getInstance().getNand().nand(operands[0], operands[1]);
+		int result [] = MainFunctionUnit.getInstance().getNand().nand(operands[0], operands[1]);
 
-		return result;
+		super.setResult((short)result[0]);
+		return result[1];
 	}
 
 }

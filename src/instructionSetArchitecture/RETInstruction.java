@@ -12,7 +12,7 @@ public class RETInstruction extends InstructionSetArchitecture {
 	}
 
 	@Override
-	public Short execute() {
+	public int execute() {
 
 		Short[] operands = super.loadDataFromRegisters();
 		
@@ -20,7 +20,8 @@ public class RETInstruction extends InstructionSetArchitecture {
 		while(Clock.counter.intValue() != current+1);
 		// call (call/return method) and pass to it the operand
 		
-		return operands[0];
+		super.setResult(operands[0]);
+		return current+1;
 	}
 
 }

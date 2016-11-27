@@ -16,7 +16,7 @@ public class Mult {
 		multCycles = time;
 	}
 	
-	public Short mul(Short sourceReg1,Short sourceReg2)
+	public int[] mul(Short sourceReg1,Short sourceReg2)
 	{
 		int currentClock = Clock.counter.intValue()+multCycles;
 		while(true)
@@ -31,6 +31,6 @@ public class Mult {
 		int regB=Integer.parseInt(sourceReg2);*/
 		short result = (short)(sourceReg1.shortValue()*sourceReg2.shortValue());
 		//String resultString =""+result;
-		return result;
+		return new int[] {(int)result,currentClock};
 	}
 }

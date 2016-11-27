@@ -11,11 +11,11 @@ public class ReservationStationEntry {
 	private Integer qj;
 	private Integer qk;
 	private Integer destination;
-	private Integer address ;
+	private Short address ;
 	
 	public ReservationStationEntry(boolean isBusy, Operation op, Short vj,
 			Short vk, Integer qj, Integer qk, Integer destination,
-			Integer address) {
+			Short address) {
 		this.isBusy = isBusy;
 		this.op = op;
 		this.vj = vj;
@@ -82,11 +82,11 @@ public class ReservationStationEntry {
 		this.destination = destination;
 	}
 
-	public Integer getAddress() {
+	public Short getAddress() {
 		return address;
 	}
 
-	public void setAddress(Integer address) {
+	public void setAddress(Short address) {
 		this.address = address;
 	}
 

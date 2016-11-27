@@ -7,6 +7,11 @@ public class Nand {
 	
 	private int nandCycles;
 	
+	public Nand (int numberOfCycles){
+		this.nandCycles = numberOfCycles;
+	}
+	
+	
 	public void setMULTCycles(int time){
 		nandCycles = time;
 	}

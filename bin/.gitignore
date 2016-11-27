@@ -1,1 +1,6 @@
 /memory/
+/functionalUnits/
+/instructionSetArchitecture/
+/registerStatus/
+/reservationStations/
+/tomasulo/

@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import memory.InstructionMemory;
 import registers.RegisterEnum;
 import reservationStations.Operation;
 
@@ -18,10 +19,13 @@ public class JALRInstruction extends InstructionSetArchitecture {
 		
 		
 		// store PC+1 in destination 
+		short pc = InstructionMemory.getInstance().getPC();
+		registerFile.storeDataToRegister(super.getDestinationRegister(),pc);
 		
 		// call (call/return method) and pass to it the operand
+		return operands[0];
 		
-		return null;
+
 	}
 
 }

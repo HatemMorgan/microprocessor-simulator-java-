@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
 
@@ -13,6 +14,14 @@ public class LoadInstruction extends InstructionSetArchitecture {
 		this.immediateValue = immediateValue;
 	}
 
+	
+	
+	public Short getImmediateValue() {
+		return immediateValue;
+	}
+
+
+
 	@Override
 	public Short execute() {
 
@@ -20,7 +29,7 @@ public class LoadInstruction extends InstructionSetArchitecture {
 
 		// call ADDI function and pass operand and immidiate value to it and it
 		// will return the address as the result
-		Short result = adderFU.add(operands[0], immediateValue);
+		Short address = MainFunctionUnit.getInstance().getAdder().add(operands[0], immediateValue);
 
 		// pass address to load function in the memory that will return the
 		// result

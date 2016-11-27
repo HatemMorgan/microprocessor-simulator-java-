@@ -6,6 +6,7 @@ public class Clock {
 	
 	public Clock(){
 		counter = new AtomicInteger();
+		this.start();
 	}
 	
 	public void start(){

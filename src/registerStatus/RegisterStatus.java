@@ -50,7 +50,7 @@ public class RegisterStatus {
 			return false;
 		}
 
-		return registerStatusTable.get(registerNum) == -1 ? true : false;
+		return registerStatusTable.get(registerNum) != -1 ? true : false;
 
 	}
 
@@ -61,6 +61,10 @@ public class RegisterStatus {
 		}
 		
 		return registerStatusTable.get(registerNum);
+	}
+	
+	public void printRegisterStatus(){
+		System.out.println(registerStatusTable.toString());
 	}
 	
 	public static void main(String[] args) {

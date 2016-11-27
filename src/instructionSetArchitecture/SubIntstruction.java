@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
 
@@ -18,7 +19,7 @@ public class SubIntstruction extends InstructionSetArchitecture {
 
 		// call SUB function and pass operands to it and it will return the
 		// result to be store in dest reg
-		Short result = adderFU.sub(operands[0], operands[1]);
+		Short result = MainFunctionUnit.getInstance().getAdder().sub(operands[0], operands[1]);
 
 		return result;
 	}

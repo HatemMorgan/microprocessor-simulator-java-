@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import memory.Clock;
 import registers.RegisterEnum;
 import reservationStations.Operation;
 
@@ -15,8 +16,10 @@ public class RETInstruction extends InstructionSetArchitecture {
 
 		Short[] operands = super.loadDataFromRegisters();
 		
+		int current = Clock.counter.intValue();
+		while(Clock.counter.intValue() != current+1);
 		// call (call/return method) and pass to it the operand
-
+		
 		return operands[0];
 	}
 

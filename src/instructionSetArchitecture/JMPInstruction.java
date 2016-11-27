@@ -35,7 +35,7 @@ public class JMPInstruction extends InstructionSetArchitecture {
 		short pc = InstructionMemory.getInstance().getPC();
 		Short address = MainFunctionUnit.getInstance().getAdder().add(result, pc);
 
-		return result;
+		return address;
 		
 	}
 

@@ -40,9 +40,6 @@ public class Adder{
 	{
 		
 		int currentClock = Clock.counter.intValue()+addCycles;
-		System.out.println(addCycles);
-		System.out.println(Clock.counter.intValue());
-		System.out.println(currentClock);
 		while(true)
 		{
 		

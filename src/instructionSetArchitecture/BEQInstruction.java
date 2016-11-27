@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
 
@@ -28,11 +29,11 @@ public class BEQInstruction extends InstructionSetArchitecture {
 		Short[] operands = super.loadDataFromRegisters();
 		
 		// call subtract method of adder and pass operands to it and it will return result
-		Short result = adderFU.sub(operands[0],operands[1]);
+		Short result = MainFunctionUnit.getInstance().getAdder().sub(operands[0],operands[1]);
 		// check if result==0 so we will branch 
 		
 		if(result == 0){
-			return 1 ;
+			return 1 
 		}else{
 			return 0 ;
 		}

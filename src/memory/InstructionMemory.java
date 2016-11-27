@@ -5,11 +5,23 @@ import registers.Register;
 public class InstructionMemory extends Memory {
 
 	private Short PC;
+	private static InstructionMemory instance ;
 
-	public InstructionMemory(int cacheLevels, int mainMemoryAccessTimeInCycles,
+	private InstructionMemory(int cacheLevels, int mainMemoryAccessTimeInCycles,
 			Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
 		super(cacheLevels, mainMemoryAccessTimeInCycles, clock, hitPolicy,
 				missPolicy);
+	}
+	
+	
+	public synchronized static InstructionMemory getInstance(){
+		return instance;
+	}
+	
+	public static void init(int cacheLevels, int mainMemoryAccessTimeInCycles,
+			Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy){
+		
+		instance = new InstructionMemory(cacheLevels, mainMemoryAccessTimeInCycles, clock, hitPolicy, missPolicy);
 	}
 
 	// method that ensures instructions are fetched all at once

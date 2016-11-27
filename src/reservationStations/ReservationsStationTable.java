@@ -22,7 +22,7 @@ public class ReservationsStationTable {
 
 	public void insertIntoReservationStation(String reservationStationName,
 			Operation op, Short vj, Short vk, Integer qj, Integer qk,
-			Integer destination, Integer address) {
+			Integer destination, Short address) {
 		// check if there is a reservation station available (not busy) with
 		// this reservationStationName
 		if (!reservationsStationTable.get(reservationStationName).isBusy()) {

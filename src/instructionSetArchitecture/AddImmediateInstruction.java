@@ -12,6 +12,14 @@ public class AddImmediateInstruction extends InstructionSetArchitecture {
 		super(Operation.ADDI,instructionNumber, destinationRegister, sourceOneRegister, null);
 		this.immediateValue = immidiateValue;
 	}
+	
+	
+
+	public Short getImmediateValue() {
+		return immediateValue;
+	}
+
+
 
 	@Override
 	public Short execute() {

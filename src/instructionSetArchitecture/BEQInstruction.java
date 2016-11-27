@@ -5,11 +5,23 @@ import reservationStations.Operation;
 
 public class BEQInstruction extends InstructionSetArchitecture {
 
-	public BEQInstruction( RegisterEnum destinationRegister, Integer instructionNumber ,
-			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
+		private Short immeditate ;
+	public BEQInstruction( RegisterEnum sourceOneRegister, Integer instructionNumber ,
+			RegisterEnum sourceTwoRegister, Short immeditate) {
 		
-		super(Operation.BEQ,instructionNumber ,destinationRegister, sourceOneRegister, sourceTwoRegister);
+		super(Operation.BEQ,instructionNumber ,null, sourceOneRegister, sourceTwoRegister);
+		this.immeditate = immeditate;
 	}
+	
+	
+	
+
+	public Short getImmeditate() {
+		return immeditate;
+	}
+
+
+
 
 	@Override
 	public Short execute() {

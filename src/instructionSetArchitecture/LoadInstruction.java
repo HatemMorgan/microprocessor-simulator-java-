@@ -13,6 +13,14 @@ public class LoadInstruction extends InstructionSetArchitecture {
 		this.immediateValue = immediateValue;
 	}
 
+	
+	
+	public Short getImmediateValue() {
+		return immediateValue;
+	}
+
+
+
 	@Override
 	public Short execute() {
 

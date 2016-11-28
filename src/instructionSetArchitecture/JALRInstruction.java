@@ -1,5 +1,7 @@
 package instructionSetArchitecture;
 
+import functionalUnits.FunctionalUnitsType;
+import functionalUnits.MainFunctionUnit;
 import memory.Clock;
 import memory.InstructionMemory;
 import registers.RegisterEnum;
@@ -10,7 +12,7 @@ public class JALRInstruction extends InstructionSetArchitecture {
 	private Short pcResult ;
 		
 	public JALRInstruction(RegisterEnum destinationRegister,Integer instructionNumber ,RegisterEnum sourceOneRegister) {
-		super(Operation.JALR,instructionNumber,destinationRegister ,sourceOneRegister , null,null);
+		super(Operation.JALR,instructionNumber,destinationRegister ,sourceOneRegister , null,FunctionalUnitsType.CALL);
 		pcResult = null;
 
 	}
@@ -26,8 +28,9 @@ public class JALRInstruction extends InstructionSetArchitecture {
 		// setting pc variable to be used to write the pc to destination result after committing
 		this.pcResult = pc; 
 		
+		int callNumCycles = MainFunctionUnit.getInstance().getCallNumCycles();
 		int current = Clock.counter.intValue();
-		while(Clock.counter.intValue() != current+1);
+		while(Clock.counter.intValue() != current+callNumCycles);
 		
 		// call (call/return method) and pass to it the operand
 		super.setResult(operands[0]);

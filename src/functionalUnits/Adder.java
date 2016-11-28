@@ -12,12 +12,12 @@ public class Adder{
 	private int addCycles;
 	private int addiCycles;
 	private int subCycles;
-	private String[] reservationStationsName ;
+	private Object[] reservationStationsName ;
 	
 
 	
 	
-	public Adder(int numberOfCycles,String[] reservationStationsName )
+	public Adder(int numberOfCycles,Object[] reservationStationsName )
 	{
 		this.addCycles = numberOfCycles;
 		this.subCycles = numberOfCycles;
@@ -59,7 +59,7 @@ public class Adder{
 	
 	
 	
-	public String[] getReservationStationsName() {
+	public Object[] getReservationStationsName() {
 		return reservationStationsName;
 	}
 

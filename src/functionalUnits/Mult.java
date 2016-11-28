@@ -7,10 +7,10 @@ import java.math.*;
 public class Mult {
 	
 	private int multCycles;
-	private String[] reservationStationsName ;
+	private Object[] reservationStationsName ;
 	
 	
-	public Mult (int numberOfCycles,String[] reservationStationsName){
+	public Mult (int numberOfCycles,Object[] reservationStationsName){
 		this.multCycles = numberOfCycles;
 		this.reservationStationsName = reservationStationsName;
 	}
@@ -19,6 +19,12 @@ public class Mult {
 		multCycles = time;
 	}
 	
+	
+	
+	public Object[] getReservationStationsName() {
+		return reservationStationsName;
+	}
+
 	public int[] mul(Short sourceReg1,Short sourceReg2)
 	{
 		int currentClock = Clock.counter.intValue()+multCycles;

@@ -11,6 +11,7 @@ import registers.Register;
 import registers.RegisterEnum;
 import registers.RegisterFile;
 import reservationStations.Operation;
+import reservationStations.ReservationStationEntry;
 
 public abstract class InstructionSetArchitecture {
 	private Operation operation;
@@ -20,6 +21,7 @@ public abstract class InstructionSetArchitecture {
 	private Integer instructionNumber;
 	private Short result ;
 	private FunctionalUnitsType functionalUnitsType;
+	private String reservationStationEntryName;
 
 	// Register File
 	protected static RegisterFile registerFile = RegisterFile.getInstance();
@@ -96,6 +98,18 @@ public abstract class InstructionSetArchitecture {
 		return functionalUnitsType;
 	}
 
+	
+	
+
+
+	public String getReservationStationEntryName() {
+		return reservationStationEntryName;
+	}
+
+	public void setReservationStationEntryName(String reservationStationEntryName) {
+		this.reservationStationEntryName = reservationStationEntryName;
+	}
+
 	@Override
 	public String toString() {
 		return "InstructionSetArchitecture [operation=" + operation
@@ -109,7 +123,7 @@ public abstract class InstructionSetArchitecture {
 
 		Clock clock = new Clock();
 		
-		MainFunctionUnit.init(3, 5, 2,new String[]{"add1", "add2", "add3", "add4"},new String[]{ "mult"},null,new String[]{"load1", "load2"},new String[]{"store1"});
+//		MainFunctionUnit.init(3, 5, 2,1,new String[]{"add1", "add2", "add3", "add4"},new String[]{ "mult"},null,new String[]{"load1", "load2"},new String[]{"store1"});
 
 		
 		InstructionMemory.init(2, 10, clock, writeHitPolicy.writeBack, writeMissPolicy.writeAllocate);		

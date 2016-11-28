@@ -7,16 +7,16 @@ import reorderBuffer.ROB;
 public class ReservationsStationTable {
 	Hashtable<String, ReservationStationEntry> reservationsStationTable;
 
-	public ReservationsStationTable(String[] reservationStationNames) {
+	public ReservationsStationTable(Object[] reservationStationNames) {
 		reservationsStationTable = new Hashtable<String, ReservationStationEntry>();
 		init(reservationStationNames);
 	}
 
-	private void init(String[] reservationStationNames) {
+	private void init(Object[] reservationStationNames) {
 		for (int i = 0; i < reservationStationNames.length; i++) {
 			ReservationStationEntry newEntry = new ReservationStationEntry(
 					false, null, null, null, null, null, null, null);
-			reservationsStationTable.put(reservationStationNames[i], newEntry);
+			reservationsStationTable.put(reservationStationNames[i].toString(), newEntry);
 		}
 	}
 

@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -10,7 +11,7 @@ public class NANDInstruction extends InstructionSetArchitecture {
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 
 		super(Operation.NAND, instructionNumber,destinationRegister, sourceOneRegister,
-				sourceTwoRegister);
+				sourceTwoRegister,FunctionalUnitsType.NAND);
 	}
 
 	@Override

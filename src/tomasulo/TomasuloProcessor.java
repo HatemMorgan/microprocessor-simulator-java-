@@ -1,14 +1,16 @@
 package tomasulo;
 
-import javax.swing.text.AbstractDocument.BranchElement;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import memory.Clock;
 import memory.InstructionMemory;
 import memory.writeHitPolicy;
 import memory.writeMissPolicy;
 import instructionSetArchitecture.AddImmediateInstruction;
-import instructionSetArchitecture.AddInstruction;
 import instructionSetArchitecture.BEQInstruction;
 import instructionSetArchitecture.InstructionSetArchitecture;
 import instructionSetArchitecture.JALRInstruction;
@@ -20,12 +22,9 @@ import instructionSetArchitecture.StoreInstruction;
 import programState.ProgramState;
 import programState.ProgramStateEntry;
 import registerStatus.RegisterStatus;
-import registers.Register;
 import registers.RegisterEnum;
 import registers.RegisterFile;
 import reorderBuffer.ROB;
-import reorderBuffer.ROBEntry;
-import reservationStations.Operation;
 import reservationStations.ReservationStationEntry;
 import reservationStations.ReservationsStationTable;
 
@@ -37,7 +36,15 @@ public class TomasuloProcessor {
 	private ROB rob;
 
 	public TomasuloProcessor(InstructionSetArchitecture[] programInstructions,
-			int ROBSize, String[] reservationStationsNames) {
+			int adderNumCycles, int multNumCycles, int nandNumCycles,
+			int callNumCycles, int ROBSize,
+			ArrayList<String> adderReservationStations,
+			ArrayList<String> multReservationStations,
+			ArrayList<String> nandReservationStations,
+			ArrayList<String> loadReservationStationsNames,
+			ArrayList<String> storeReservationStationsNames,
+			ArrayList<String> callReservationStationsNames
+			) {
 		// intialize program state table and pass instructions array to it
 		programState = new ProgramState();
 		programState.addInstructionsToProgramStateTable(programInstructions);
@@ -49,43 +56,46 @@ public class TomasuloProcessor {
 		rob = new ROB(ROBSize);
 
 		// intialize reservationStationTable
-		reservationsStationTable = new ReservationsStationTable(
-				reservationStationsNames);
+		ArrayList<String> list = new ArrayList<String>();
+		list.addAll(adderReservationStations);
+		list.addAll(multReservationStations);
+		list.addAll(nandReservationStations);
+		list.addAll(loadReservationStationsNames);
+		list.addAll(storeReservationStationsNames);
+		list.addAll(callReservationStationsNames);
+		reservationsStationTable = new ReservationsStationTable(list.toArray());
 
 		Clock clock = new Clock();
 
-		MainFunctionUnit.init(3, 5, 2);
+		MainFunctionUnit.init(adderNumCycles,multNumCycles,nandNumCycles,callNumCycles, adderReservationStations.toArray(),
+				multReservationStations.toArray(),
+				nandReservationStations.toArray(),
+				loadReservationStationsNames.toArray(),
+				storeReservationStationsNames.toArray(),
+				callReservationStationsNames.toArray()
+				);
 
 		InstructionMemory.init(2, 10, clock, writeHitPolicy.writeBack,
 				writeMissPolicy.writeAllocate);
 
 	}
 
-	public void runInstruction(InstructionSetArchitecture instruction,
-			int robNum, String reservationStationName) {
-		// issuing
-		// check if the instruction is issued
-		if (programState.getProgramStateTableEntry(
-				instruction.getInstructionNumber()).getIssued() != 0) {
-
-		} else {
-			// issuing
-
-		}
-
-	}
-
-	public void issueInstruction(InstructionSetArchitecture instruction,
-			String reservationStationName) {
+	public void issueInstruction(InstructionSetArchitecture instruction) {
 
 		// checking if there are available reservation station and rob entry
-		ReservationStationEntry reservationStation = reservationsStationTable
-				.getReservationStationEntry(reservationStationName);
-		if (rob.isFull() || reservationStation.isBusy()) {
+		String reservationStationName = MainFunctionUnit.getInstance()
+				.getAvailableReservationStation(
+						instruction.getFunctionalUnitsType(),
+						reservationsStationTable);
+
+		if (rob.isFull() || reservationStationName == null) {
 			System.out
 					.println("No availabe an rob free entry  and/or availabe reservation station");
 			return;
 		}
+		ReservationStationEntry reservationStation = reservationsStationTable
+				.getReservationStationEntry(reservationStationName);
+		instruction.setReservationStationEntryName(reservationStationName);
 
 		// insert into ROB after we made sure that there is an empty ROB
 		// entry
@@ -205,8 +215,7 @@ public class TomasuloProcessor {
 
 	}
 
-	public void executeInstruction(InstructionSetArchitecture instruction,
-			String reservationStationName) {
+	public void executeInstruction(InstructionSetArchitecture instruction) {
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
 
@@ -216,7 +225,8 @@ public class TomasuloProcessor {
 		}
 
 		ReservationStationEntry reservationStation = reservationsStationTable
-				.getReservationStationEntry(reservationStationName);
+				.getReservationStationEntry(instruction
+						.getReservationStationEntryName());
 
 		if (reservationStation.getQj() == null
 				&& reservationStation.getQk() == null) {
@@ -239,11 +249,8 @@ public class TomasuloProcessor {
 
 	}
 
-	public void writeInstruction(InstructionSetArchitecture instruction,
-			String reservationStationName) {
-		ReservationStationEntry reservationStation = reservationsStationTable
-				.getReservationStationEntry(reservationStationName);
-
+	public void writeInstruction(InstructionSetArchitecture instruction) {
+		
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
 
@@ -253,11 +260,17 @@ public class TomasuloProcessor {
 			return;
 		}
 
+		ReservationStationEntry reservationStation = reservationsStationTable
+				.getReservationStationEntry(instruction
+						.getReservationStationEntryName());
+
+		
 		// Getting ROB number
 		Integer ROBNum = reservationStation.getDestination();
 
 		// Emptying reservation station entry
-		reservationsStationTable.remove(reservationStationName);
+		reservationsStationTable.remove(instruction
+				.getReservationStationEntryName());
 		Short result = instruction.getResult();
 
 		if (ROBNum != null) {
@@ -297,10 +310,20 @@ public class TomasuloProcessor {
 		RegisterEnum registerDestination = instruction.getDestinationRegister();
 
 		rob.commit();
-		if (instruction.getResult() != null&& registerDestination!=null) {
-			RegisterFile.getInstance().storeDataToRegister(registerDestination,
-					instruction.getResult());
-			registerStatus.removeFromRegisterStatusTable(registerDestination);
+		if (instruction.getResult() != null && registerDestination != null) {
+
+			if (instruction instanceof JALRInstruction) {
+				RegisterFile.getInstance().storeDataToRegister(
+						registerDestination,
+						((JALRInstruction) instruction).getPcResult());
+			} else {
+				RegisterFile.getInstance().storeDataToRegister(
+						registerDestination, instruction.getResult());
+				registerStatus
+						.removeFromRegisterStatusTable(registerDestination);
+
+			}
+
 		}
 		// stalling for 1 clock cycle
 
@@ -332,9 +355,6 @@ public class TomasuloProcessor {
 
 	public static void main(String[] args) {
 
-		String[] reservationStationNames = { "load1", "load2", "store1",
-				"add1", "add2", "add3", "add4", "mult" };
-
 		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[9];
 		instructions[0] = new LoadInstruction(RegisterEnum.R2, 1,
 				RegisterEnum.R1, (short) 20);
@@ -356,8 +376,33 @@ public class TomasuloProcessor {
 		instructions[8] = new LoadInstruction(RegisterEnum.R2, 9,
 				RegisterEnum.R6, (short) 20);
 
+		ArrayList<String> adderReservationStations = new ArrayList<String>();
+		adderReservationStations.add("add1");
+		adderReservationStations.add("add2");
+		adderReservationStations.add("add3");
+		adderReservationStations.add("add4");
+
+		ArrayList<String> multReservationStations = new ArrayList<String>();
+		multReservationStations.add("mult");
+
+		ArrayList<String> loadReservationStationsNames = new ArrayList<String>();
+		loadReservationStationsNames.add("load1");
+		loadReservationStationsNames.add("load2");
+
+		ArrayList<String> storeReservationStationsNames = new ArrayList<String>();
+		storeReservationStationsNames.add("store1");
+
+		ArrayList<String> nandReservationStations = new ArrayList<String>();
+		nandReservationStations.add("nand");
+		
+		ArrayList<String> callReservationStations = new ArrayList<String>();
+		callReservationStations.add("call1");
+		callReservationStations.add("call2");
+
 		TomasuloProcessor tomasuloProcessor = new TomasuloProcessor(
-				instructions, 8, reservationStationNames);
+				instructions,3,5,2,1, 8, adderReservationStations,
+				multReservationStations, nandReservationStations,
+				loadReservationStationsNames, storeReservationStationsNames,callReservationStations);
 
 		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R1,
 				(short) 20);
@@ -377,44 +422,44 @@ public class TomasuloProcessor {
 		System.out
 				.println("----------------------------------- ISSUE ---------------------------------------");
 
-		tomasuloProcessor.issueInstruction(instructions[0], "load1");
-		tomasuloProcessor.issueInstruction(instructions[1], "mult");
-		tomasuloProcessor.issueInstruction(instructions[2], "store1");
-		tomasuloProcessor.issueInstruction(instructions[3], "add1");
-		tomasuloProcessor.issueInstruction(instructions[4], "add2");
-		tomasuloProcessor.issueInstruction(instructions[5], "add3");
-		tomasuloProcessor.issueInstruction(instructions[6], "add4");
+		tomasuloProcessor.issueInstruction(instructions[0]);
+		tomasuloProcessor.issueInstruction(instructions[1]);
+		tomasuloProcessor.issueInstruction(instructions[2]);
+		tomasuloProcessor.issueInstruction(instructions[3]);
+		tomasuloProcessor.issueInstruction(instructions[4]);
+		tomasuloProcessor.issueInstruction(instructions[5]);
+		tomasuloProcessor.issueInstruction(instructions[6]);
 		// this will not be issued beacuse no available reservation station
-		tomasuloProcessor.issueInstruction(instructions[7], "mult");
+		tomasuloProcessor.issueInstruction(instructions[7]);
 		// this will update the register status R2 with last ROB entry
 		// (renaming)
-		tomasuloProcessor.issueInstruction(instructions[8], "load2");
+		tomasuloProcessor.issueInstruction(instructions[8]);
 
 		System.out
 				.println("---------------------------------------- Execute  ----------------------------------------------");
 
-		tomasuloProcessor.executeInstruction(instructions[0], "load1");
-		tomasuloProcessor.executeInstruction(instructions[1], "mult");
-		tomasuloProcessor.executeInstruction(instructions[2], "store1");
-		tomasuloProcessor.executeInstruction(instructions[3], "add1");
-		tomasuloProcessor.executeInstruction(instructions[4], "add2");
-		tomasuloProcessor.executeInstruction(instructions[5], "add3");
-		tomasuloProcessor.executeInstruction(instructions[6], "add4");
-		tomasuloProcessor.executeInstruction(instructions[7], "mult");
-		tomasuloProcessor.executeInstruction(instructions[8], "load2");
+		tomasuloProcessor.executeInstruction(instructions[0]);
+		tomasuloProcessor.executeInstruction(instructions[1]);
+		tomasuloProcessor.executeInstruction(instructions[2]);
+		tomasuloProcessor.executeInstruction(instructions[3]);
+		tomasuloProcessor.executeInstruction(instructions[4]);
+		tomasuloProcessor.executeInstruction(instructions[5]);
+		tomasuloProcessor.executeInstruction(instructions[6]);
+		tomasuloProcessor.executeInstruction(instructions[7]);
+		tomasuloProcessor.executeInstruction(instructions[8]);
 
 		System.out
 				.println("------------------------------------------ WriteBack   --------------------------------------------");
 
-		tomasuloProcessor.writeInstruction(instructions[0], "load1");
-		tomasuloProcessor.writeInstruction(instructions[1], "mult");
-		tomasuloProcessor.writeInstruction(instructions[2], "store1");
-		tomasuloProcessor.writeInstruction(instructions[3], "add1");
-		tomasuloProcessor.writeInstruction(instructions[4], "add2");
-		tomasuloProcessor.writeInstruction(instructions[5], "add3");
-		tomasuloProcessor.writeInstruction(instructions[6], "add4");
-		tomasuloProcessor.writeInstruction(instructions[7], "mult");
-		tomasuloProcessor.writeInstruction(instructions[8], "load2");
+		tomasuloProcessor.writeInstruction(instructions[0]);
+		tomasuloProcessor.writeInstruction(instructions[1]);
+		tomasuloProcessor.writeInstruction(instructions[2]);
+		tomasuloProcessor.writeInstruction(instructions[3]);
+		tomasuloProcessor.writeInstruction(instructions[4]);
+		tomasuloProcessor.writeInstruction(instructions[5]);
+		tomasuloProcessor.writeInstruction(instructions[6]);
+		tomasuloProcessor.writeInstruction(instructions[7]);
+		tomasuloProcessor.writeInstruction(instructions[8]);
 
 		System.out
 				.println("------------------------------------------ Committing   --------------------------------------------");

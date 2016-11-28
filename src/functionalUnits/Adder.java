@@ -12,16 +12,17 @@ public class Adder{
 	private int addCycles;
 	private int addiCycles;
 	private int subCycles;
-	
+	private Object[] reservationStationsName ;
 	
 
 	
 	
-	public Adder(int numberOfCycles)
+	public Adder(int numberOfCycles,Object[] reservationStationsName )
 	{
 		this.addCycles = numberOfCycles;
 		this.subCycles = numberOfCycles;
 		this.addiCycles = numberOfCycles;
+		this.reservationStationsName = reservationStationsName;
 	}
 	
 	public void setADDCycleTime(int time){
@@ -55,6 +56,17 @@ public class Adder{
 		return new int[] {(int)result,currentClock};		
 	}
 	
+	
+	
+	
+	public Object[] getReservationStationsName() {
+		return reservationStationsName;
+	}
+
+	public void setReservationStationsName(String[] reservationStationsName) {
+		this.reservationStationsName = reservationStationsName;
+	}
+
 	public int[] sub(Short sourceReg1,Short sourceReg2)
 	{
 		int currentClock = Clock.counter.intValue()+subCycles;

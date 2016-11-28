@@ -1,6 +1,7 @@
 package instructionSetArchitecture;
 
 import memory.InstructionMemory;
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -11,7 +12,7 @@ public class BEQInstruction extends InstructionSetArchitecture {
 	public BEQInstruction( RegisterEnum sourceOneRegister, Integer instructionNumber ,
 			RegisterEnum sourceTwoRegister, Short immeditate) {
 		
-		super(Operation.BEQ,instructionNumber ,null, sourceOneRegister, sourceTwoRegister);
+		super(Operation.BEQ,instructionNumber ,null, sourceOneRegister, sourceTwoRegister,FunctionalUnitsType.ADDER);
 		this.immeditate = immeditate;
 	}
 	

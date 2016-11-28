@@ -1,5 +1,6 @@
 package tomasulo;
 
+import java.io.PrintStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -352,9 +353,8 @@ public class TomasuloProcessor {
 	public ROB getRob() {
 		return rob;
 	}
-
+//	public static GUI gui;
 	public static void main(String[] args) {
-
 		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[9];
 		instructions[0] = new LoadInstruction(RegisterEnum.R2, 1,
 				RegisterEnum.R1, (short) 20);

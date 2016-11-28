@@ -3,15 +3,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.TimeUnit;
 public class Clock {
 	public static AtomicInteger counter;
-	
+	public static boolean autoClock = true;
 	public Clock(){
 		counter = new AtomicInteger();
+//		this.start();
 	}
 	
 	public void start(){
 		Runnable run = new Runnable() {
 		    public void run() {
-		    	while(true){
+		    	while(autoClock){
 					counter.incrementAndGet();
 //					System.out.println(counter);
 					try {
@@ -28,6 +29,17 @@ public class Clock {
 
 		
 		
+	}
+	
+	
+	public void increment(){
+		counter.incrementAndGet();
+	}
+	public void stopClock(){
+		autoClock = false;
+	}
+	public void runClock(){
+		autoClock = true;
 	}
 	
 	

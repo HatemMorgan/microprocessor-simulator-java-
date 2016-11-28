@@ -6,7 +6,7 @@ public class DataMemory{
 	public static void main(String[] args) throws InterruptedException {
 		Clock c = new Clock();
 		c.start();
-		DataMemory m = new DataMemory(2, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
+		DataMemory m = new DataMemory(1, 4, c, writeHitPolicy.writeBack, writeMissPolicy.writeAllocate);
 		m.store((short) 255, (short)200);
 		short result = m.load((short)255);
 //		short result = m.load((short)265);

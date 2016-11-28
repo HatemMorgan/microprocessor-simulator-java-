@@ -51,8 +51,9 @@ public class InstructionMemory extends Memory {
 		for (int i = 0; i < instructionsToFetch; i++) {
 			result[i] = decode(load(startAddress));
 			startAddress++;
+			PC++;
 		}
-		// resetClockCycles(instructionsToFetch);
+		 resetClockCycles(instructionsToFetch);
 
 		return result;
 	}
@@ -66,12 +67,14 @@ public class InstructionMemory extends Memory {
 //		System.out.println(b);
 		Clock c = new Clock();
 		c.start();
-		InstructionMemory a = new InstructionMemory(1, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
+		InstructionMemory a = new InstructionMemory(1, 4, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
 		InstructionSetArchitecture[] ins = new InstructionSetArchitecture[1];
 		ins[0] = i;
 		a.storeInstructions(ins);
 		InstructionSetArchitecture[] aa = a.readInstructions(1, 0);
 		System.out.println(aa[0]);
+		InstructionSetArchitecture[] ab = a.readInstructions(1, 0);
+		System.out.println(ab[0]);
 	}
 	private static InstructionSetArchitecture decode(String instruction) {
         InstructionSetArchitecture result = null;
@@ -117,7 +120,6 @@ public class InstructionMemory extends Memory {
 	public void storeInstructions(InstructionSetArchitecture []instructions){ 
 		for(short i=0; i<instructions.length; ++i){
 			String encoded = encode(instructions[i]);
-
 			main.storeInstruction(encoded, i);
 			System.out.println("Stored Instruction: " + instructions[i]);
 		}
@@ -134,7 +136,7 @@ public class InstructionMemory extends Memory {
 			this.store(startAddress, instructions[i]);
 			startAddress++;
 		}
-		// resetClockCycles(instructions.length);
+		 resetClockCycles(instructions.length);
 	}
 	public Short getPC() {
 		return PC;
@@ -153,5 +155,8 @@ public class InstructionMemory extends Memory {
 		instance = new InstructionMemory(cacheLevels,
 				mainMemoryAccessTimeInCycles, clock, hitPolicy, missPolicy);
 	}
+	
+	
+
 
 }

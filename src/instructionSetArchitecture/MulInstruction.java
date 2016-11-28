@@ -15,12 +15,11 @@ public class MulInstruction extends InstructionSetArchitecture {
 	}
 
 	@Override
-	public int execute() {
-		Short[] operands = super.loadDataFromRegisters();
+	public int execute(Short operand1,Short operand2) {
 		
 		// call Mul function and pass operands to it and it will return the
 		// result to be store in dest reg
-		int result[] = MainFunctionUnit.getInstance().getMult().mul(operands[0], operands[1]);
+		int result[] = MainFunctionUnit.getInstance().getMult().mul(operand1, operand2);
 
 		super.setResult((short)result[0]);
 		return result[1];

@@ -27,11 +27,11 @@ public class BEQInstruction extends InstructionSetArchitecture {
 
 
 	@Override
-	public int execute() {
-		Short[] operands = super.loadDataFromRegisters();
+	public int execute(Short operand1,Short operand2) {
+
 		
 		// call subtract method of adder and pass operands to it and it will return result
-		int[] results = MainFunctionUnit.getInstance().getAdder().sub(operands[0],operands[1]);
+		int[] results = MainFunctionUnit.getInstance().getAdder().sub(operand1,operand2);
 		// check if result==0 so we will branch 
 		
 		if(results[0] == 0)

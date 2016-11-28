@@ -13,11 +13,10 @@ public class AddInstruction extends InstructionSetArchitecture {
 	}
 
 	@Override
-	public int execute() {
-		Short[] operands = super.loadDataFromRegisters();
+	public int execute(Short operand1,Short operand2) {
 		
 		// call ADD function and pass operands to it and it will return  the result to be store in dest reg
-		int[] results = MainFunctionUnit.getInstance().getAdder().add(operands[0], operands[1]);
+		int[] results = MainFunctionUnit.getInstance().getAdder().add(operand1, operand2);
 		System.out.println("------------->"+(short)results[0]);
 		super.setResult((short)results[0]);
 		System.out.println("---------------->"+super.getResult());

@@ -14,16 +14,15 @@ public class RETInstruction extends InstructionSetArchitecture {
 	}
 
 	@Override
-	public int execute() {
+	public int execute(Short operand1,Short operand2) {
 
-		Short[] operands = super.loadDataFromRegisters();
-		
+
 		int callNumCycles = MainFunctionUnit.getInstance().getCallNumCycles();
 		int current = Clock.counter.intValue();
 		while(Clock.counter.intValue() != current+callNumCycles);
 		// call (call/return method) and pass to it the operand
 		
-		super.setResult(operands[0]);
+		super.setResult(operand1);
 		return current+1;
 	}
 

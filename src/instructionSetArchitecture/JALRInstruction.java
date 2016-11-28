@@ -18,11 +18,8 @@ public class JALRInstruction extends InstructionSetArchitecture {
 	}
 
 	@Override
-	public int execute() {
-		
-		Short[] operands = super.loadDataFromRegisters();
-		
-		
+	public int execute(Short operand1,Short operand2) {
+				
 		// store PC+1 in destination 
 		short pc = InstructionMemory.getInstance().getPC();
 		// setting pc variable to be used to write the pc to destination result after committing
@@ -33,7 +30,7 @@ public class JALRInstruction extends InstructionSetArchitecture {
 		while(Clock.counter.intValue() != current+callNumCycles);
 		
 		// call (call/return method) and pass to it the operand
-		super.setResult(operands[0]);
+		super.setResult(operand1);
 		
 		return current+1;
 		

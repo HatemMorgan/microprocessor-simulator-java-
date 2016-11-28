@@ -24,13 +24,12 @@ public class LoadInstruction extends InstructionSetArchitecture {
 
 
 	@Override
-	public int execute() {
+	public int execute(Short operand1,Short operand2) {
 
-		Short[] operands = super.loadDataFromRegisters();
 
 		// call ADDI function and pass operand and immidiate value to it and it
 		// will return the address as the result
-		int results[] = MainFunctionUnit.getInstance().getAdder().add(operands[0], immediateValue);
+		int results[] = MainFunctionUnit.getInstance().getAdder().add(operand1, immediateValue);
 
 		// pass result[0] to load function in the memory that will return the
 		// result and the clock cycle

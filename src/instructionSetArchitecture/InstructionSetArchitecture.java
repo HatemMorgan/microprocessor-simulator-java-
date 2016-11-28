@@ -39,7 +39,7 @@ public abstract class InstructionSetArchitecture implements Serializable{
 		this.functionalUnitsType = functionalUnitsType;
 	}
 
-	public abstract int execute();
+	public abstract int execute(Short operand1,Short operand2);
 
 	public Short[] loadDataFromRegisters() {
 		// TODO get data from source operands
@@ -180,8 +180,8 @@ public abstract class InstructionSetArchitecture implements Serializable{
 //		System.out.println("Finishing at clock cycle:"+NAND.execute()+" and  SUB result = " + NAND.getResult() );
 		
 		
-		RETInstruction RET = new RETInstruction(RegisterEnum.R3, 2);
-		System.out.println("Finishing at clock cycle:"+ RET.execute()+" and   RET result = " +  RET.getResult() );
+//		RETInstruction RET = new RETInstruction(RegisterEnum.R3, 2);
+//		System.out.println("Finishing at clock cycle:"+ RET.execute()+" and   RET result = " +  RET.getResult() );
 		
 //		LoadInstruction LD = new LoadInstruction(RegisterEnum.R3, 2,
 //				RegisterEnum.R4, (short) 903);

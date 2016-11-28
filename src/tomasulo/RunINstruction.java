@@ -236,7 +236,7 @@ public class RunINstruction implements Runnable {
 
 		if (reservationStation.getQj() == null
 				&& reservationStation.getQk() == null) {
-			int execEndClockCycle = instruction.execute();
+			int execEndClockCycle = instruction.execute(reservationStation.getVj(),reservationStation.getVk());
 			if (instruction instanceof LoadInstruction
 					|| instruction instanceof JALRInstruction
 					|| instruction instanceof RETInstruction
@@ -298,7 +298,6 @@ public class RunINstruction implements Runnable {
 		}
 		// ROB adding result
 		rob.writeResultTOROB(ROBNum, result);
-
 		// pass results to all waiting reservation stations
 		reservationsStationTable.passResultToWaitingReservationStation(result,
 				ROBNum);

@@ -25,12 +25,11 @@ public class JMPInstruction extends InstructionSetArchitecture {
 
 
 	@Override
-	public int  execute() {
+	public int  execute(Short operand1,Short operand2) {
 		
-		Short[] operands = super.loadDataFromRegisters();
 		
 		// call ADDI function and pass  operand and immidiate value to it
-		int result[] = MainFunctionUnit.getInstance().getAdder().add(operands[0],immediateValue);
+		int result[] = MainFunctionUnit.getInstance().getAdder().add(operand1,immediateValue);
 		
 		// call ADDI function and pass result and PC+1 to calculate targat address
 		short pc = InstructionMemory.getInstance().getPC();

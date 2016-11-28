@@ -25,74 +25,59 @@ import registerStatus.RegisterStatus;
 import registers.RegisterEnum;
 import registers.RegisterFile;
 import reorderBuffer.ROB;
+import reorderBuffer.ROBEntry;
 import reservationStations.ReservationStationEntry;
 import reservationStations.ReservationsStationTable;
 
-public class TomasuloProcessor {
+public class RunINstruction implements Runnable {
 
+	private InstructionSetArchitecture instruction;
 	private ProgramState programState;
 	private RegisterStatus registerStatus;
 	private ReservationsStationTable reservationsStationTable;
 	private ROB rob;
+	private boolean committed;
 
-	public TomasuloProcessor(InstructionSetArchitecture[] programInstructions,
-			int adderNumCycles, int multNumCycles, int nandNumCycles,
-			int callNumCycles, int ROBSize,
-			ArrayList<String> adderReservationStations,
-			ArrayList<String> multReservationStations,
-			ArrayList<String> nandReservationStations,
-			ArrayList<String> loadReservationStationsNames,
-			ArrayList<String> storeReservationStationsNames,
-			ArrayList<String> callReservationStationsNames
-			) {
-		// intialize program state table and pass instructions array to it
-		programState = new ProgramState();
-		programState.addInstructionsToProgramStateTable(programInstructions);
+	public RunINstruction(InstructionSetArchitecture instruction,
+			ProgramState programState, RegisterStatus registerStatus,
+			ReservationsStationTable reservationsStationTable, ROB rob) {
 
-		// intialize RegisterStatus table
-		registerStatus = new RegisterStatus();
-
-		// instialize ROB
-		rob = new ROB(ROBSize);
-
-		// intialize reservationStationTable
-		ArrayList<String> list = new ArrayList<String>();
-		list.addAll(adderReservationStations);
-		list.addAll(multReservationStations);
-		list.addAll(nandReservationStations);
-		list.addAll(loadReservationStationsNames);
-		list.addAll(storeReservationStationsNames);
-		list.addAll(callReservationStationsNames);
-		reservationsStationTable = new ReservationsStationTable(list.toArray());
-
-		Clock clock = new Clock();
-
-		MainFunctionUnit.init(adderNumCycles,multNumCycles,nandNumCycles,callNumCycles, adderReservationStations.toArray(),
-				multReservationStations.toArray(),
-				nandReservationStations.toArray(),
-				loadReservationStationsNames.toArray(),
-				storeReservationStationsNames.toArray(),
-				callReservationStationsNames.toArray()
-				);
-
-		InstructionMemory.init(2, 10, clock, writeHitPolicy.writeBack,
-				writeMissPolicy.writeAllocate);
-
+		this.instruction = instruction;
+		this.programState = programState;
+		this.registerStatus = registerStatus;
+		this.reservationsStationTable = reservationsStationTable;
+		this.rob = rob;
+		this.committed = false;
 	}
 
-	public void issueInstruction(InstructionSetArchitecture instruction) {
+	@Override
+	public void run() {
+				
+			issueInstruction();
+			System.out.println("-->"+instruction.toString()+"----->"+" finished "+" at cycle : "+Clock.counter.intValue());
+			
+	}
+
+	public void issueInstruction() {
 
 		// checking if there are available reservation station and rob entry
+
 		String reservationStationName = MainFunctionUnit.getInstance()
 				.getAvailableReservationStation(
 						instruction.getFunctionalUnitsType(),
 						reservationsStationTable);
 
-		if (rob.isFull() || reservationStationName == null) {
-			System.out
-					.println("No availabe an rob free entry  and/or availabe reservation station");
-			return;
+		while (rob.isFull() || reservationStationName == null || programState.getInstructionNumberOfInOrderIssuedISA() != instruction.getInstructionNumber()) {
+			reservationStationName = MainFunctionUnit.getInstance()
+					.getAvailableReservationStation(
+							instruction.getFunctionalUnitsType(),
+							reservationsStationTable);
 		}
+		
+		System.out.println("-->"+instruction.toString()+"----->"+" Start issuing"+" at cycle : "+Clock.counter.intValue());
+		
+	
+		
 		ReservationStationEntry reservationStation = reservationsStationTable
 				.getReservationStationEntry(reservationStationName);
 		instruction.setReservationStationEntryName(reservationStationName);
@@ -212,13 +197,18 @@ public class TomasuloProcessor {
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
 		// System.out.println(programStateEntry.toString());
 		programStateEntry.setIssued(current + 1);
+		
+		System.out.println("-->"+instruction.toString()+"----->"+" End issuing"+" at cycle : "+Clock.counter.intValue());
+		programState.setInstructionNumberOfInOrderIssuedISA(programState.getInstructionNumberOfInOrderIssuedISA()+1);
+		
+		executeInstruction();
 
 	}
 
-	public void executeInstruction(InstructionSetArchitecture instruction) {
+	public void executeInstruction() {
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
-
+		
 		if (programStateEntry.getIssued() == 0) {
 			System.out.println("instruction not issued yet");
 			return;
@@ -228,6 +218,11 @@ public class TomasuloProcessor {
 				.getReservationStationEntry(instruction
 						.getReservationStationEntryName());
 
+		while(reservationStation.getQj() != null
+				|| reservationStation.getQk() != null);
+		
+		System.out.println("-->"+instruction.toString()+"----->"+" Start Executing"+" at cycle : "+Clock.counter.intValue());
+		
 		if (reservationStation.getQj() == null
 				&& reservationStation.getQk() == null) {
 			int execEndClockCycle = instruction.execute();
@@ -245,12 +240,16 @@ public class TomasuloProcessor {
 			programState.getProgramStateTableEntry(
 					instruction.getInstructionNumber()).setExecuted(
 					(short) execEndClockCycle);
+			
+			System.out.println("-->"+instruction.toString()+"----->"+" End Executing"+" at cycle : "+Clock.counter.intValue());
+			
+			writeInstruction();
 		}
 
 	}
 
-	public void writeInstruction(InstructionSetArchitecture instruction) {
-		
+	public void writeInstruction() {
+
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
 
@@ -260,11 +259,12 @@ public class TomasuloProcessor {
 			return;
 		}
 
+		System.out.println("-->"+instruction.toString()+"----->"+" Start Writing"+" at cycle : "+Clock.counter.intValue());
+		
 		ReservationStationEntry reservationStation = reservationsStationTable
 				.getReservationStationEntry(instruction
 						.getReservationStationEntryName());
 
-		
 		// Getting ROB number
 		Integer ROBNum = reservationStation.getDestination();
 
@@ -294,10 +294,14 @@ public class TomasuloProcessor {
 		programState.getProgramStateTableEntry(
 				instruction.getInstructionNumber()).setWritten(
 				(short) current + 1);
+		
+		System.out.println("-->"+instruction.toString()+"----->"+" End Writing"+" at cycle : "+Clock.counter.intValue());
+		
+		commitInstruction();
 
 	}
 
-	public void commitInstruction(InstructionSetArchitecture instruction) {
+	public void commitInstruction() {
 
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
@@ -306,9 +310,12 @@ public class TomasuloProcessor {
 			System.out.println("instruction not Written yet");
 			return;
 		}
-
+	
+		
 		RegisterEnum registerDestination = instruction.getDestinationRegister();
-
+		
+		System.out.println("-->"+instruction.toString()+"----->"+" Want to commit "+" at cycle : "+Clock.counter.intValue());
+		
 		rob.commit();
 		if (instruction.getResult() != null && registerDestination != null) {
 
@@ -335,161 +342,154 @@ public class TomasuloProcessor {
 		programState.getProgramStateTableEntry(
 				instruction.getInstructionNumber()).setCommitted(
 				(short) current + 1);
-	}
-
-	public ProgramState getProgramState() {
-		return programState;
-	}
-
-	public RegisterStatus getRegisterStatus() {
-		return registerStatus;
-	}
-
-	public ReservationsStationTable getReservationsStationTable() {
-		return reservationsStationTable;
-	}
-
-	public ROB getRob() {
-		return rob;
-	}
-
-	public static void main(String[] args) {
-
-		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[9];
-		instructions[0] = new LoadInstruction(RegisterEnum.R2, 1,
-				RegisterEnum.R1, (short) 20);
-
-		instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
-				RegisterEnum.R3, RegisterEnum.R4);
-
-		instructions[2] = new StoreInstruction(RegisterEnum.R4, 3,
-				RegisterEnum.R5, (short) 30);
-
-		instructions[3] = new BEQInstruction(RegisterEnum.R3, 4,
-				RegisterEnum.R7, (short) 50);
-		instructions[4] = new JMPInstruction(RegisterEnum.R3, 5, (short) 70);
-		instructions[5] = new RETInstruction(RegisterEnum.R1, 6);
-		instructions[6] = new JALRInstruction(RegisterEnum.R4, 7,
-				RegisterEnum.R5);
-		instructions[7] = new MulInstruction(RegisterEnum.R7, 8,
-				RegisterEnum.R4, RegisterEnum.R3);
-		instructions[8] = new LoadInstruction(RegisterEnum.R2, 9,
-				RegisterEnum.R6, (short) 20);
-
-		ArrayList<String> adderReservationStations = new ArrayList<String>();
-		adderReservationStations.add("add1");
-		adderReservationStations.add("add2");
-		adderReservationStations.add("add3");
-		adderReservationStations.add("add4");
-
-		ArrayList<String> multReservationStations = new ArrayList<String>();
-		multReservationStations.add("mult");
-
-		ArrayList<String> loadReservationStationsNames = new ArrayList<String>();
-		loadReservationStationsNames.add("load1");
-		loadReservationStationsNames.add("load2");
-
-		ArrayList<String> storeReservationStationsNames = new ArrayList<String>();
-		storeReservationStationsNames.add("store1");
-
-		ArrayList<String> nandReservationStations = new ArrayList<String>();
-		nandReservationStations.add("nand");
 		
-		ArrayList<String> callReservationStations = new ArrayList<String>();
-		callReservationStations.add("call1");
-		callReservationStations.add("call2");
-
-		TomasuloProcessor tomasuloProcessor = new TomasuloProcessor(
-				instructions,3,5,2,1, 8, adderReservationStations,
-				multReservationStations, nandReservationStations,
-				loadReservationStationsNames, storeReservationStationsNames,callReservationStations);
-
-		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R1,
-				(short) 20);
-		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R2,
-				(short) 200);
-		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R3,
-				(short) 2);
-		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R4,
-				(short) 290);
-		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R5,
-				(short) 522);
-		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R6,
-				(short) 2022);
-		RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R7,
-				(short) 903);
-
-		System.out
-				.println("----------------------------------- ISSUE ---------------------------------------");
-
-		tomasuloProcessor.issueInstruction(instructions[0]);
-		tomasuloProcessor.issueInstruction(instructions[1]);
-		tomasuloProcessor.issueInstruction(instructions[2]);
-		tomasuloProcessor.issueInstruction(instructions[3]);
-		tomasuloProcessor.issueInstruction(instructions[4]);
-		tomasuloProcessor.issueInstruction(instructions[5]);
-		tomasuloProcessor.issueInstruction(instructions[6]);
-		// this will not be issued beacuse no available reservation station
-		tomasuloProcessor.issueInstruction(instructions[7]);
-		// this will update the register status R2 with last ROB entry
-		// (renaming)
-		tomasuloProcessor.issueInstruction(instructions[8]);
-
-		System.out
-				.println("---------------------------------------- Execute  ----------------------------------------------");
-
-		tomasuloProcessor.executeInstruction(instructions[0]);
-		tomasuloProcessor.executeInstruction(instructions[1]);
-		tomasuloProcessor.executeInstruction(instructions[2]);
-		tomasuloProcessor.executeInstruction(instructions[3]);
-		tomasuloProcessor.executeInstruction(instructions[4]);
-		tomasuloProcessor.executeInstruction(instructions[5]);
-		tomasuloProcessor.executeInstruction(instructions[6]);
-		tomasuloProcessor.executeInstruction(instructions[7]);
-		tomasuloProcessor.executeInstruction(instructions[8]);
-
-		System.out
-				.println("------------------------------------------ WriteBack   --------------------------------------------");
-
-		tomasuloProcessor.writeInstruction(instructions[0]);
-		tomasuloProcessor.writeInstruction(instructions[1]);
-		tomasuloProcessor.writeInstruction(instructions[2]);
-		tomasuloProcessor.writeInstruction(instructions[3]);
-		tomasuloProcessor.writeInstruction(instructions[4]);
-		tomasuloProcessor.writeInstruction(instructions[5]);
-		tomasuloProcessor.writeInstruction(instructions[6]);
-		tomasuloProcessor.writeInstruction(instructions[7]);
-		tomasuloProcessor.writeInstruction(instructions[8]);
-
-		System.out
-				.println("------------------------------------------ Committing   --------------------------------------------");
-
-		tomasuloProcessor.commitInstruction(instructions[0]);
-		tomasuloProcessor.commitInstruction(instructions[1]);
-		tomasuloProcessor.commitInstruction(instructions[2]);
-		tomasuloProcessor.commitInstruction(instructions[3]);
-		tomasuloProcessor.commitInstruction(instructions[4]);
-		tomasuloProcessor.commitInstruction(instructions[5]);
-		tomasuloProcessor.commitInstruction(instructions[6]);
-		tomasuloProcessor.commitInstruction(instructions[7]);
-		tomasuloProcessor.commitInstruction(instructions[8]);
-
-		System.out
-				.println("------------------------- Program State ---------------------------");
-		tomasuloProcessor.getProgramState().printProgramStateTable();
-		System.out
-				.println("------------------------- Reservation Station ---------------------------");
-		tomasuloProcessor.getReservationsStationTable()
-				.printReservationStationsTable();
-		System.out
-				.println("------------------------- Register Status ---------------------------");
-		tomasuloProcessor.getRegisterStatus().printRegisterStatus();
-		System.out
-				.println("------------------------- ROB ---------------------------");
-		tomasuloProcessor.getRob().printROB();
-
-		System.out
-				.println("------------------------- Register File ---------------------------");
-		RegisterFile.getInstance().printregisterFileTable();
+		System.out.println("-->"+instruction.toString()+"----->"+" committed"+" at cycle : "+Clock.counter.intValue());
+		
+		// set committed flag to true ;
+		committed = true;
+		
 	}
+
+	// public static void main(String[] args) {
+	//
+	// InstructionSetArchitecture[] instructions = new
+	// InstructionSetArchitecture[9];
+	// instructions[0] = new LoadInstruction(RegisterEnum.R2, 1,
+	// RegisterEnum.R1, (short) 20);
+	//
+	// instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
+	// RegisterEnum.R3, RegisterEnum.R4);
+	//
+	// instructions[2] = new StoreInstruction(RegisterEnum.R4, 3,
+	// RegisterEnum.R5, (short) 30);
+	//
+	// instructions[3] = new BEQInstruction(RegisterEnum.R3, 4,
+	// RegisterEnum.R7, (short) 50);
+	// instructions[4] = new JMPInstruction(RegisterEnum.R3, 5, (short) 70);
+	// instructions[5] = new RETInstruction(RegisterEnum.R1, 6);
+	// instructions[6] = new JALRInstruction(RegisterEnum.R4, 7,
+	// RegisterEnum.R5);
+	// instructions[7] = new MulInstruction(RegisterEnum.R7, 8,
+	// RegisterEnum.R4, RegisterEnum.R3);
+	// instructions[8] = new LoadInstruction(RegisterEnum.R2, 9,
+	// RegisterEnum.R6, (short) 20);
+	//
+	// ArrayList<String> adderReservationStations = new ArrayList<String>();
+	// adderReservationStations.add("add1");
+	// adderReservationStations.add("add2");
+	// adderReservationStations.add("add3");
+	// adderReservationStations.add("add4");
+	//
+	// ArrayList<String> multReservationStations = new ArrayList<String>();
+	// multReservationStations.add("mult");
+	//
+	// ArrayList<String> loadReservationStationsNames = new ArrayList<String>();
+	// loadReservationStationsNames.add("load1");
+	// loadReservationStationsNames.add("load2");
+	//
+	// ArrayList<String> storeReservationStationsNames = new
+	// ArrayList<String>();
+	// storeReservationStationsNames.add("store1");
+	//
+	// ArrayList<String> nandReservationStations = new ArrayList<String>();
+	// nandReservationStations.add("nand");
+	//
+	// ArrayList<String> callReservationStations = new ArrayList<String>();
+	// callReservationStations.add("call1");
+	// callReservationStations.add("call2");
+	//
+	// TomasuloProcessor tomasuloProcessor = new TomasuloProcessor(
+	// instructions, 3, 5, 2, 1, 8, adderReservationStations,
+	// multReservationStations, nandReservationStations,
+	// loadReservationStationsNames, storeReservationStationsNames,
+	// callReservationStations);
+	//
+	// RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R1,
+	// (short) 20);
+	// RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R2,
+	// (short) 200);
+	// RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R3,
+	// (short) 2);
+	// RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R4,
+	// (short) 290);
+	// RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R5,
+	// (short) 522);
+	// RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R6,
+	// (short) 2022);
+	// RegisterFile.getInstance().storeDataToRegister(RegisterEnum.R7,
+	// (short) 903);
+	//
+	// System.out
+	// .println("----------------------------------- ISSUE ---------------------------------------");
+	//
+	// tomasuloProcessor.issueInstruction(instructions[0]);
+	// tomasuloProcessor.issueInstruction(instructions[1]);
+	// tomasuloProcessor.issueInstruction(instructions[2]);
+	// tomasuloProcessor.issueInstruction(instructions[3]);
+	// tomasuloProcessor.issueInstruction(instructions[4]);
+	// tomasuloProcessor.issueInstruction(instructions[5]);
+	// tomasuloProcessor.issueInstruction(instructions[6]);
+	// // this will not be issued beacuse no available reservation station
+	// tomasuloProcessor.issueInstruction(instructions[7]);
+	// // this will update the register status R2 with last ROB entry
+	// // (renaming)
+	// tomasuloProcessor.issueInstruction(instructions[8]);
+	//
+	// System.out
+	// .println("---------------------------------------- Execute  ----------------------------------------------");
+	//
+	// tomasuloProcessor.executeInstruction(instructions[0]);
+	// tomasuloProcessor.executeInstruction(instructions[1]);
+	// tomasuloProcessor.executeInstruction(instructions[2]);
+	// tomasuloProcessor.executeInstruction(instructions[3]);
+	// tomasuloProcessor.executeInstruction(instructions[4]);
+	// tomasuloProcessor.executeInstruction(instructions[5]);
+	// tomasuloProcessor.executeInstruction(instructions[6]);
+	// tomasuloProcessor.executeInstruction(instructions[7]);
+	// tomasuloProcessor.executeInstruction(instructions[8]);
+	//
+	// System.out
+	// .println("------------------------------------------ WriteBack   --------------------------------------------");
+	//
+	// tomasuloProcessor.writeInstruction(instructions[0]);
+	// tomasuloProcessor.writeInstruction(instructions[1]);
+	// tomasuloProcessor.writeInstruction(instructions[2]);
+	// tomasuloProcessor.writeInstruction(instructions[3]);
+	// tomasuloProcessor.writeInstruction(instructions[4]);
+	// tomasuloProcessor.writeInstruction(instructions[5]);
+	// tomasuloProcessor.writeInstruction(instructions[6]);
+	// tomasuloProcessor.writeInstruction(instructions[7]);
+	// tomasuloProcessor.writeInstruction(instructions[8]);
+	//
+	// System.out
+	// .println("------------------------------------------ Committing   --------------------------------------------");
+	//
+	// tomasuloProcessor.commitInstruction(instructions[0]);
+	// tomasuloProcessor.commitInstruction(instructions[1]);
+	// tomasuloProcessor.commitInstruction(instructions[2]);
+	// tomasuloProcessor.commitInstruction(instructions[3]);
+	// tomasuloProcessor.commitInstruction(instructions[4]);
+	// tomasuloProcessor.commitInstruction(instructions[5]);
+	// tomasuloProcessor.commitInstruction(instructions[6]);
+	// tomasuloProcessor.commitInstruction(instructions[7]);
+	// tomasuloProcessor.commitInstruction(instructions[8]);
+	//
+	// System.out
+	// .println("------------------------- Program State ---------------------------");
+	// tomasuloProcessor.getProgramState().printProgramStateTable();
+	// System.out
+	// .println("------------------------- Reservation Station ---------------------------");
+	// tomasuloProcessor.getReservationsStationTable()
+	// .printReservationStationsTable();
+	// System.out
+	// .println("------------------------- Register Status ---------------------------");
+	// tomasuloProcessor.getRegisterStatus().printRegisterStatus();
+	// System.out
+	// .println("------------------------- ROB ---------------------------");
+	// tomasuloProcessor.getRob().printROB();
+	//
+	// System.out
+	// .println("------------------------- Register File ---------------------------");
+	// RegisterFile.getInstance().printregisterFileTable();
+	// }
 }

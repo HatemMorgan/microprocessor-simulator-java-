@@ -21,7 +21,7 @@ public class RegisterStatus {
 
 	}
 
-	public void insertIntoRegisterStatusTable(RegisterEnum registerNumber,
+	public synchronized void insertIntoRegisterStatusTable(RegisterEnum registerNumber,
 			Integer ROBNum) {
 		if (!registerStatusTable.containsKey(registerNumber)) {
 			System.out.println("Wrong Register Number: #" + registerNumber);
@@ -33,7 +33,7 @@ public class RegisterStatus {
 				+ " into registerNumber: #" + registerNumber);
 	}
 
-	public void removeFromRegisterStatusTable(RegisterEnum registerNumber) {
+	public synchronized void removeFromRegisterStatusTable(RegisterEnum registerNumber) {
 		if (!registerStatusTable.containsKey(registerNumber)) {
 			System.out.println("Wrong Register Number");
 			return;
@@ -44,7 +44,7 @@ public class RegisterStatus {
 				+ registerNumber);
 	}
 
-	public boolean isBusy(RegisterEnum registerNum) {
+	public synchronized boolean isBusy(RegisterEnum registerNum) {
 		if (!registerStatusTable.containsKey(registerNum)) {
 			System.out.println("Wrong Register Number");
 			return false;
@@ -54,7 +54,7 @@ public class RegisterStatus {
 
 	}
 
-	public Integer getROBNum(RegisterEnum registerNum){
+	public synchronized Integer getROBNum(RegisterEnum registerNum){
 		if (!registerStatusTable.containsKey(registerNum)) {
 			System.out.println("Wrong Register Number");
 			return 0;

@@ -71,7 +71,7 @@ public class ROB {
 
 	}
 
-	public void writeResultTOROB(int entryNumber, Short result) {
+	public synchronized void writeResultTOROB(int entryNumber, Short result) {
 		ROBEntry current = first;
 		boolean found = false;
 		while (current.next != first) {
@@ -96,7 +96,7 @@ public class ROB {
 		}
 	}
 
-	public void commit() {
+	public synchronized void commit() {
 		// check if the head is pointing to this entry inorder to maintain
 		// inorder committing
 		if ( head.isReady()) {
@@ -117,10 +117,9 @@ public class ROB {
 		} else {
 			
 
-			if (!head.isReady()) {
-				System.out
-						.println("Connot commit because the ROB entry the head is pointing to it is not ready(instruction is not in commit stage) ");
-			}
+			while (!head.isReady()) ;
+			
+			
 
 		}
 	}
@@ -143,7 +142,7 @@ public class ROB {
 
 	}
 
-	public boolean IsReady(int robNum) {
+	public synchronized boolean IsReady(int robNum) {
 		if (robNum > size) {
 			System.out.println("Invalid ROB number");
 			return false;
@@ -157,7 +156,7 @@ public class ROB {
 
 	}
 
-	public Short getValue(int robNum) {
+	public synchronized Short getValue(int robNum) {
 		if (robNum > size) {
 			System.out.println("Invalid ROB number");
 			return null;
@@ -171,7 +170,7 @@ public class ROB {
 
 	}
 
-	public void setROBEntryReady(int robNum) {
+	public synchronized void setROBEntryReady(int robNum) {
 		if (robNum > size) {
 			System.out.println("Invalid ROB number");
 			return;
@@ -184,7 +183,7 @@ public class ROB {
 		current.setReady(true);
 	}
 
-	public int getROBEntryNumber(InstructionSetArchitecture instruction) {
+	public synchronized int getROBEntryNumber(InstructionSetArchitecture instruction) {
 
 		if (first.getType().equals(instruction)) {
 			return first.getEntryNumber();

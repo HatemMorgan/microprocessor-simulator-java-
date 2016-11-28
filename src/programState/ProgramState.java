@@ -8,9 +8,10 @@ import registers.RegisterEnum;
 
 public class ProgramState {
 	private ArrayList<ProgramStateEntry> programStateTable;
-
+	private int instructionNumberOfInOrderIssuedISA ;
 	public ProgramState() {
 		programStateTable = new ArrayList<>();
+		instructionNumberOfInOrderIssuedISA = 1;
 	}
 
 	public void addInstructionsToProgramStateTable(
@@ -27,7 +28,7 @@ public class ProgramState {
 		}
 	}
 
-	public InstructionSetArchitecture getInstruction(int position){
+	public synchronized InstructionSetArchitecture getInstruction(int position){
 		if (programStateTable.size() >= position){
 			System.out.println("No instruction with this position");
 			return null;
@@ -37,7 +38,7 @@ public class ProgramState {
 		
 	}
 	
-	public ProgramStateEntry getProgramStateTableEntry(int position){
+	public synchronized ProgramStateEntry getProgramStateTableEntry(int position){
 		if (programStateTable.size() <= position-1){
 			System.out.println("No instruction with this position");
 			return null;
@@ -48,6 +49,17 @@ public class ProgramState {
 	}
 	
 	
+	
+	
+	public synchronized int getInstructionNumberOfInOrderIssuedISA() {
+		return instructionNumberOfInOrderIssuedISA;
+	}
+
+	public synchronized void setInstructionNumberOfInOrderIssuedISA(
+			int instructionNumberOfInOrderIssuedISA) {
+		this.instructionNumberOfInOrderIssuedISA = instructionNumberOfInOrderIssuedISA;
+	}
+
 	public static void main(String[] args) {
 
 		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[2];

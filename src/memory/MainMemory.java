@@ -1,6 +1,8 @@
 package memory;
 import java.util.Arrays;
 
+import instructionSetArchitecture.InstructionSetArchitecture;
+
 public class MainMemory {
 	//64KB memory
 	String[][] memory;
@@ -25,10 +27,11 @@ public class MainMemory {
 		return "";
 	}
 	
-	public void storeInstruction(String instruction, int address){
+	public void storeInstruction(String instruction, short address){
 		memory[address/blockSize][address%blockSize] = instruction;
 		System.out.println("Inserted " + instruction + " in main successfully!");
 	}
+
 	
 	
 	public void store(String value, int address){
@@ -81,7 +84,7 @@ public class MainMemory {
 		Clock c = new Clock();
 		c.start();
 		MainMemory m = new MainMemory(4, c, 1);
-		m.store("sayegh", 0xff);
+		m.store("sayegh", 255);
 		String value = m.load(255);
 		System.out.println(value);
 	}

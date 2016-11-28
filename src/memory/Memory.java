@@ -1,6 +1,5 @@
 package memory;
 
-
 public class Memory {
 	Cache[] caches;
 	MainMemory main;
@@ -9,11 +8,8 @@ public class Memory {
 	
 	//back + allocate
 	//through + around
-	
-	//?? why there is default values for writeHitPolicy and writeMissPolicy
-	public static writeHitPolicy hitPolicy = writeHitPolicy.writeThrough;
-	public static writeMissPolicy missPolicy = writeMissPolicy.writeAround;
-
+	public writeHitPolicy hitPolicy = writeHitPolicy.writeThrough;
+	public writeMissPolicy missPolicy = writeMissPolicy.writeAround;
 	
 	public Memory(int cacheLevels, int mainMemoryAccessTimeInCycles,  Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
 		this.cacheLevels = cacheLevels;
@@ -27,7 +23,6 @@ public class Memory {
 		init();
 	}
 	
-	// ??? caches doesnot have the same size or associativity . it must be customized 
 	void init(){
 		for (int i = 0; i < cacheLevels; i++) {
 			caches[i] = new Cache(16, 1, 1, 1, this.clock);
@@ -42,9 +37,8 @@ public class Memory {
 		}		
 		return "";
 	}
-
+	
 	public String load(int byteAddress){
-
 		String res=loadHelper(byteAddress, 0);
 		System.out.println(res);
 		return res;
@@ -54,7 +48,6 @@ public class Memory {
 	
 	String loadHelper(int byteAddress, int i){
 		CacheEntry result = null;
-		System.out.println(i);
 		if(i>= caches.length){
 			String mainMemoryResult =  main.load(byteAddress);
 			return mainMemoryResult;
@@ -62,7 +55,6 @@ public class Memory {
 
 		//searching the cache
 		result = caches[i].searchCache(byteAddress);
-		System.out.println("here------>"+result);
 		//Read hit
 		if(result !=null){
 			System.out.println("Found in cache level " + i);
@@ -77,9 +69,11 @@ public class Memory {
 //			no allocate
 			
 			//get value from lower memory
-			returnValue =  readAround(byteAddress, i);
+			returnValue =  readAround(byteAddress, i+1);
+			System.out.println("Return value " + returnValue);
 			//write the value to this cache level
-			storeHelper(byteAddress, returnValue, i);
+//			storeHelper(byteAddress, returnValue, i);
+			writeThrough(byteAddress, returnValue, i);
 			return returnValue;		
 
 		}else{
@@ -157,18 +151,10 @@ public class Memory {
 	void writeThrough(int byteAddress, String value, int i){
 		//Write to caches and main
 		for (int j = 0; j < caches.length; j++) {
-			caches[i].insertIntoCache(byteAddress, value, false);			
+			caches[j].insertIntoCache(byteAddress, value, false);			
 		}
 		main.store(value, byteAddress);
 
-	}
-	
-	public void storeInstructions(String []instructions){
-		for(int i=0; i<instructions.length; ++i){
-			main.storeInstruction(instructions[i], i);
-			System.out.println("Stored Instruction: " + instructions[i]);
-		}
-		System.out.println("Stored Instructions Successfully!");
 	}
 
 	public void store(int byteAddress, String value){
@@ -208,15 +194,9 @@ public class Memory {
 	public static void main(String[] args) {
 		Clock c = new Clock();
 		c.start();
-		Memory m = new Memory(2, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAllocate);
-		m.store(212, "sayegh");
-		String res = m.load(212);
-		System.out.println(res);
-
-		System.out.println("------------------------------------------------");
-		String res2 = m.load(212);
-		System.out.println("heree");
-		
-		System.out.println(res2);
+		Memory m = new Memory(2, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
+		m.store(255, "sayegh");
+		m.load(255);
+		m.toString();
 	}
 }

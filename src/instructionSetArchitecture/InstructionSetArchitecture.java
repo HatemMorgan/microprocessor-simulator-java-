@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import functionalUnits.*;
@@ -13,7 +14,7 @@ import registers.RegisterFile;
 import reservationStations.Operation;
 import reservationStations.ReservationStationEntry;
 
-public abstract class InstructionSetArchitecture {
+public abstract class InstructionSetArchitecture implements Serializable{
 	private Operation operation;
 	private RegisterEnum destinationRegister;
 	private RegisterEnum sourceOneRegister;

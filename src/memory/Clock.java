@@ -4,17 +4,30 @@ import java.util.concurrent.TimeUnit;
 public class Clock {
 	public static AtomicInteger counter;
 	public static boolean autoClock = true;
+	private boolean finish;
 	public Clock(){
 		counter = new AtomicInteger();
-//		this.start();
+		finish = false;
+		this.start();
+
 	}
 	
+	
+	
+
+
+	public void setFinish(boolean finish) {
+		this.finish = finish;
+	}
+
+
+
 	public void start(){
 		Runnable run = new Runnable() {
 		    public void run() {
-		    	while(autoClock){
+		    	while(!finish){
 					counter.incrementAndGet();
-//					System.out.println(counter);
+					System.out.println(counter);
 					try {
 						TimeUnit.SECONDS.sleep(1);
 					} catch (InterruptedException e) {

@@ -24,15 +24,15 @@ public class StoreInstruction extends InstructionSetArchitecture {
 
 
 	@Override
-	public int execute() {
+	public int execute(Short operand1,Short operand2) {
 		
 		
 		Short[] operands = super.loadDataFromRegisters();
 			
 		// call ADDI function and pass operand and immediateValue to it and it will return the address as the result
-		int result [] = MainFunctionUnit.getInstance().getAdder().add(operands[0],immediateValue);
+		int result [] = MainFunctionUnit.getInstance().getAdder().add(operand2,immediateValue);
 		
-		// call store method and pass result[0] to it
+		// call store method and pass operand1 to it
 		//TODo
 				
 		return 1;

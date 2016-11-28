@@ -24,11 +24,10 @@ public class AddImmediateInstruction extends InstructionSetArchitecture {
 
 
 	@Override
-	public int execute() {
+	public int execute(Short operand1,Short operand2) {
 	
-		Short[] operands = super.loadDataFromRegisters();
 		// call ADDI function and pass operand and immediateValue to it and it will return the address as the result
-		int[] results= MainFunctionUnit.getInstance().getAdder().add(operands[0],immediateValue);
+		int[] results= MainFunctionUnit.getInstance().getAdder().add(operand1,immediateValue);
 		
 		super.setResult((short)results[0]);
 		return results[1];

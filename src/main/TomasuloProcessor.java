@@ -182,7 +182,7 @@ public class TomasuloProcessor {
 		// RegisterEnum.R3, RegisterEnum.R4);
 
 		// test with RAW dependencies between instructions
-		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[4];
+		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[6];
 		instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
 				RegisterEnum.R1, (short) 20);
 
@@ -194,8 +194,8 @@ public class TomasuloProcessor {
 
 		instructions[3] = new SubIntstruction(RegisterEnum.R7, 4,
 				RegisterEnum.R3, RegisterEnum.R6);
-//		instructions[4] = new LoadInstruction(RegisterEnum.R4, 5, RegisterEnum.R0,(short)1);
-//		instructions[5] = new StoreInstruction(RegisterEnum.R2, 6, RegisterEnum.R0,(short)3);
+		instructions[4] = new LoadInstruction(RegisterEnum.R4, 5, RegisterEnum.R0,(short)2);
+		instructions[5] = new StoreInstruction(RegisterEnum.R2, 6, RegisterEnum.R0,(short)3);
 		
 
 		// instructions[2] = new StoreInstruction(RegisterEnum.R4, 3,
@@ -264,20 +264,20 @@ public class TomasuloProcessor {
 		System.out
 				.println("------------------------- Program State ---------------------------");
 		tomasuloProcessor.getProgramState().printProgramStateTable();
-		// System.out
-		// .println("------------------------- Reservation Station ---------------------------");
-		// tomasuloProcessor.getReservationsStationTable()
-		// .printReservationStationsTable();
-		// System.out
-		// .println("------------------------- Register Status ---------------------------");
-		// tomasuloProcessor.getRegisterStatus().printRegisterStatus();
-		// System.out
-		// .println("------------------------- ROB ---------------------------");
-		// tomasuloProcessor.getRob().printROB();
-		//
-		// System.out
-		// .println("------------------------- Register File ---------------------------");
-		// RegisterFile.getInstance().printregisterFileTable();
+		 System.out
+		 .println("------------------------- Reservation Station ---------------------------");
+		 tomasuloProcessor.getReservationsStationTable()
+		 .printReservationStationsTable();
+		 System.out
+		 .println("------------------------- Register Status ---------------------------");
+		 tomasuloProcessor.getRegisterStatus().printRegisterStatus();
+		 System.out
+		 .println("------------------------- ROB ---------------------------");
+		 tomasuloProcessor.getRob().printROB();
+		
+		 System.out
+		 .println("------------------------- Register File ---------------------------");
+		 RegisterFile.getInstance().printregisterFileTable();
 
 	}
 

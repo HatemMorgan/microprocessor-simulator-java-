@@ -34,7 +34,7 @@ public class MainMemory {
 
 	
 	
-	public void store(String value, int address){
+	public synchronized void store(String value, int address){
 		//value is the binary representation of the value in string format
 		//address can be hexadecimal or decimal or even binary
 		
@@ -56,7 +56,7 @@ public class MainMemory {
 		busy = false;
 	}
 	
-	public String load(int address){
+	public synchronized String load(int address){
 		//address can be hexadecimal or decimal or even binary
 		
 		//wait till previous operation is finished

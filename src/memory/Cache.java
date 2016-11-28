@@ -43,7 +43,7 @@ public class Cache {
 	}
 	
 	
-	public CacheEntry searchCache(int byteAddress){
+	public synchronized CacheEntry searchCache(int byteAddress){
 		
 		while(busy);
 		busy = true;

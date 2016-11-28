@@ -32,7 +32,7 @@ public class DataMemory{
 	
 	
 
-	public Short load(Short address) {
+	public synchronized Short load(Short address) {
 		int byteAddress = address;
 		String result = this.memory.load(byteAddress);
 		Short answer = 0;
@@ -44,7 +44,7 @@ public class DataMemory{
 		return answer;
 	}
 
-	public void store(Short address, Short value) {
+	public synchronized void store(Short address, Short value) {
 		String val = value + "";
 		int byteAddress = address;
 		this.memory.store(byteAddress, val);

@@ -1,22 +1,36 @@
 package memory;
 
 public class DataMemory{
-
+	
+	private static DataMemory dataMemory;
 	public Memory memory;
+
 	public static void main(String[] args) throws InterruptedException {
 		Clock c = new Clock();
-		c.start();
-		DataMemory m = new DataMemory(2, 1, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
+//		c.start();
+		DataMemory m = new DataMemory(1, 4, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
 		m.store((short) 255, (short)200);
 		short result = m.load((short)255);
 //		short result = m.load((short)265);
+		
 		System.out.println(result);
 	}
-
-	public DataMemory(int cacheLevels, int mainMemoryAccessTimeInCycles,  Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
+	
+	public synchronized static DataMemory getInstance(){
+		return dataMemory;
+	}
+	
+	public static void init(int cacheLevels, int mainMemoryAccessTimeInCycles,  Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
+		dataMemory = new DataMemory(cacheLevels, mainMemoryAccessTimeInCycles, clock, hitPolicy, missPolicy);
+	}
+	
+	private DataMemory(int cacheLevels, int mainMemoryAccessTimeInCycles,  Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
 
 		this.memory = new Memory(cacheLevels, mainMemoryAccessTimeInCycles, clock, hitPolicy, missPolicy);
 	}
+	
+	
+	
 
 	public Short load(Short address) {
 		int byteAddress = address;
@@ -36,6 +50,5 @@ public class DataMemory{
 		this.memory.store(byteAddress, val);
 
 	}
-	
 }
 

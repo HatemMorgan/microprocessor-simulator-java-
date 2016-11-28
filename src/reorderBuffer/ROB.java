@@ -16,11 +16,14 @@ public class ROB {
 	private ROBEntry last;
 	private int size;
 	private int robentryNumberOfInOrderCommittedISA;
+	// make sure to insert instruction inorder when issuing
+	private int robLastinstructionNumEntry ;
 
 	public ROB(int size) {
 		this.size = size;
 		init();
 		this.robentryNumberOfInOrderCommittedISA = 1 ;
+		this.robLastinstructionNumEntry = 1;
 	}
 
 	private void init() {
@@ -218,6 +221,16 @@ public class ROB {
 	public void setRobentryNumberOfInOrderCommittedISA(
 			int robentryNumberOfInOrderCommittedISA) {
 		this.robentryNumberOfInOrderCommittedISA = robentryNumberOfInOrderCommittedISA;
+	}
+	
+	
+
+	public int getRobLastinstructionNumEntry() {
+		return robLastinstructionNumEntry;
+	}
+
+	public void setRobLastinstructionNumEntry(int robLastinstructionNumEntry) {
+		this.robLastinstructionNumEntry = robLastinstructionNumEntry;
 	}
 
 	public static void main(String[] args) {

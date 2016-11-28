@@ -49,7 +49,7 @@ public class Cache {
 		busy = true;
 		//determine at which clock cycle the operation will end
 		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
-		
+				
 		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
 
 		//wait until memory access time is over

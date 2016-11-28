@@ -27,6 +27,11 @@ public class RegisterStatus {
 			System.out.println("Wrong Register Number: #" + registerNumber);
 			return;
 		}
+		
+		if(registerNumber == RegisterEnum.R0){
+			System.out.println("Cannot write on register R0");
+			return;
+		}
 
 		registerStatusTable.put(registerNumber, ROBNum);
 		System.out.println("Inserted ROBNumber: #" + ROBNum

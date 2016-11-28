@@ -17,7 +17,10 @@ public class ProgramState {
 
 	public void addInstructionsToProgramStateTable(
 			InstructionSetArchitecture[] instructions) {
+
 		for (int i = 0; i < instructions.length; i++) {
+			if (instructions[i] == null)
+				return;
 			ProgramStateEntry newEntry = new ProgramStateEntry(instructions[i]);
 			programStateTable.add(newEntry);
 		}

@@ -24,8 +24,6 @@ public class BEQInstruction extends InstructionSetArchitecture {
 	}
 
 
-
-
 	@Override
 	public int execute(Short operand1,Short operand2) {
 

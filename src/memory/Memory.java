@@ -39,6 +39,7 @@ public class Memory {
 	}
 	
 	public String load(int byteAddress){
+		
 		String res=loadHelper(byteAddress, 0);
 		System.out.println(res);
 		return res;
@@ -153,7 +154,7 @@ public class Memory {
 		for (int j = 0; j < caches.length; j++) {
 			caches[j].insertIntoCache(byteAddress, value, false);			
 		}
-		main.store(value, byteAddress);
+		//main.store(value, byteAddress);
 
 	}
 

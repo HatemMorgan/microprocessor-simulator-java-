@@ -1,5 +1,8 @@
 package instructionSetArchitecture;
 
+import main.TomasuloProcessor;
+import memory.Clock;
+import memory.DataMemory;
 import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
@@ -27,15 +30,15 @@ public class StoreInstruction extends InstructionSetArchitecture {
 	public int execute(Short operand1,Short operand2) {
 		
 		
-		Short[] operands = super.loadDataFromRegisters();
-			
-		// call ADDI function and pass operand and immediateValue to it and it will return the address as the result
-		int result [] = MainFunctionUnit.getInstance().getAdder().add(operand2,immediateValue);
-		
-		// call store method and pass operand1 to it
-		//TODo
-				
-		return 1;
+		short address = (short) (operand2 + immediateValue);
+
+		// Stall for 1 cycle
+		int current = Clock.counter.intValue();
+		while (Clock.counter.intValue() != current + 1);
+
+		// Store value
+		DataMemory.getInstance().store(address, operand1);
+		return Clock.counter.intValue() + 1;
 	}
 
 }

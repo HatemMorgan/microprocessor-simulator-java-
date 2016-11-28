@@ -15,6 +15,7 @@ import registers.RegisterEnum;
 public class InstructionMemory extends Memory {
 
 	private Short PC;
+	private Short endProgram;
 	private static InstructionMemory instance;
 
 	private InstructionMemory(int cacheLevels,
@@ -45,12 +46,17 @@ public class InstructionMemory extends Memory {
 
 	// gets number of instructions to read and the start address of the program
 	// returns an array of strings containing the instructions
-	public InstructionSetArchitecture[] readInstructions(int instructionsToFetch, int startAddress) {
+	public InstructionSetArchitecture[] readInstructions(int instructionsToFetch) {
 		InstructionSetArchitecture[] result = new InstructionSetArchitecture[instructionsToFetch];
 		decreaseClockCycles(instructionsToFetch);
+		
 		for (int i = 0; i < instructionsToFetch; i++) {
-			result[i] = decode(load(startAddress));
-			startAddress++;
+			
+			if(PC == endProgram){
+				return result;
+			}
+			
+			result[i] = decode(load(PC));
 			PC++;
 		}
 		 resetClockCycles(instructionsToFetch);
@@ -60,21 +66,24 @@ public class InstructionMemory extends Memory {
 
 	public static void main(String[] args) {
 		AddInstruction i = new AddInstruction(RegisterEnum.R2, 1, RegisterEnum.R3, RegisterEnum.R4);
+//		AddInstruction i2 = new AddInstruction(RegisterEnum.R2, 1, RegisterEnum.R3, RegisterEnum.R4);
 //		System.out.println(a.toString());
 //		String encoded = encode(a);
 //		System.out.println(encoded);
 //		InstructionSetArchitecture b = decode(encoded);
 //		System.out.println(b);
 		Clock c = new Clock();
-		c.start();
+		
 		InstructionMemory a = new InstructionMemory(1, 4, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
 		InstructionSetArchitecture[] ins = new InstructionSetArchitecture[1];
 		ins[0] = i;
+//		ins[1] = i2;
 		a.storeInstructions(ins);
-		InstructionSetArchitecture[] aa = a.readInstructions(1, 0);
-		System.out.println(aa[0]);
-		InstructionSetArchitecture[] ab = a.readInstructions(1, 0);
-		System.out.println(ab[0]);
+//		c.start();
+		InstructionSetArchitecture[] aa = a.readInstructions(1);
+		System.out.println(aa[0].toString());
+//		InstructionSetArchitecture[] ab = a.readInstructions(1);
+//		System.out.println(ab[0].toString());
 	}
 	private static InstructionSetArchitecture decode(String instruction) {
         InstructionSetArchitecture result = null;
@@ -101,6 +110,9 @@ public class InstructionMemory extends Memory {
 	
     /** Read the object from Base64 string. */
 	private static Object fromString(String s) throws IOException, ClassNotFoundException {
+		if(s==null)
+			return null;
+		
 		byte[] data = Base64.getDecoder().decode(s);
 		ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
 		Object o = ois.readObject();
@@ -121,7 +133,7 @@ public class InstructionMemory extends Memory {
 		for(short i=0; i<instructions.length; ++i){
 			String encoded = encode(instructions[i]);
 			main.storeInstruction(encoded, i);
-			System.out.println("Stored Instruction: " + instructions[i]);
+			System.out.println("Stored Instruction: " + instructions[i].toString());
 		}
 		System.out.println("Stored Instructions Successfully!");
 	}
@@ -149,6 +161,17 @@ public class InstructionMemory extends Memory {
 	public void incrementPC() {
 		PC++;
 	}
+	
+	
+	
+	public Short getEndProgram() {
+		return endProgram;
+	}
+
+	public void setEndProgram(Short endProgram) {
+		this.endProgram = endProgram;
+	}
+
 	public static void init(int cacheLevels, int mainMemoryAccessTimeInCycles,
 			Clock clock, writeHitPolicy hitPolicy, writeMissPolicy missPolicy) {
 

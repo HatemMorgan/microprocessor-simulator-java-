@@ -52,10 +52,11 @@ public class RunINstruction implements Runnable {
 
 	@Override
 	public void run() {
-				
-			issueInstruction();
-			System.out.println("-->"+instruction.toString()+"----->"+" finished "+" at cycle : "+Clock.counter.intValue());
-			
+
+		issueInstruction();
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " finished " + " at cycle : " + Clock.counter.intValue());
+
 	}
 
 	public void issueInstruction() {
@@ -67,17 +68,19 @@ public class RunINstruction implements Runnable {
 						instruction.getFunctionalUnitsType(),
 						reservationsStationTable);
 
-		while (rob.isFull() || reservationStationName == null || programState.getInstructionNumberOfInOrderIssuedISA() != instruction.getInstructionNumber()) {
+		while (rob.isFull()
+				|| reservationStationName == null
+				|| programState.getInstructionNumberOfInOrderIssuedISA() != instruction
+						.getInstructionNumber()) {
 			reservationStationName = MainFunctionUnit.getInstance()
 					.getAvailableReservationStation(
 							instruction.getFunctionalUnitsType(),
 							reservationsStationTable);
 		}
-		
-		System.out.println("-->"+instruction.toString()+"----->"+" Start issuing"+" at cycle : "+Clock.counter.intValue());
-		
-	
-		
+
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " Start issuing" + " at cycle : " + Clock.counter.intValue());
+
 		ReservationStationEntry reservationStation = reservationsStationTable
 				.getReservationStationEntry(reservationStationName);
 		instruction.setReservationStationEntryName(reservationStationName);
@@ -197,32 +200,40 @@ public class RunINstruction implements Runnable {
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
 		// System.out.println(programStateEntry.toString());
 		programStateEntry.setIssued(current + 1);
-		
-		System.out.println("-->"+instruction.toString()+"----->"+" End issuing"+" at cycle : "+Clock.counter.intValue());
-		programState.setInstructionNumberOfInOrderIssuedISA(programState.getInstructionNumberOfInOrderIssuedISA()+1);
-		
-		executeInstruction();
+
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " End issuing" + " at cycle : " + Clock.counter.intValue());
+		programState.setInstructionNumberOfInOrderIssuedISA(programState
+				.getInstructionNumberOfInOrderIssuedISA() + 1);
+
+		executeInstruction(robEntryNum);
 
 	}
 
-	public void executeInstruction() {
+	public void executeInstruction(int robEntryNum) {
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
-		
+
 		if (programStateEntry.getIssued() == 0) {
 			System.out.println("instruction not issued yet");
 			return;
 		}
-
+		
+		
 		ReservationStationEntry reservationStation = reservationsStationTable
 				.getReservationStationEntry(instruction
 						.getReservationStationEntryName());
+		
+		
+		while (reservationStation.getQj() != null
+				|| reservationStation.getQk() != null){
+			System.out.print("");
+		}
 
-		while(reservationStation.getQj() != null
-				|| reservationStation.getQk() != null);
-		
-		System.out.println("-->"+instruction.toString()+"----->"+" Start Executing"+" at cycle : "+Clock.counter.intValue());
-		
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " Start Executing" + " at cycle : "
+				+ Clock.counter.intValue());
+
 		if (reservationStation.getQj() == null
 				&& reservationStation.getQk() == null) {
 			int execEndClockCycle = instruction.execute();
@@ -240,15 +251,17 @@ public class RunINstruction implements Runnable {
 			programState.getProgramStateTableEntry(
 					instruction.getInstructionNumber()).setExecuted(
 					(short) execEndClockCycle);
-			
-			System.out.println("-->"+instruction.toString()+"----->"+" End Executing"+" at cycle : "+Clock.counter.intValue());
-			
-			writeInstruction();
+
+			System.out.println("-->" + instruction.toString() + "----->"
+					+ " End Executing" + " at cycle : "
+					+ Clock.counter.intValue());
+
+			writeInstruction(robEntryNum);
 		}
 
 	}
 
-	public void writeInstruction() {
+	public void writeInstruction(int robEntryNum) {
 
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
@@ -259,7 +272,13 @@ public class RunINstruction implements Runnable {
 			return;
 		}
 
-		System.out.println("-->"+instruction.toString()+"----->"+" Start Writing"+" at cycle : "+Clock.counter.intValue());
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " Start Writing" + " at cycle : " + Clock.counter.intValue());
+
+		// stalling for 1 clock cycle
+
+		int current = Clock.counter.intValue();
+		while (Clock.counter.intValue() != current + 1);
 		
 		ReservationStationEntry reservationStation = reservationsStationTable
 				.getReservationStationEntry(instruction
@@ -284,24 +303,22 @@ public class RunINstruction implements Runnable {
 		reservationsStationTable.passResultToWaitingReservationStation(result,
 				ROBNum);
 
-		// stalling for 1 clock cycle
 
-		int current = Clock.counter.intValue();
-		while (Clock.counter.intValue() != current + 1)
-			;
+
 
 		// update program state table after one clock cycle
 		programState.getProgramStateTableEntry(
 				instruction.getInstructionNumber()).setWritten(
 				(short) current + 1);
-		
-		System.out.println("-->"+instruction.toString()+"----->"+" End Writing"+" at cycle : "+Clock.counter.intValue());
-		
-		commitInstruction();
+
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " End Writing" + " at cycle : " + Clock.counter.intValue());
+
+		commitInstruction(robEntryNum);
 
 	}
 
-	public void commitInstruction() {
+	public void commitInstruction(int robEntryNum) {
 
 		ProgramStateEntry programStateEntry = programState
 				.getProgramStateTableEntry(instruction.getInstructionNumber());
@@ -310,12 +327,19 @@ public class RunINstruction implements Runnable {
 			System.out.println("instruction not Written yet");
 			return;
 		}
-	
+		// stall until its turn come
+		while(rob.getRobentryNumberOfInOrderCommittedISA() != robEntryNum){
+			// because compiler is ignoring the loop so I have to print any thing to make it check condition
+			System.out.print("");
+		}
 		
+			System.out.println("------------------> ROBNUM------------->"+robEntryNum);
 		RegisterEnum registerDestination = instruction.getDestinationRegister();
-		
-		System.out.println("-->"+instruction.toString()+"----->"+" Want to commit "+" at cycle : "+Clock.counter.intValue());
-		
+
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " Want to commit " + " at cycle : "
+				+ Clock.counter.intValue());
+
 		rob.commit();
 		if (instruction.getResult() != null && registerDestination != null) {
 
@@ -342,12 +366,26 @@ public class RunINstruction implements Runnable {
 		programState.getProgramStateTableEntry(
 				instruction.getInstructionNumber()).setCommitted(
 				(short) current + 1);
+
 		
-		System.out.println("-->"+instruction.toString()+"----->"+" committed"+" at cycle : "+Clock.counter.intValue());
+
+		// set RobentryNumberOfInOrderCommittedISA in the ROB to allow
+		// committing of next instruction
+		// this will allow inorder committing
+		
+		if (rob.getRobentryNumberOfInOrderCommittedISA() != rob.getSize()) {
+			rob.setRobentryNumberOfInOrderCommittedISA(rob
+					.getRobentryNumberOfInOrderCommittedISA() + 1);
+		} else {
+			rob.setRobentryNumberOfInOrderCommittedISA(1);
+		}
+		
+		System.out.println("-->" + instruction.toString() + "----->"
+				+ " committed" + " at cycle : " + Clock.counter.intValue());
 		
 		// set committed flag to true ;
 		committed = true;
-		
+
 	}
 
 	// public static void main(String[] args) {

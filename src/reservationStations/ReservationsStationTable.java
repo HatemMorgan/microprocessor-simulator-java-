@@ -98,12 +98,14 @@ public class ReservationsStationTable {
 				System.out.println("updated Vj with value :" + value
 						+ " from ROB: #" + ROBNum);
 				reservationEntry.setVj(value);
+				reservationEntry.setQj(null);
 			}
 			if (reservationEntry.getQk() != null
 					&& reservationEntry.getQk().equals(ROBNum)) {
 				System.out.println("updated Vk with value :" + value
 						+ " from ROB: #" + ROBNum);
 				reservationEntry.setVk(value);
+				reservationEntry.setQk(null);
 			}
 		}
 	}

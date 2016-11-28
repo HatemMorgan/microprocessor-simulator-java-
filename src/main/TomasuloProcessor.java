@@ -117,19 +117,52 @@ public class TomasuloProcessor {
 
 
 	public static void main(String[] args) {
+		// trivial example
+//		 InstructionSetArchitecture[] instructions = new
+//		 InstructionSetArchitecture[4];
+//		 instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
+//		 RegisterEnum.R1, (short) 20);
+//		 
+//		 instructions[1] = new AddInstruction(RegisterEnum.R5, 2,
+//				 RegisterEnum.R1, RegisterEnum.R4);
+//		 
+//		 instructions[2] = new SubIntstruction(RegisterEnum.R7, 3,
+//				 RegisterEnum.R3, RegisterEnum.R4);
+//		
+//		 instructions[3] = new MulInstruction(RegisterEnum.R6, 4,
+//		 RegisterEnum.R3, RegisterEnum.R4);
+		 
+		// testing committing in order and stalling when it is not its turn to commit
+//		 InstructionSetArchitecture[] instructions = new
+//		 InstructionSetArchitecture[4];
+//		 instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
+//		 RegisterEnum.R1, (short) 20);
+//		 
+//		 instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
+//				 RegisterEnum.R3, RegisterEnum.R4); 
+//		 
+//		 instructions[2] = new AddInstruction(RegisterEnum.R5, 3,
+//				 RegisterEnum.R1, RegisterEnum.R4);
+//		 
+//		 instructions[3] = new SubIntstruction(RegisterEnum.R7,4,
+//				 RegisterEnum.R3, RegisterEnum.R4);
+		
+		// test with RAW dependencies between instructions
 		 InstructionSetArchitecture[] instructions = new
 		 InstructionSetArchitecture[4];
 		 instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
 		 RegisterEnum.R1, (short) 20);
-		
-		 instructions[3] = new MulInstruction(RegisterEnum.R6, 4,
-		 RegisterEnum.R3, RegisterEnum.R4);
 		 
-		 instructions[2] = new SubIntstruction(RegisterEnum.R7, 3,
-				 RegisterEnum.R3, RegisterEnum.R4);
+		 instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
+				 RegisterEnum.R2, RegisterEnum.R4); 
 		 
-		 instructions[1] = new AddInstruction(RegisterEnum.R5, 2,
+		 instructions[2] = new AddInstruction(RegisterEnum.R5, 3,
 				 RegisterEnum.R1, RegisterEnum.R4);
+		 
+		 instructions[3] = new SubIntstruction(RegisterEnum.R7,4,
+				 RegisterEnum.R3, RegisterEnum.R6);
+		 
+	
 		
 //		 instructions[2] = new StoreInstruction(RegisterEnum.R4, 3,
 //		 RegisterEnum.R5, (short) 30);

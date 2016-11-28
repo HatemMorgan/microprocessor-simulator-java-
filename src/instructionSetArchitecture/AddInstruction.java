@@ -1,7 +1,6 @@
 package instructionSetArchitecture;
 
-import functionalUnits.FunctionalUnitsType;
-import functionalUnits.MainFunctionUnit;
+import functionalUnits.*;
 import registers.RegisterEnum;
 import reservationStations.Operation;
 

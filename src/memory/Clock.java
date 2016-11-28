@@ -8,6 +8,7 @@ public class Clock {
 		counter = new AtomicInteger();
 		finish = false;
 		this.start();
+
 	}
 	
 	

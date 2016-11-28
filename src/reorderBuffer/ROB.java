@@ -15,10 +15,12 @@ public class ROB {
 	private ROBEntry first;
 	private ROBEntry last;
 	private int size;
+	private int robentryNumberOfInOrderCommittedISA;
 
 	public ROB(int size) {
 		this.size = size;
 		init();
+		this.robentryNumberOfInOrderCommittedISA = 1 ;
 	}
 
 	private void init() {
@@ -99,27 +101,23 @@ public class ROB {
 	public synchronized void commit() {
 		// check if the head is pointing to this entry inorder to maintain
 		// inorder committing
-		if ( head.isReady()) {
-			
+		if (head.isReady()) {
+
 			System.out.println("entry with number #" + head.getEntryNumber()
 					+ " is committed and removed from the ROB");
-			
+
 			ROBEntry current = head;
 			head = head.next;
 
-			
 			current.setDestination(null);
 			current.setReady(false);
 			current.setType(null);
 			current.setValue(null);
 
-			
 		} else {
-			
 
-			while (!head.isReady()) ;
-			
-			
+			while (!head.isReady())
+				;
 
 		}
 	}
@@ -183,7 +181,8 @@ public class ROB {
 		current.setReady(true);
 	}
 
-	public synchronized int getROBEntryNumber(InstructionSetArchitecture instruction) {
+	public synchronized int getROBEntryNumber(
+			InstructionSetArchitecture instruction) {
 
 		if (first.getType().equals(instruction)) {
 			return first.getEntryNumber();
@@ -200,6 +199,25 @@ public class ROB {
 
 		return current.getEntryNumber();
 
+	}
+	
+	
+	
+	public int getSize() {
+		return size;
+	}
+
+	public int getHeadROBEntryNum(){
+			return head.getEntryNumber();
+	}
+
+	public int getRobentryNumberOfInOrderCommittedISA() {
+		return robentryNumberOfInOrderCommittedISA;
+	}
+
+	public void setRobentryNumberOfInOrderCommittedISA(
+			int robentryNumberOfInOrderCommittedISA) {
+		this.robentryNumberOfInOrderCommittedISA = robentryNumberOfInOrderCommittedISA;
 	}
 
 	public static void main(String[] args) {
@@ -219,7 +237,7 @@ public class ROB {
 
 		r.writeResultTOROB(3, (short) 24); // testing entring a new entry
 		r.commit(); // testing committing an entry that the head is not
-						// pointing to it
+					// pointing to it
 		r.commit(); // testing committing an entry that is not ready
 
 		r.writeResultTOROB(1, (short) 200);

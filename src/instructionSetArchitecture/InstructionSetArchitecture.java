@@ -19,19 +19,21 @@ public abstract class InstructionSetArchitecture {
 	private RegisterEnum sourceTwoRegister;
 	private Integer instructionNumber;
 	private Short result ;
+	private FunctionalUnitsType functionalUnitsType;
 
 	// Register File
 	protected static RegisterFile registerFile = RegisterFile.getInstance();
 
 	public InstructionSetArchitecture(Operation operation,
 			Integer instructionNumber, RegisterEnum destinationRegister,
-			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
+			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister,FunctionalUnitsType functionalUnitsType) {
 
 		this.instructionNumber = instructionNumber;
 		this.operation = operation;
 		this.destinationRegister = destinationRegister;
 		this.sourceOneRegister = sourceOneRegister;
 		this.sourceTwoRegister = sourceTwoRegister;
+		this.functionalUnitsType = functionalUnitsType;
 	}
 
 	public abstract int execute();
@@ -88,6 +90,12 @@ public abstract class InstructionSetArchitecture {
 		this.result = result;
 	}
 
+	
+	
+	public FunctionalUnitsType getFunctionalUnitsType() {
+		return functionalUnitsType;
+	}
+
 	@Override
 	public String toString() {
 		return "InstructionSetArchitecture [operation=" + operation
@@ -101,7 +109,8 @@ public abstract class InstructionSetArchitecture {
 
 		Clock clock = new Clock();
 		
-		MainFunctionUnit.init(3, 5, 2);
+		MainFunctionUnit.init(3, 5, 2,new String[]{"add1", "add2", "add3", "add4"},new String[]{ "mult"},null,new String[]{"load1", "load2"},new String[]{"store1"});
+
 		
 		InstructionMemory.init(2, 10, clock, writeHitPolicy.writeBack, writeMissPolicy.writeAllocate);		
 		

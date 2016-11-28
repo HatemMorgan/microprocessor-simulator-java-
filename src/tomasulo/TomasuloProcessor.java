@@ -1,6 +1,5 @@
 package tomasulo;
 
-import javax.swing.text.AbstractDocument.BranchElement;
 
 import functionalUnits.MainFunctionUnit;
 import memory.Clock;
@@ -8,7 +7,6 @@ import memory.InstructionMemory;
 import memory.writeHitPolicy;
 import memory.writeMissPolicy;
 import instructionSetArchitecture.AddImmediateInstruction;
-import instructionSetArchitecture.AddInstruction;
 import instructionSetArchitecture.BEQInstruction;
 import instructionSetArchitecture.InstructionSetArchitecture;
 import instructionSetArchitecture.JALRInstruction;
@@ -20,12 +18,9 @@ import instructionSetArchitecture.StoreInstruction;
 import programState.ProgramState;
 import programState.ProgramStateEntry;
 import registerStatus.RegisterStatus;
-import registers.Register;
 import registers.RegisterEnum;
 import registers.RegisterFile;
 import reorderBuffer.ROB;
-import reorderBuffer.ROBEntry;
-import reservationStations.Operation;
 import reservationStations.ReservationStationEntry;
 import reservationStations.ReservationsStationTable;
 
@@ -54,7 +49,7 @@ public class TomasuloProcessor {
 
 		Clock clock = new Clock();
 
-		MainFunctionUnit.init(3, 5, 2);
+		MainFunctionUnit.init(3, 5, 2,new String[]{"add1", "add2", "add3", "add4"},new String[]{ "mult"},null,new String[]{"load1", "load2"},new String[]{"store1"});
 
 		InstructionMemory.init(2, 10, clock, writeHitPolicy.writeBack,
 				writeMissPolicy.writeAllocate);
@@ -259,6 +254,7 @@ public class TomasuloProcessor {
 		// Emptying reservation station entry
 		reservationsStationTable.remove(reservationStationName);
 		Short result = instruction.getResult();
+		
 
 		if (ROBNum != null) {
 			// ROB entry ready
@@ -298,9 +294,18 @@ public class TomasuloProcessor {
 
 		rob.commit();
 		if (instruction.getResult() != null&& registerDestination!=null) {
+			
+			if(instruction instanceof JALRInstruction){
+				RegisterFile.getInstance().storeDataToRegister(registerDestination,
+						((JALRInstruction)instruction).getPcResult());
+			}else{
 			RegisterFile.getInstance().storeDataToRegister(registerDestination,
 					instruction.getResult());
 			registerStatus.removeFromRegisterStatusTable(registerDestination);
+			
+			}
+			
+			
 		}
 		// stalling for 1 clock cycle
 

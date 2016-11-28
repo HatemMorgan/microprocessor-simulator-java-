@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -10,7 +11,7 @@ public class MulInstruction extends InstructionSetArchitecture {
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 
 		super(Operation.MUL, instructionNumber,destinationRegister, sourceOneRegister,
-				sourceTwoRegister);
+				sourceTwoRegister,FunctionalUnitsType.MULT);
 	}
 
 	@Override

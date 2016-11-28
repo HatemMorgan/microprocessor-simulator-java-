@@ -1,15 +1,18 @@
 package functionalUnits;
 import memory.Clock;
+
 import java.util.*;
 import java.math.*;
 
 public class Mult {
 	
 	private int multCycles;
+	private String[] reservationStationsName ;
 	
 	
-	public Mult (int numberOfCycles){
+	public Mult (int numberOfCycles,String[] reservationStationsName){
 		this.multCycles = numberOfCycles;
+		this.reservationStationsName = reservationStationsName;
 	}
 	
 	public void setMULTCycles(int time){

@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -9,7 +10,7 @@ public class AddInstruction extends InstructionSetArchitecture {
 	public AddInstruction(RegisterEnum destinationRegister,Integer instructionNumber,
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 		
-		super(Operation.ADD, instructionNumber,destinationRegister, sourceOneRegister, sourceTwoRegister);
+		super(Operation.ADD, instructionNumber,destinationRegister, sourceOneRegister, sourceTwoRegister,FunctionalUnitsType.ADDER);
 	}
 
 	@Override

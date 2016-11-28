@@ -1,14 +1,17 @@
 package functionalUnits;
 import memory.Clock;
+
 import java.util.*;
 import java.math.*;
 
 public class Nand {
 	
 	private int nandCycles;
+	private String[] reservationStationsName ;
 	
-	public Nand (int numberOfCycles){
+	public Nand (int numberOfCycles,String[] reservationStationsName){
 		this.nandCycles = numberOfCycles;
+		this.reservationStationsName = reservationStationsName;
 	}
 	
 	

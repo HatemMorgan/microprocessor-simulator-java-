@@ -1,6 +1,7 @@
 package instructionSetArchitecture;
 
 import memory.InstructionMemory;
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -11,7 +12,7 @@ public class JMPInstruction extends InstructionSetArchitecture {
 
 	public JMPInstruction(RegisterEnum sourceOneRegister,Integer instructionNumber,Short immediateValue) {
 		super(Operation.JMP,instructionNumber ,null, sourceOneRegister,
-				null);
+				null,FunctionalUnitsType.ADDER);
 		this.immediateValue = immediateValue;
 	}
 

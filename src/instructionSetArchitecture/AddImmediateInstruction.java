@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -10,7 +11,7 @@ public class AddImmediateInstruction extends InstructionSetArchitecture {
 	public AddImmediateInstruction( RegisterEnum destinationRegister, Integer instructionNumber,
 			RegisterEnum sourceOneRegister, Short immidiateValue) {
 		
-		super(Operation.ADDI,instructionNumber, destinationRegister, sourceOneRegister, null);
+		super(Operation.ADDI,instructionNumber, destinationRegister, sourceOneRegister, null,FunctionalUnitsType.ADDER);
 		this.immediateValue = immidiateValue;
 	}
 	

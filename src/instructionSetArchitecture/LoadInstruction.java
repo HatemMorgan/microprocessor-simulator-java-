@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -10,7 +11,7 @@ public class LoadInstruction extends InstructionSetArchitecture {
 	public LoadInstruction(RegisterEnum destinationRegister,Integer instructionNumber,
 			RegisterEnum sourceOneRegister, Short immediateValue) {
 
-		super(Operation.LD,instructionNumber ,destinationRegister, sourceOneRegister, null);
+		super(Operation.LD,instructionNumber ,destinationRegister, sourceOneRegister, null,FunctionalUnitsType.LOAD);
 		this.immediateValue = immediateValue;
 	}
 

@@ -15,10 +15,12 @@ public class ROB {
 	private ROBEntry first;
 	private ROBEntry last;
 	private int size;
+	private int robentryNumberOfInOrderCommittedISA;
 
 	public ROB(int size) {
 		this.size = size;
 		init();
+		this.robentryNumberOfInOrderCommittedISA = 1 ;
 	}
 
 	private void init() {
@@ -71,7 +73,7 @@ public class ROB {
 
 	}
 
-	public void writeResultTOROB(int entryNumber, Short result) {
+	public synchronized void writeResultTOROB(int entryNumber, Short result) {
 		ROBEntry current = first;
 		boolean found = false;
 		while (current.next != first) {
@@ -96,31 +98,26 @@ public class ROB {
 		}
 	}
 
-	public void commit() {
+	public synchronized void commit() {
 		// check if the head is pointing to this entry inorder to maintain
 		// inorder committing
-		if ( head.isReady()) {
-			
+		if (head.isReady()) {
+
 			System.out.println("entry with number #" + head.getEntryNumber()
 					+ " is committed and removed from the ROB");
-			
+
 			ROBEntry current = head;
 			head = head.next;
 
-			
 			current.setDestination(null);
 			current.setReady(false);
 			current.setType(null);
 			current.setValue(null);
 
-			
 		} else {
-			
 
-			if (!head.isReady()) {
-				System.out
-						.println("Connot commit because the ROB entry the head is pointing to it is not ready(instruction is not in commit stage) ");
-			}
+			while (!head.isReady())
+				;
 
 		}
 	}
@@ -143,7 +140,7 @@ public class ROB {
 
 	}
 
-	public boolean IsReady(int robNum) {
+	public synchronized boolean IsReady(int robNum) {
 		if (robNum > size) {
 			System.out.println("Invalid ROB number");
 			return false;
@@ -157,7 +154,7 @@ public class ROB {
 
 	}
 
-	public Short getValue(int robNum) {
+	public synchronized Short getValue(int robNum) {
 		if (robNum > size) {
 			System.out.println("Invalid ROB number");
 			return null;
@@ -171,7 +168,7 @@ public class ROB {
 
 	}
 
-	public void setROBEntryReady(int robNum) {
+	public synchronized void setROBEntryReady(int robNum) {
 		if (robNum > size) {
 			System.out.println("Invalid ROB number");
 			return;
@@ -184,7 +181,8 @@ public class ROB {
 		current.setReady(true);
 	}
 
-	public int getROBEntryNumber(InstructionSetArchitecture instruction) {
+	public synchronized int getROBEntryNumber(
+			InstructionSetArchitecture instruction) {
 
 		if (first.getType().equals(instruction)) {
 			return first.getEntryNumber();
@@ -201,6 +199,25 @@ public class ROB {
 
 		return current.getEntryNumber();
 
+	}
+	
+	
+	
+	public int getSize() {
+		return size;
+	}
+
+	public int getHeadROBEntryNum(){
+			return head.getEntryNumber();
+	}
+
+	public int getRobentryNumberOfInOrderCommittedISA() {
+		return robentryNumberOfInOrderCommittedISA;
+	}
+
+	public void setRobentryNumberOfInOrderCommittedISA(
+			int robentryNumberOfInOrderCommittedISA) {
+		this.robentryNumberOfInOrderCommittedISA = robentryNumberOfInOrderCommittedISA;
 	}
 
 	public static void main(String[] args) {
@@ -220,7 +237,7 @@ public class ROB {
 
 		r.writeResultTOROB(3, (short) 24); // testing entring a new entry
 		r.commit(); // testing committing an entry that the head is not
-						// pointing to it
+					// pointing to it
 		r.commit(); // testing committing an entry that is not ready
 
 		r.writeResultTOROB(1, (short) 200);

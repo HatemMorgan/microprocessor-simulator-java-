@@ -1,14 +1,17 @@
 package functionalUnits;
 import memory.Clock;
+
 import java.util.*;
 import java.math.*;
 
 public class Nand {
 	
 	private int nandCycles;
+	private Object[] reservationStationsName ;
 	
-	public Nand (int numberOfCycles){
+	public Nand (int numberOfCycles,Object[] reservationStationsName){
 		this.nandCycles = numberOfCycles;
+		this.reservationStationsName = reservationStationsName;
 	}
 	
 	
@@ -23,7 +26,14 @@ public class Nand {
 		return result;
 	}
 	
-	public Short nand(Short sourceReg1,Short sourceReg2)
+	
+	
+	public Object[] getReservationStationsName() {
+		return reservationStationsName;
+	}
+
+
+	public int[] nand(Short sourceReg1,Short sourceReg2)
 	{
 		int currentClock = Clock.counter.intValue()+nandCycles;
 		while(true)
@@ -36,7 +46,7 @@ public class Nand {
 		int regB=Integer.parseInt(sourceReg2);*/
 		short result = (short)~(bitwiseAnd(sourceReg1.shortValue(),sourceReg2.shortValue()));
 		//String resultString =""+result;
-		return result;
+		return new int[] {(int)result,currentClock};
 	}
 }
 

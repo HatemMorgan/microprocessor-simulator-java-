@@ -1,22 +1,31 @@
 package functionalUnits;
 import memory.Clock;
+
 import java.util.*;
 import java.math.*;
 
 public class Mult {
 	
 	private int multCycles;
+	private Object[] reservationStationsName ;
 	
 	
-	public Mult (int numberOfCycles){
+	public Mult (int numberOfCycles,Object[] reservationStationsName){
 		this.multCycles = numberOfCycles;
+		this.reservationStationsName = reservationStationsName;
 	}
 	
 	public void setMULTCycles(int time){
 		multCycles = time;
 	}
 	
-	public Short mul(Short sourceReg1,Short sourceReg2)
+	
+	
+	public Object[] getReservationStationsName() {
+		return reservationStationsName;
+	}
+
+	public int[] mul(Short sourceReg1,Short sourceReg2)
 	{
 		int currentClock = Clock.counter.intValue()+multCycles;
 		while(true)
@@ -31,6 +40,6 @@ public class Mult {
 		int regB=Integer.parseInt(sourceReg2);*/
 		short result = (short)(sourceReg1.shortValue()*sourceReg2.shortValue());
 		//String resultString =""+result;
-		return result;
+		return new int[] {(int)result,currentClock};
 	}
 }

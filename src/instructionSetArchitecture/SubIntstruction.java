@@ -1,5 +1,6 @@
 package instructionSetArchitecture;
 
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -10,18 +11,19 @@ public class SubIntstruction extends InstructionSetArchitecture {
 			RegisterEnum sourceOneRegister, RegisterEnum sourceTwoRegister) {
 
 		super(Operation.SUB,instructionNumber, destinationRegister, sourceOneRegister,
-				sourceTwoRegister);
+				sourceTwoRegister,FunctionalUnitsType.ADDER);
 	}
 
 	@Override
-	public Short execute() {
+	public int execute() {
 		Short[] operands = super.loadDataFromRegisters();
 
 		// call SUB function and pass operands to it and it will return the
 		// result to be store in dest reg
-		Short result = MainFunctionUnit.getInstance().getAdder().sub(operands[0], operands[1]);
+		int result[] = MainFunctionUnit.getInstance().getAdder().sub(operands[0], operands[1]);
 
-		return result;
+		super.setResult((short)result[0]);
+		return result[1];
 	}
 
 }

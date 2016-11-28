@@ -1,6 +1,7 @@
 package instructionSetArchitecture;
 
 import memory.InstructionMemory;
+import functionalUnits.FunctionalUnitsType;
 import functionalUnits.MainFunctionUnit;
 import registers.RegisterEnum;
 import reservationStations.Operation;
@@ -11,7 +12,7 @@ public class BEQInstruction extends InstructionSetArchitecture {
 	public BEQInstruction( RegisterEnum sourceOneRegister, Integer instructionNumber ,
 			RegisterEnum sourceTwoRegister, Short immeditate) {
 		
-		super(Operation.BEQ,instructionNumber ,null, sourceOneRegister, sourceTwoRegister);
+		super(Operation.BEQ,instructionNumber ,null, sourceOneRegister, sourceTwoRegister,FunctionalUnitsType.ADDER);
 		this.immeditate = immeditate;
 	}
 	
@@ -26,19 +27,19 @@ public class BEQInstruction extends InstructionSetArchitecture {
 
 
 	@Override
-	public Short execute() {
+	public int execute() {
 		Short[] operands = super.loadDataFromRegisters();
 		
 		// call subtract method of adder and pass operands to it and it will return result
-		Short result = MainFunctionUnit.getInstance().getAdder().sub(operands[0],operands[1]);
+		int[] results = MainFunctionUnit.getInstance().getAdder().sub(operands[0],operands[1]);
 		// check if result==0 so we will branch 
 		
-		if(result == 0){
-			return (short) (InstructionMemory.getInstance().getPC()+immeditate);
-		}else{
-			return null ;
-		}
-	
+		if(results[0] == 0)
+			super.setResult((short) (InstructionMemory.getInstance().getPC()+immeditate));
+		else
+			super.setResult(null);
+		
+		return results[1];
 	}
 
 }

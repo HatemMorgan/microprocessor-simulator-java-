@@ -1,10 +1,9 @@
+/memory/
+/tomasulo/
+/GUI/
 /functionalUnits/
 /instructionSetArchitecture/
-/memory/
 /programState/
 /registerStatus/
-/registers/
 /reorderBuffer/
 /reservationStations/
-/tomasulo/
-/workingMemory/

@@ -47,6 +47,7 @@ public class Memory {
 	}
 
 	
+	
 	String loadHelper(int byteAddress, int i){
 		CacheEntry result = null;
 		if(i>= caches.length){
@@ -73,8 +74,7 @@ public class Memory {
 			returnValue =  readAround(byteAddress, i+1);
 			System.out.println("Return value " + returnValue);
 			//write the value to this cache level
-//			storeHelper(byteAddress, returnValue, i);
-			writeThrough(byteAddress, returnValue, i);
+			writeThrough2(byteAddress, returnValue, i);
 			return returnValue;		
 
 		}else{
@@ -155,6 +155,14 @@ public class Memory {
 			caches[j].insertIntoCache(byteAddress, value, false);			
 		}
 		//main.store(value, byteAddress);
+
+	}
+
+	void writeThrough2(int byteAddress, String value, int i){
+		//Write to caches and main
+		for (int j = 0; j < caches.length; j++) {
+			caches[j].insertIntoCache(byteAddress, value, false);			
+		}
 
 	}
 

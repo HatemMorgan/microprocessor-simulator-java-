@@ -191,7 +191,7 @@ public class TomasuloProcessor {
 		// RegisterEnum.R3, RegisterEnum.R4);
 
 		// test with RAW dependencies between instructions and testing when ROB size = 5 < numOfInstructions 
-		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[6];
+		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[5];
 		instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
 				RegisterEnum.R1, (short) 20);
 
@@ -204,7 +204,7 @@ public class TomasuloProcessor {
 		instructions[3] = new SubIntstruction(RegisterEnum.R7, 4,
 				RegisterEnum.R3, RegisterEnum.R6);
 		instructions[4] = new LoadInstruction(RegisterEnum.R4, 5, RegisterEnum.R0,(short)2);
-		instructions[5] = new StoreInstruction(RegisterEnum.R2, 6, RegisterEnum.R0,(short)3);
+//		instructions[5] = new StoreInstruction(RegisterEnum.R2, 6, RegisterEnum.R0,(short)3);
 		
 
 		// instructions[2] = new StoreInstruction(RegisterEnum.R4, 3,

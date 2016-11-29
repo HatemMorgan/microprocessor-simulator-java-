@@ -1,5 +1,7 @@
 package memory;
+
 import java.util.Arrays;
+import java.util.Random;
 
 public class Cache {
 	int cacheSize;
@@ -22,8 +24,8 @@ public class Cache {
 		this.memory = new CacheEntry[cacheLines / associativity][associativity];
 		this.clock = clock;
 	}
-	
-	public String toString(){
+
+	public String toString() {
 		for (int i = 0; i < memory.length; i++) {
 			System.out.println(Arrays.toString(memory[i]));
 		}
@@ -38,118 +40,117 @@ public class Cache {
 			
 		CacheEntry[] memorySet = memory[index];
 		//TODO: LRU Replacement
-
-		return memorySet[0];
+		Random r = new Random();
+		int rand = r.nextInt(memorySet.length);
+		return memorySet[rand];
 	}
-	
+
 	
 	public synchronized CacheEntry searchCache(int byteAddress){
 		
 		while(busy);
+
 		busy = true;
-		//determine at which clock cycle the operation will end
+		// determine at which clock cycle the operation will end
 		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
-				
+
 		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
 
-		//wait until memory access time is over
-		while(clock.counter.get() < clockCycleToReturnAt);
+		// wait until memory access time is over
+		while (clock.counter.get() < clockCycleToReturnAt)
+			;
 
 		int[] addressSegments = decryptAddress(byteAddress);
 		int tag = addressSegments[0];
 		int index = addressSegments[1];
-//		int offset = addressSegments[2];
-			
+		// int offset = addressSegments[2];
+
 		CacheEntry[] memorySet = memory[index];
 		for (int i = 0; i < memorySet.length; i++) {
-			if(memorySet[i] == null){
+			if (memorySet[i] == null) {
 				break;
 			}
-			if(memorySet[i].tag == tag && memorySet[i].valid == true){
+			if (memorySet[i].tag == tag && memorySet[i].valid == true) {
 				System.out.println("Result found");
 				busy = false;
 				return memorySet[i];
-			} 
+			}
 		}
-		
-		//not found
+
+		// not found
 		System.out.println("Result not found");
-		busy=false;
+		busy = false;
 		return null;
 	}
-	
-	//returns [Tag, Index, Offset]
-	int[] decryptAddress(int byteAddress){
+
+	// returns [Tag, Index, Offset]
+	int[] decryptAddress(int byteAddress) {
 		int indexBits = log(cacheLines, 2);
 		int offsetBits = log(lineSize, 2);
-		int tagBits = 16-(indexBits+offsetBits);
+		int tagBits = 16 - (indexBits + offsetBits);
 
-		
 		int byteAddressCopy = byteAddress;
 		int offset = extractLastNBitsToDecimal(byteAddressCopy, offsetBits);
 		byteAddressCopy >>= offsetBits;
 		int index = extractLastNBitsToDecimal(byteAddressCopy, indexBits);
 		byteAddressCopy >>= indexBits;
 		int tag = extractLastNBitsToDecimal(byteAddressCopy, tagBits);
-		
+
 		int[] result = new int[3];
 		result[0] = tag;
 		result[1] = index;
 		result[2] = offset;
-		
+
 		return result;
 
 	}
-	
-	
-	void insertIntoCache(int byteAddress, String data, boolean dirty){
-		while(busy);
+
+	void insertIntoCache(int byteAddress, String data, boolean dirty) {
+		while (busy)
+			;
 		busy = true;
-		
-		//determine at which clock cycle the operation will end
+
+		// determine at which clock cycle the operation will end
 		int clockCycleToReturnAt = clock.counter.get() + accessTimeInCycles;
-		
+
 		System.out.println("Cache access will finish in clock cycle " + clockCycleToReturnAt);
 
-		//wait until memory access time is over
-		while(clock.counter.get() < clockCycleToReturnAt);
+		// wait until memory access time is over
+		while (clock.counter.get() < clockCycleToReturnAt)
+			;
 
 		int[] addressSegments = decryptAddress(byteAddress);
 		int tag = addressSegments[0];
 		int index = addressSegments[1];
-//		int offset = addressSegments[2];
+		// int offset = addressSegments[2];
 
-
-		//looks for first invalid entry
+		// looks for first invalid entry
 		boolean foundInvalidCell = false;
 		CacheEntry[] memorySet = memory[index];
-		for (int i = 0; i < memorySet.length; i++) {			
-			if(memorySet[i] == null || memorySet[i].valid == false){
+		for (int i = 0; i < memorySet.length; i++) {
+			if (memorySet[i] == null || memorySet[i].valid == false) {
 				memorySet[i] = new CacheEntry(tag, data, true, dirty);
 				System.out.println("Inserted new value into cache");
 				foundInvalidCell = true;
-				break;			
+				break;
 			}
 		}
-		if(!foundInvalidCell){
-			//replace first entry in set
+		if (!foundInvalidCell) {
+			// replace first entry in set
 			memorySet[0] = new CacheEntry(tag, data, true, dirty);
 		}
-		//TODO: LRU Replacement
-		busy=false;
+		// TODO: LRU Replacement
+		busy = false;
 
 	}
-	
-	
-	
-	public int bitmask(int n){
-		return (int) (Math.pow(2, n) -1);
+
+	public int bitmask(int n) {
+		return (int) (Math.pow(2, n) - 1);
 	}
-	
-	public int extractLastNBitsToDecimal(int integer, int N){
+
+	public int extractLastNBitsToDecimal(int integer, int N) {
 		int masked = bitmask(N);
 		int res = integer & masked;
-
 
 		return res;
 	}

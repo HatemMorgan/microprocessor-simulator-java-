@@ -73,17 +73,20 @@ public class InstructionMemory extends Memory {
 //		InstructionSetArchitecture b = decode(encoded);
 //		System.out.println(b);
 		Clock c = new Clock();
-		
+
 		InstructionMemory a = new InstructionMemory(1, 4, c, writeHitPolicy.writeThrough, writeMissPolicy.writeAround);
 		InstructionSetArchitecture[] ins = new InstructionSetArchitecture[1];
 		ins[0] = i;
 //		ins[1] = i2;
 		a.storeInstructions(ins);
+
 //		c.start();
 		InstructionSetArchitecture[] aa = a.readInstructions(1);
 		System.out.println(aa[0].toString());
 //		InstructionSetArchitecture[] ab = a.readInstructions(1);
 //		System.out.println(ab[0].toString());
+
+
 	}
 	private static InstructionSetArchitecture decode(String instruction) {
         InstructionSetArchitecture result = null;

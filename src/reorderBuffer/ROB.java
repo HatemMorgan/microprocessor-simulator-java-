@@ -76,7 +76,7 @@ public class ROB {
 
 	}
 
-	public synchronized void writeResultTOROB(int entryNumber, Short result) {
+	public void writeResultTOROB(int entryNumber, Short result) {
 		ROBEntry current = first;
 		boolean found = false;
 		while (current.next != first) {

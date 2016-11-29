@@ -3,6 +3,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.TimeUnit;
 public class Clock {
 	public static AtomicInteger counter;
+	public static boolean autoClock = true;
 	private boolean finish;
 	public Clock(){
 		counter = new AtomicInteger();
@@ -41,6 +42,17 @@ public class Clock {
 
 		
 		
+	}
+	
+	
+	public void increment(){
+		counter.incrementAndGet();
+	}
+	public void stopClock(){
+		autoClock = false;
+	}
+	public void runClock(){
+		autoClock = true;
 	}
 	
 	

@@ -117,11 +117,6 @@ public class ROB {
 			current.setType(null);
 			current.setValue(null);
 
-		} else {
-
-			while (!head.isReady())
-				;
-
 		}
 	}
 

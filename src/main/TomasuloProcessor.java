@@ -3,6 +3,7 @@ package main;
 import functionalUnits.MainFunctionUnit;
 import instructionSetArchitecture.AddImmediateInstruction;
 import instructionSetArchitecture.AddInstruction;
+import instructionSetArchitecture.BEQInstruction;
 import instructionSetArchitecture.InstructionSetArchitecture;
 import instructionSetArchitecture.LoadInstruction;
 import instructionSetArchitecture.MulInstruction;
@@ -111,6 +112,14 @@ public class TomasuloProcessor {
 					finished = true;
 					break;
 				}
+				
+				if(instructionsFetched[i] instanceof BEQInstruction){
+				
+				if(((BEQInstruction)instructionsFetched[i]).getImmeditate() < 0){
+					instructionMemory.setPC((short) (0-((BEQInstruction)instructionsFetched[i]).getImmeditate()));
+				}
+				
+			}
 
 				Thread thread = new Thread(new RunINstruction(
 						instructionsFetched[i], programState, registerStatus,
@@ -255,7 +264,7 @@ public class TomasuloProcessor {
 		intialData.put((short)1,(short) 30);
 		intialData.put((short)2,(short) 920);
 		TomasuloProcessor tomasuloProcessor = new TomasuloProcessor(
-				instructions, 3, 5, 2, 1, 5, adderReservationStations,
+				instructions, 3, 5, 2, 1, 4, adderReservationStations,
 				multReservationStations, nandReservationStations,
 				loadReservationStationsNames, storeReservationStationsNames,
 				callReservationStations, 1, 2, writeHitPolicy.writeThrough,

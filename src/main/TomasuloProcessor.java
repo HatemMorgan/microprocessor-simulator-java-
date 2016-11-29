@@ -181,7 +181,7 @@ public class TomasuloProcessor {
 		// instructions[3] = new SubIntstruction(RegisterEnum.R7,4,
 		// RegisterEnum.R3, RegisterEnum.R4);
 
-		// test with RAW dependencies between instructions
+		// test with RAW dependencies between instructions and testing when ROB size = 5 < numOfInstructions 
 		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[6];
 		instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
 				RegisterEnum.R1, (short) 20);
@@ -255,7 +255,7 @@ public class TomasuloProcessor {
 		intialData.put((short)1,(short) 30);
 		intialData.put((short)2,(short) 920);
 		TomasuloProcessor tomasuloProcessor = new TomasuloProcessor(
-				instructions, 3, 5, 2, 1, 8, adderReservationStations,
+				instructions, 3, 5, 2, 1, 5, adderReservationStations,
 				multReservationStations, nandReservationStations,
 				loadReservationStationsNames, storeReservationStationsNames,
 				callReservationStations, 1, 2, writeHitPolicy.writeThrough,

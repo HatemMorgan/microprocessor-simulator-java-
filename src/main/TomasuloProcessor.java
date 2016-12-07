@@ -159,53 +159,56 @@ public class TomasuloProcessor {
 	}
 
 	public static void main(String[] args) {
-		// trivial example
-		// InstructionSetArchitecture[] instructions = new
-		// InstructionSetArchitecture[4];
-		// instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
-		// RegisterEnum.R1, (short) 20);
-		//
-		// instructions[1] = new AddInstruction(RegisterEnum.R5, 2,
-		// RegisterEnum.R1, RegisterEnum.R4);
-		//
-		// instructions[2] = new SubIntstruction(RegisterEnum.R7, 3,
-		// RegisterEnum.R3, RegisterEnum.R4);
-		//
-		// instructions[3] = new MulInstruction(RegisterEnum.R6, 4,
-		// RegisterEnum.R3, RegisterEnum.R4);
+		// testing program 1
+//		 InstructionSetArchitecture[] instructions = new
+//		 InstructionSetArchitecture[4];
+//		 instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
+//		 RegisterEnum.R1, (short) 20);
+//		
+//		 instructions[1] = new AddInstruction(RegisterEnum.R5, 2,
+//		 RegisterEnum.R1, RegisterEnum.R4);
+//		
+//		 instructions[2] = new SubIntstruction(RegisterEnum.R7, 3,
+//		 RegisterEnum.R3, RegisterEnum.R4);
+//		
+//		 instructions[3] = new MulInstruction(RegisterEnum.R6, 4,
+//		 RegisterEnum.R3, RegisterEnum.R4);
 
 		// testing committing in order and stalling when it is not its turn to
 		// commit
-		// InstructionSetArchitecture[] instructions = new
-		// InstructionSetArchitecture[4];
-		// instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
-		// RegisterEnum.R1, (short) 20);
-		//
-		// instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
-		// RegisterEnum.R3, RegisterEnum.R4);
-		//
-		// instructions[2] = new AddInstruction(RegisterEnum.R5, 3,
-		// RegisterEnum.R1, RegisterEnum.R4);
-		//
-		// instructions[3] = new SubIntstruction(RegisterEnum.R7,4,
-		// RegisterEnum.R3, RegisterEnum.R4);
+		 InstructionSetArchitecture[] instructions = new
+		 InstructionSetArchitecture[4];
+		 instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
+		 RegisterEnum.R1, (short) 20);
+		
+		 instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
+		 RegisterEnum.R3, RegisterEnum.R4);
+		
+		 instructions[2] = new AddInstruction(RegisterEnum.R5, 3,
+		 RegisterEnum.R1, RegisterEnum.R4);
+		
+		 instructions[3] = new SubIntstruction(RegisterEnum.R7,4,
+		 RegisterEnum.R3, RegisterEnum.R4);
 
 		// test with RAW dependencies between instructions and testing when ROB size = 5 < numOfInstructions 
-		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[5];
-		instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
-				RegisterEnum.R1, (short) 20);
-
-		instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
-				RegisterEnum.R2, RegisterEnum.R4);
-
-		instructions[2] = new AddInstruction(RegisterEnum.R5, 3,
-				RegisterEnum.R1, RegisterEnum.R4);
-
-		instructions[3] = new SubIntstruction(RegisterEnum.R7, 4,
-				RegisterEnum.R3, RegisterEnum.R6);
-		instructions[4] = new LoadInstruction(RegisterEnum.R4, 5, RegisterEnum.R0,(short)2);
-//		instructions[5] = new StoreInstruction(RegisterEnum.R2, 6, RegisterEnum.R0,(short)3);
-		
+//		InstructionSetArchitecture[] instructions = new InstructionSetArchitecture[7];
+//		instructions[0] = new AddImmediateInstruction(RegisterEnum.R2, 1,
+//				RegisterEnum.R1, (short) 20);
+//
+//		instructions[1] = new MulInstruction(RegisterEnum.R6, 2,
+//				RegisterEnum.R2, RegisterEnum.R4);
+//
+//		instructions[2] = new AddInstruction(RegisterEnum.R5, 3,
+//				RegisterEnum.R1, RegisterEnum.R4);
+//
+//		instructions[3] = new StoreInstruction(RegisterEnum.R2, 4, RegisterEnum.R0,(short)3);
+//		
+//		instructions[4] = new SubIntstruction(RegisterEnum.R7, 5,
+//				RegisterEnum.R3, RegisterEnum.R6);
+//	
+//		
+//		instructions[5] = new LoadInstruction(RegisterEnum.R1, 6, RegisterEnum.R0,(short)2);
+//		instructions[6] = new LoadInstruction(RegisterEnum.R4, 7, RegisterEnum.R0,(short)3);
 
 		// instructions[2] = new StoreInstruction(RegisterEnum.R4, 3,
 		// RegisterEnum.R5, (short) 30);
@@ -263,12 +266,15 @@ public class TomasuloProcessor {
 		intialData.put((short)0,(short) 200);
 		intialData.put((short)1,(short) 30);
 		intialData.put((short)2,(short) 920);
+		
+		//testing Second program with ROB size 4 and Pipeline 2
+		
 		TomasuloProcessor tomasuloProcessor = new TomasuloProcessor(
 				instructions, 3, 5, 2, 1, 4, adderReservationStations,
 				multReservationStations, nandReservationStations,
 				loadReservationStationsNames, storeReservationStationsNames,
 				callReservationStations, 1, 2, writeHitPolicy.writeThrough,
-				writeMissPolicy.writeAround, 3,intialData);
+				writeMissPolicy.writeAround, 2,intialData);
 
 		System.out
 				.println("------------------------- Program State ---------------------------");
